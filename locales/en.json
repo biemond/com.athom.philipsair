@@ -1,0 +1,12 @@
+{
+	"pair": {
+		"start": {
+			"title": "Setup Philips Air purifier",
+			"intro": "Enter the ip address of the philips device",
+			"error": "An error has occurred.",
+			"required": "IP address is a required value.",
+			"ipkey": "Philips IP address",
+			"saveSettings": "Save settings"
+		}
+  }
+}

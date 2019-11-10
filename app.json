@@ -1,0 +1,96 @@
+{
+	"id": "com.athom.philipsair",
+	"version": "0.0.1",
+	"compatibility": ">=1.5.0",
+	"sdk": 2,
+	"name": {
+		"en": "philipsair"
+	},
+	"description": {
+		"en": "Philips air purifier"
+	},
+	"category": [
+		"climate"
+	],
+	"permissions": [],
+	"images": {
+		"large": "/assets/images/large.png",
+		"small": "/assets/images/small.png"
+	},
+	"author": {
+		"name": "Edwin Biemond",
+		"email": "biemond@gmail.com"
+	},
+	"capabilities": {
+		"latest_upload_date": {
+			"type": "string",
+			"title": {
+				"en": "Latest update date"
+			},
+			"getable": true,
+			"setable": false,
+			"icon": "/assets/images/clock.svg"
+		},
+		"sensor_pm25": {
+			"type": "number",
+			"title": {
+				"en": "Current PM2.5 value"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": "ug/m"
+			},
+			"min": 0,
+			"max": 80,
+			"decimals": 0,
+			"insights": true,
+			"uiComponent": "sensor"
+		}
+	},
+	"flow": {
+	},
+	"drivers": [{
+		"id": "device",
+		"pair": [
+			{
+				"id": "pair"
+			}
+		],
+		"settings": [
+			{
+				"type": "group",
+				"label": {
+					"en": "General settings"
+				},
+				"children": [
+					{
+						"id": "ipkey",
+						"type": "text",
+						"label": {
+							"en": "Philips air ip address"
+						},
+						"value": "192.168.2.195",
+						"hint": {
+							"en": "Enter the ip address key of your Philips air purifier"
+						}
+					}
+				]
+			}
+		],
+		"name": {
+			"en": "device"
+		},
+		"class": "other",
+		"energy": {
+		},
+		"capabilities": [
+			"latest_upload_date",
+			"sensor_pm25"
+		],
+		"images": {
+			"large": "/drivers/device/assets/images/large.png",
+			"small": "/drivers/device/assets/images/small.png"
+		}
+	}]
+}
