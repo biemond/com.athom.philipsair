@@ -44,52 +44,40 @@ class device extends Homey.Device {
                     }
                 });
         })
-        
 
+        this._conditionScoreIaql = new Homey.FlowCardCondition('score_iaql').register().registerRunListener((args, state) => {
+            let result = (this.conditionScoreIaqlToString(this.getCapabilityValue('measure_iaql')) == args.argument_main) 
+            return Promise.resolve(result);
+        }); 
+        this._conditionScorePm25 = new Homey.FlowCardCondition('score_pm25').register().registerRunListener((args, state) => {
+            let result = (this.conditionScorePm25lToString(this.getCapabilityValue('measure_pm25')) == args.argument_main) 
+            return Promise.resolve(result);
+        }); 
+    }
 
-        // this._flowTriggerScoreAbove80 = new Homey.FlowCardTrigger('ScoreAbove80').register();
-        // this._flowTriggerScoreBetween6080 = new Homey.FlowCardTrigger('ScoreBetween60-80').register();
-        // this._flowTriggerScoreBelow60 = new Homey.FlowCardTrigger('ScoreBelow60').register();
-        // this._conditionScoreOutput = new Homey.FlowCardCondition('score_output').register().registerRunListener((args, state) => {
-        //     let result = (this.conditionScoreOutputToString(this.getCapabilityValue('score')) == args.argument_main) 
-        //     return Promise.resolve(result);
-        // }); 
-	}
+    conditionScoreIaqlToString(index) {
+        if ( index > 9 ) {
+            return 'verypoor';
+        } else if ( index > 6 ) {
+            return 'poor';
+        } else if ( index > 3 ) {
+            return 'fair';
+        } else {
+            return 'good';
+        }
+    }
 
-    // conditionScoreOutputToString(score) {
-    //     if ( score < 40 ) {
-    //         return 'verybad';
-    //     } else if ( score < 60 ) {
-    //         return 'bad';
-    //     } else if ( score < 80 ) {
-    //         return 'average';
-    //     } else {
-    //         return 'good';
-    //     }
-    // }
-
-    // // flow triggers
-    // flowTriggerScoreAbove80(tokens) {
-    //     this._flowTriggerScoreAbove80
-    //         .trigger(tokens)
-    //         .then(this.log("flowTriggerScoreAbove80"))
-    //         .catch(this.error)
-    // }
-
-    // // flow triggers
-    // flowTriggerScoreBetween6080(tokens) {
-    //     this._flowTriggerScoreBetween6080
-    //         .trigger(tokens)
-    //         .then(this.log("flowTriggerScoreBetween6080"))
-    //         .catch(this.error)
-    // }
-    // // flow triggers
-    // flowTriggerScoreBelow60(tokens) {
-    //     this._flowTriggerScoreBelow60
-    //         .trigger(tokens)
-    //         .then(this.log("flowTriggerScoreBelow60"))
-    //         .catch(this.error)
-    // }
+    conditionScorePm25lToString(index) {
+        if ( index > 55 ) {
+            return 'verypoor';
+        } else if ( index > 35 ) {
+            return 'poor';
+        } else if ( index > 12 ) {
+            return 'fair';
+        } else {
+            return 'good';
+        }
+    }
     
     onDeleted() {
         let id = this.getData().id;
@@ -123,32 +111,49 @@ class device extends Homey.Device {
 	pollAirDevice(settings) {
         let currentdate =new Date().timeNow();
         this.log("refresh now " + currentdate);
+        this.setCapabilityValue('latest_retrieval_date', currentdate);
         this.log(settings);
         philipsair.getCurrentStatusData(settings).then(data => {
             this.log("pollAirDevice: "+data);
 
             this.log(`Product: ${data.firmware.name} version ${data.firmware.version} upgrade ${data.firmware.upgrade != '' ? data.firmware.upgrade  : "-"} status ${data.firmware.statusmsg != '' ? data.firmware.statusmsg  : "-"}`)
-            this.log(`Pre-filter: clean in ${data.filter.fltsts0} hours`)
-            this.log(`Active Carbon ${data.filter.fltt2} filter: replace in ${data.filter.fltsts2} hours`)
-            this.log(`HEPA ${data.filter.fltt1} filter: replace in ${data.filter.fltsts1} hours`)
+            this.setCapabilityValue('product', `${data.firmware.name} ${data.firmware.version}`);
+
+            if(data.filter.hasOwnProperty('fltsts0')){
+               this.log(`Pre-filter: clean in ${data.filter.fltsts0} hours`)
+               this.setCapabilityValue('pre_filter_clean', data.filter.fltsts0);
+            }
+            if(data.filter.hasOwnProperty('fltsts2')){
+               this.log(`Active Carbon ${data.filter.fltt2} filter: replace in ${data.filter.fltsts2} hours`)
+               this.setCapabilityValue('carbon_filter_replace', data.filter.fltsts2);
+            }
+            if(data.filter.hasOwnProperty('fltsts1')){
+                this.log(`HEPA ${data.filter.fltt1} filter: replace in ${data.filter.fltsts1} hours`)
+                this.setCapabilityValue('herpa_filter_replace', data.filter.fltsts1);
+            }
             let json = data.status;
             if(json.hasOwnProperty('pwr')){
                 this.log(`Power: ${json.pwr == '1' ? 'ON'  : "OFF"}`)
             }
             if(json.hasOwnProperty('pm25')){
                 this.log(`PM25: ${json.pm25}`)
+                this.setCapabilityValue('measure_pm25', json.pm25);
             }
             if(json.hasOwnProperty('tvoc')){
                 this.log(`GAS (TVOC): ${json.tvoc}`)
+                this.setCapabilityValue('measure_tvoc', json.tvoc);
             }
             if(json.hasOwnProperty('rhset')){
                 this.log(`Target humidity: ${json.rhset}`)
+                this.setCapabilityValue('measure_humidity', json.rhset);
             }     
             if(json.hasOwnProperty('iaql')){
                 this.log(`Allergen index: ${json.iaql}`)
+                this.setCapabilityValue('measure_iaql', json.iaql);
             } 
             if(json.hasOwnProperty('temp')){
                 this.log(`Temperature: ${json.temp}`)
+                this.setCapabilityValue('measure_temperature', json.temp);
             } 
             if(json.hasOwnProperty('func')){
                 this.log(`Function: ${json.pwr == 'P' ? 'Purification'  : "Purification & Humidification"}`)
@@ -194,89 +199,6 @@ class device extends Homey.Device {
             } 
         })
     }
-
-
-
-    // pollAwairDevice(settings) {
-	// 	awair.getCurrentData(settings).then(data => {
-    //         let currentdate =new Date().timeNow();
-	// 		this.log("refresh now " + currentdate);
-	// 		console.log("Received data " + JSON.stringify(data));
-    //         if (data.data != null){
-    //             console.log("object "+ JSON.stringify(data.data[0]));
-    //             let strUpdateDate = data.data[0].timestamp;
-    //             console.log("last date " +  strUpdateDate.substring(11,24));
-                
-    //             for ( var i = 0; i < data.data[0].indices.length; i++) {
-    //                 let obj = data.data[0].indices[i];
-    //                 console.log("object: " + obj);
-    //                 console.log("comp: " + obj.comp);
-    //                 console.log("value: " + obj.value);
-    //                 if ( obj.comp == "temp") {
-    //                     this.setCapabilityValue('condition_temp', obj.value);
-    //                 }
-    //                 if ( obj.comp == "co2") {
-    //                     this.setCapabilityValue('condition_co2', obj.value);
-    //                 }
-    //                 if ( obj.comp == "humid") {
-    //                     this.setCapabilityValue('condition_humid', obj.value);
-    //                 }
-    //                 if ( obj.comp == "pm25") {
-    //                     this.setCapabilityValue('condition_pm25', obj.value);
-    //                 }
-    //                 if ( obj.comp == "vox") {
-    //                     this.setCapabilityValue('condition_vox', obj.value);
-    //                 }                                                            
-    //                 if ( obj.comp == "lux") {
-    //                     this.setCapabilityValue('condition_lux', obj.value);
-    //                 }  
-    //             }
-    //             for ( var i = 0; i < data.data[0].sensors.length; i++) {
-    //                 let obj = data.data[0].sensors[i];
-    //                 console.log("object: " + obj);
-    //                 console.log("comp: " + obj.comp);
-    //                 console.log("value: " + obj.value);
-    //                 if ( obj.comp == "temp") {
-    //                     this.setCapabilityValue('sensor_temp', obj.value);
-    //                 }  
-    //                 if ( obj.comp == "co2") {
-    //                     this.setCapabilityValue('sensor_co2', obj.value);
-    //                 }
-    //                 if ( obj.comp == "humid") {
-    //                     this.setCapabilityValue('sensor_humid', obj.value);
-    //                 }  
-    //                 if ( obj.comp == "pm25") {
-    //                     this.setCapabilityValue('sensor_pm25', obj.value);
-    //                 }
-    //                 if ( obj.comp == "voc") {
-    //                     this.setCapabilityValue('sensor_voc', obj.value);
-    //                 }      
-    //                 if ( obj.comp == "lux") {
-    //                     this.setCapabilityValue('sensor_lux', obj.value);
-    //                 }   
-    //             }
-
-    //             this.setCapabilityValue('latest_upload_date', strUpdateDate.substring(11,24));
-
-    //             let score = data.data[0].score;
-    //             this.setCapabilityValue('score',score);
-    //             let tokens = {
-    //                 "score": score,
-    //                 "device": settings.name
-    //             };
-    //             if ( this.getCapabilityValue('score') < 80  && score >= 80 ) {
-    //                 this.flowTriggerScoreAbove80(tokens);
-    //             } else if ( this.getCapabilityValue('score') >= 80 
-    //                    && score >= 60 
-    //                    && score < 80 ) {
-    //                 this.flowTriggerScoreBetween6080(tokens);
-    //             } else if ( this.getCapabilityValue('score') >= 60 
-    //                    && score < 60 ) {
-    //                 this.flowTriggerScoreBelow60(tokens);
-    //             }
-    //         }
-	// 	})
-	// }
 }
 
 module.exports = device;

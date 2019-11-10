@@ -1,24 +1,32 @@
-# philipsair
+# Philips Air purifier
 
-Philip AIR purifier, it should work for all the philips air devices
-- AC2729
-- AC2889
+Added support for Philip AIR purifiers, it should work for all the philips air devices but I could only test it on 
 - AC5659_10 
 
-Tested it myself on AC5659_10 
-
 ## Device
+For adding the device you need to provide Philips device ip address plus Homey has to be on the same network as your purifier 
 
-### Provide Philips device ip address
+Sensors
+- latest_retrieval_date
+- measure_pm25
+- measure_iaql
+- measure_tvoc
+- measure_humidity
+- measure_temperature
+- pre_filter_clean
+- carbon_filter_replace
+- herpa_filter_replace
+- product
 
 ## Flows
-- 
 
 ### triggers
 - 
 
 ### conditions
-- 
+- score_pm25 with good, fair, poor and verypoor
+- score_iaql (allergen) with good, fair, poor and verypoor
+
 
 ## Thanks
 Special thanks to Radoslav Gerganov for reverse enginering and security work. 

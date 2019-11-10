@@ -22,7 +22,7 @@
 		"email": "biemond@gmail.com"
 	},
 	"capabilities": {
-		"latest_upload_date": {
+		"latest_retrieval_date": {
 			"type": "string",
 			"title": {
 				"en": "Latest update date"
@@ -31,7 +31,51 @@
 			"setable": false,
 			"icon": "/assets/images/clock.svg"
 		},
-		"sensor_pm25": {
+		"product": {
+			"type": "string",
+			"title": {
+				"en": "product"
+			},
+			"getable": true,
+			"setable": false
+		},
+		"pre_filter_clean": {
+			"type": "number",
+			"title": {
+				"en": "Pre-filter clean in"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": "hours"
+			},
+			"icon": "/assets/images/clock.svg"
+		},
+		"carbon_filter_replace": {
+			"type": "number",
+			"title": {
+				"en": "Active Carbon replace in"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": "hours"
+			},
+			"icon": "/assets/images/clock.svg"
+		},
+		"herpa_filter_replace": {
+			"type": "number",
+			"title": {
+				"en": "HEPA filter replace in"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": "hours"
+			},
+			"icon": "/assets/images/clock.svg"
+		},
+		"measure_pm25": {
 			"type": "number",
 			"title": {
 				"en": "Current PM2.5 value"
@@ -42,13 +86,173 @@
 				"en": "ug/m"
 			},
 			"min": 0,
-			"max": 80,
+			"max": 99,
 			"decimals": 0,
 			"insights": true,
 			"uiComponent": "sensor"
-		}
+		},
+		"measure_iaql": {
+			"type": "number",
+			"title": {
+				"en": "Current Allergen index"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": ""
+			},
+			"min": 1,
+			"max": 12,
+			"decimals": 0,
+			"insights": true,
+			"uiComponent": "sensor"
+		},
+		"measure_tvoc": {
+			"type": "number",
+			"title": {
+				"en": "Current GAS (TVOC)"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": ""
+			},
+			"min": 1,
+			"max": 20,
+			"decimals": 0,
+			"insights": true,
+			"uiComponent": "sensor"
+		},
+		"measure_humidity": {
+			"type": "number",
+			"title": {
+				"en": "Target humidity"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": ""
+			},
+			"min": 1,
+			"max": 99,
+			"decimals": 0,
+			"insights": true,
+			"icon": "/assets/images/humidity.svg"
+		},
+		"measure_temperature": {
+			"type": "number",
+			"title": {
+				"en": "Temperature"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": "C"
+			},
+			"min": -10,
+			"max": 50,
+			"decimals": 0,
+			"insights": true,
+			"icon": "/assets/images/temp.svg"
+		}		
 	},
 	"flow": {
+        "triggers": [
+		  {
+			"id": "measure_pm25_changed",
+			"title": {
+			  "en": "Target pm2.5 changed"
+			}
+		  }
+		],
+		"conditions": [{
+			"id": "score_iaql",
+			"title": {
+				"en": "Allergen index:"
+			},
+			"hint": {
+				"en": "Allergen index"
+			},
+			"args": [{
+					"name": "device",
+					"type": "device",
+					"filter": "driver_id=device"
+				},
+				{
+					"name": "argument_main",
+					"type": "dropdown",
+					"values": [{
+							"id": "good",
+							"label": {
+								"en": "good, score below 4"
+							}
+						},
+						{
+							"id": "fair",
+							"label": {
+								"en": "average, between 4 and 6"
+							}
+						},
+						{
+							"id": "poor",
+							"label": {
+								"en": "poor, between 7 and 9"
+							}
+						},
+						{
+							"id": "verypoor",
+							"label": {
+								"en": "very poor, above 9"
+							}
+						}
+					]
+				}
+			]
+		},{
+			"id": "score_pm25",
+			"title": {
+				"en": "pm2.5 measurement"
+			},
+			"hint": {
+				"en": "pm2.5 measurement"
+			},
+			"args": [{
+					"name": "device",
+					"type": "device",
+					"filter": "driver_id=device"
+				},
+				{
+					"name": "argument_main",
+					"type": "dropdown",
+					"values": [{
+							"id": "good",
+							"label": {
+								"en": "good, score below 13"
+							}
+						},
+						{
+							"id": "fair",
+							"label": {
+								"en": "average, between 13 and 35"
+							}
+						},
+						{
+							"id": "poor",
+							"label": {
+								"en": "poor, between 36 and 55"
+							}
+						},
+						{
+							"id": "verypoor",
+							"label": {
+								"en": "very poor, above 55"
+							}
+						}
+					]
+				}
+			]
+		}
+	    ]
 	},
 	"drivers": [{
 		"id": "device",
@@ -85,8 +289,16 @@
 		"energy": {
 		},
 		"capabilities": [
-			"latest_upload_date",
-			"sensor_pm25"
+			"latest_retrieval_date",
+			"measure_pm25",
+			"measure_iaql",
+			"measure_tvoc",
+			"measure_humidity",
+			"measure_temperature",
+			"pre_filter_clean",
+			"carbon_filter_replace",
+			"herpa_filter_replace",
+			"product"
 		],
 		"images": {
 			"large": "/drivers/device/assets/images/large.png",
