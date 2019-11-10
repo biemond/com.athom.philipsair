@@ -4,10 +4,10 @@
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
-		"en": "philipsair"
+		"en": "Philips Air"
 	},
 	"description": {
-		"en": "Philips air purifier"
+		"en": "Philips Air Purifier"
 	},
 	"category": [
 		"climate"
@@ -68,11 +68,11 @@
 						"id": "ipkey",
 						"type": "text",
 						"label": {
-							"en": "Philips air ip address"
+							"en": "Philips Air device IP address"
 						},
 						"value": "192.168.2.195",
 						"hint": {
-							"en": "Enter the ip address key of your Philips air purifier"
+							"en": "Enter the IP address key of your Philips Air purifier"
 						}
 					}
 				]
