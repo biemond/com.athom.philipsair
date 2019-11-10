@@ -125,10 +125,79 @@ class device extends Homey.Device {
         this.log("refresh now " + currentdate);
         this.log(settings);
         philipsair.getCurrentStatusData(settings).then(data => {
-            this.log("return "+data);
+            this.log("pollAirDevice: "+data);
+
+            this.log(`Product: ${data.firmware.name} version ${data.firmware.version} upgrade ${data.firmware.upgrade != '' ? data.firmware.upgrade  : "-"} status ${data.firmware.statusmsg != '' ? data.firmware.statusmsg  : "-"}`)
+            this.log(`Pre-filter: clean in ${data.filter.fltsts0} hours`)
+            this.log(`Active Carbon ${data.filter.fltt2} filter: replace in ${data.filter.fltsts2} hours`)
+            this.log(`HEPA ${data.filter.fltt1} filter: replace in ${data.filter.fltsts1} hours`)
+            let json = data.status;
+            if(json.hasOwnProperty('pwr')){
+                this.log(`Power: ${json.pwr == '1' ? 'ON'  : "OFF"}`)
+            }
+            if(json.hasOwnProperty('pm25')){
+                this.log(`PM25: ${json.pm25}`)
+            }
+            if(json.hasOwnProperty('tvoc')){
+                this.log(`GAS (TVOC): ${json.tvoc}`)
+            }
+            if(json.hasOwnProperty('rhset')){
+                this.log(`Target humidity: ${json.rhset}`)
+            }     
+            if(json.hasOwnProperty('iaql')){
+                this.log(`Allergen index: ${json.iaql}`)
+            } 
+            if(json.hasOwnProperty('temp')){
+                this.log(`Temperature: ${json.temp}`)
+            } 
+            if(json.hasOwnProperty('func')){
+                this.log(`Function: ${json.pwr == 'P' ? 'Purification'  : "Purification & Humidification"}`)
+            } 
+            if(json.hasOwnProperty('mode')){
+                let mode_str = {'P': 'auto', 'A': 'allergen', 'S': 'sleep', 'M': 'manual', 'B': 'bacteria', 'N': 'night'}
+                this.log(`Mode: ${mode_str[json.mode]}`)
+            } 
+            if(json.hasOwnProperty('om')){
+                let om_str = {'s': 'silent', 't': 'turbo'}
+                this.log(`Fan speed: ${om_str[json.om]}`)
+            } 
+            if(json.hasOwnProperty('aqil')){
+                this.log(`Light brightness: ${json.aqil}`)
+            } 
+            if(json.hasOwnProperty('uil')){
+                let uil_str = {'1': 'ON', '0': 'OFF'}
+                this.log(`Buttons light: ${uil_str[json.uil]}`)
+            } 
+            if(json.hasOwnProperty('ddp')){
+                let ddp_str = {'1': 'PM2.5', '0': 'IAI'}
+                this.log(`Used index: ${ddp_str[json.ddp]}`)
+            } 
+            if(json.hasOwnProperty('wl')){
+                this.log(`Water level: ${json.wl}`)
+            } 
+            if(json.hasOwnProperty('cl')){
+                this.log(`Child lock: ${json.cl}`)
+            }     
+            if(json.hasOwnProperty('dt')){
+                this.log(`Timer hours: ${json.dt}`)
+            } 
+            if(json.hasOwnProperty('dtrs')){
+                this.log(`Timer minutes: ${json.dtrs}`)
+            }  
+            if(json.hasOwnProperty('err')){
+                if ( json.err != 0) {
+                    let err_str = {49408: 'no water', 32768: 'water tank open'}
+                    this.log(`Error: ${ddp_str[json.err]}`)
+                } {
+                    this.log(`Error: -`)
+                }
+            } 
         })
     }
-	// pollAwairDevice(settings) {
+
+
+
+    // pollAwairDevice(settings) {
 	// 	awair.getCurrentData(settings).then(data => {
     //         let currentdate =new Date().timeNow();
 	// 		this.log("refresh now " + currentdate);
