@@ -86,7 +86,7 @@
 				"en": "ug/m"
 			},
 			"min": 0,
-			"max": 99,
+			"max": 999,
 			"decimals": 0,
 			"insights": true,
 			"uiComponent": "sensor"
