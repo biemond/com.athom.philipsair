@@ -287,6 +287,9 @@
 		},
 		"class": "other",
 		"energy": {
+			"approximation": {
+				"usageConstant": 20
+			}
 		},
 		"capabilities": [
 			"latest_retrieval_date",
