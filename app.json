@@ -12,6 +12,11 @@
 	"category": [
 		"climate"
 	],
+	"bugs": {
+		"url": "https://github.com/biemond/com.athom.philipsair/issues"
+	},
+	"source": "https://github.com/biemond/com.athom.philipsair",
+	"support": "mailto:biemond@gmail.com",
 	"permissions": [],
 	"images": {
 		"large": "/assets/images/large.png",
@@ -154,158 +159,166 @@
 			"decimals": 0,
 			"insights": true,
 			"icon": "/assets/images/temp.svg"
-		}		
+		}
 	},
 	"flow": {
-        "triggers": [
-		  {
-			"id": "measure_pm25_changed",
-			"title": {
-			  "en": "Target pm2.5 changed"
-			}
-		  }
-		],
-		"conditions": [{
-			"id": "score_iaql",
-			"title": {
-				"en": "Allergen index:"
-			},
-			"hint": {
-				"en": "Allergen index"
-			},
-			"args": [{
-					"name": "device",
-					"type": "device",
-					"filter": "driver_id=device"
-				},
-				{
-					"name": "argument_main",
-					"type": "dropdown",
-					"values": [{
-							"id": "good",
-							"label": {
-								"en": "good, score below 4"
-							}
-						},
-						{
-							"id": "fair",
-							"label": {
-								"en": "average, between 4 and 6"
-							}
-						},
-						{
-							"id": "poor",
-							"label": {
-								"en": "poor, between 7 and 9"
-							}
-						},
-						{
-							"id": "verypoor",
-							"label": {
-								"en": "very poor, above 9"
-							}
-						}
-					]
-				}
-			]
-		},{
-			"id": "score_pm25",
-			"title": {
-				"en": "pm2.5 measurement"
-			},
-			"hint": {
-				"en": "pm2.5 measurement"
-			},
-			"args": [{
-					"name": "device",
-					"type": "device",
-					"filter": "driver_id=device"
-				},
-				{
-					"name": "argument_main",
-					"type": "dropdown",
-					"values": [{
-							"id": "good",
-							"label": {
-								"en": "good, score below 13"
-							}
-						},
-						{
-							"id": "fair",
-							"label": {
-								"en": "average, between 13 and 35"
-							}
-						},
-						{
-							"id": "poor",
-							"label": {
-								"en": "poor, between 36 and 55"
-							}
-						},
-						{
-							"id": "verypoor",
-							"label": {
-								"en": "very poor, above 55"
-							}
-						}
-					]
-				}
-			]
-		}
-	    ]
-	},
-	"drivers": [{
-		"id": "device",
-		"pair": [
+		"triggers": [
 			{
-				"id": "pair"
+				"id": "measure_pm25_changed",
+				"title": {
+					"en": "Target pm2.5 changed"
+				}
 			}
 		],
-		"settings": [
+		"conditions": [
 			{
-				"type": "group",
-				"label": {
-					"en": "General settings"
+				"id": "score_iaql",
+				"title": {
+					"en": "Allergen index:"
 				},
-				"children": [
+				"hint": {
+					"en": "Allergen index"
+				},
+				"args": [
 					{
-						"id": "ipkey",
-						"type": "text",
-						"label": {
-							"en": "Philips Air device IP address"
-						},
-						"value": "192.168.2.195",
-						"hint": {
-							"en": "Enter the IP address key of your Philips Air purifier"
-						}
+						"name": "device",
+						"type": "device",
+						"filter": "driver_id=device"
+					},
+					{
+						"name": "argument_main",
+						"type": "dropdown",
+						"values": [
+							{
+								"id": "good",
+								"label": {
+									"en": "good, score below 4"
+								}
+							},
+							{
+								"id": "fair",
+								"label": {
+									"en": "average, between 4 and 6"
+								}
+							},
+							{
+								"id": "poor",
+								"label": {
+									"en": "poor, between 7 and 9"
+								}
+							},
+							{
+								"id": "verypoor",
+								"label": {
+									"en": "very poor, above 9"
+								}
+							}
+						]
+					}
+				]
+			},
+			{
+				"id": "score_pm25",
+				"title": {
+					"en": "pm2.5 measurement"
+				},
+				"hint": {
+					"en": "pm2.5 measurement"
+				},
+				"args": [
+					{
+						"name": "device",
+						"type": "device",
+						"filter": "driver_id=device"
+					},
+					{
+						"name": "argument_main",
+						"type": "dropdown",
+						"values": [
+							{
+								"id": "good",
+								"label": {
+									"en": "good, score below 13"
+								}
+							},
+							{
+								"id": "fair",
+								"label": {
+									"en": "average, between 13 and 35"
+								}
+							},
+							{
+								"id": "poor",
+								"label": {
+									"en": "poor, between 36 and 55"
+								}
+							},
+							{
+								"id": "verypoor",
+								"label": {
+									"en": "very poor, above 55"
+								}
+							}
+						]
 					}
 				]
 			}
-		],
-		"name": {
-			"en": "device"
-		},
-		"class": "other",
-		"energy": {
-			"approximation": {
-				"usageConstant": 20
+		]
+	},
+	"drivers": [
+		{
+			"id": "device",
+			"pair": [
+				{
+					"id": "pair"
+				}
+			],
+			"settings": [
+				{
+					"type": "group",
+					"label": {
+						"en": "General settings"
+					},
+					"children": [
+						{
+							"id": "ipkey",
+							"type": "text",
+							"label": {
+								"en": "Philips Air device IP address"
+							},
+							"value": "192.168.2.195",
+							"hint": {
+								"en": "Enter the IP address key of your Philips Air purifier"
+							}
+						}
+					]
+				}
+			],
+			"name": {
+				"en": "device"
+			},
+			"class": "other",
+			"energy": {
+				"approximation": {
+					"usageConstant": 20
+				}
+			},
+			"capabilities": [
+				"latest_retrieval_date",
+				"measure_pm25",
+				"measure_iaql",
+				"measure_tvoc",
+				"measure_humidity",
+				"measure_temperature",
+				"pre_filter_clean",
+				"carbon_filter_replace",
+				"herpa_filter_replace",
+				"product"
+			],
+			"images": {
+				"large": "/drivers/device/assets/images/large.png",
+				"small": "/drivers/device/assets/images/small.png"
 			}
-		},
-		"capabilities": [
-			"latest_retrieval_date",
-			"measure_pm25",
-			"measure_iaql",
-			"measure_tvoc",
-			"measure_humidity",
-			"measure_temperature",
-			"pre_filter_clean",
-			"carbon_filter_replace",
-			"herpa_filter_replace",
-			"product"
-		],
-		"images": {
-			"large": "/drivers/device/assets/images/large.png",
-			"small": "/drivers/device/assets/images/small.png"
 		}
-	}]
+	]
 }
