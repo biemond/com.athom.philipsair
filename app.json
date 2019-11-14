@@ -9,6 +9,13 @@
 	"description": {
 		"en": "Philips Air Purifier"
 	},
+	"tags": {
+		"en": [
+			"air",
+			"philips",
+			"purifier"
+		]
+	},
 	"category": [
 		"climate"
 	],
