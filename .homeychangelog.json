@@ -1,4 +1,7 @@
 {
+  "0.0.4": {
+    "en": "new trigger measure_pm25_changed, measure_iaql_changed, measure_tvoc_changed"
+  },
   "0.0.3": {
     "en": "initial release"
   }
