@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
@@ -135,10 +135,26 @@
 			"insights": true,
 			"uiComponent": "sensor"
 		},
-		"measure_humidity": {
+		"target_humidity": {
 			"type": "number",
 			"title": {
 				"en": "Target humidity"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": ""
+			},
+			"min": 1,
+			"max": 99,
+			"decimals": 0,
+			"insights": true,
+			"icon": "/assets/images/humidity.svg"
+		},
+		"measure_humidity": {
+			"type": "number",
+			"title": {
+				"en": "Humidity"
 			},
 			"getable": true,
 			"setable": false,
@@ -228,6 +244,31 @@
 				"tokens": [
 				  {
 					"name": "measure_tvoc",
+					"type": "number",
+					"title": {
+					  "en": "value"
+					},
+					"example": {
+					  "en": "1"
+					}
+				  }
+				],
+				"args": [
+				  {
+					"name": "device",
+					"type": "device",
+					"filter": "driver_id=device"
+				  }
+				]
+			  },
+			  {
+				"id": "measure_humidity",
+				"title": {
+				  "en": "Humidity changed"
+				},
+				"tokens": [
+				  {
+					"name": "measure_humidity",
 					"type": "number",
 					"title": {
 					  "en": "value"
@@ -385,6 +426,7 @@
 				"measure_iaql",
 				"measure_tvoc",
 				"measure_humidity",
+				"target_humidity",
 				"measure_temperature",
 				"pre_filter_clean",
 				"carbon_filter_replace",

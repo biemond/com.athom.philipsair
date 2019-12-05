@@ -150,9 +150,13 @@ class device extends Homey.Device {
                     this.log(`GAS (TVOC): ${json.tvoc}`)
                     this.setCapabilityValue('measure_tvoc', json.tvoc);
                 }
+                if(json.hasOwnProperty('rh')){
+                    this.log(`Humidity: ${json.rh}`)
+                    this.setCapabilityValue('measure_humidity', json.rh);
+                }  
                 if(json.hasOwnProperty('rhset')){
                     this.log(`Target humidity: ${json.rhset}`)
-                    this.setCapabilityValue('measure_humidity', json.rhset);
+                    this.setCapabilityValue('target_humidity', json.rhset);
                 }     
                 if(json.hasOwnProperty('iaql')){
                     this.log(`Allergen index: ${json.iaql}`)
