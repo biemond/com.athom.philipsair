@@ -262,7 +262,7 @@
 				]
 			  },
 			  {
-				"id": "measure_humidity",
+				"id": "measure_humidity_changed",
 				"title": {
 				  "en": "Humidity changed"
 				},

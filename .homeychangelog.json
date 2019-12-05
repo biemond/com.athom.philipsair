@@ -1,6 +1,6 @@
 {
   "0.0.5": {
-    "en": "fix measure_humidity and target_humidity, new trigger measure_humidity. to see target target_humidity reinstall device"
+    "en": "fix measure_humidity and target_humidity, new trigger measure_humidity. to see target measure_humidity_changed reinstall device"
   },  
   "0.0.4": {
     "en": "new trigger measure_pm25_changed, measure_iaql_changed, measure_tvoc_changed"
