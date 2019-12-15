@@ -23,7 +23,9 @@ class device extends Homey.Device {
             let name = this.getData().id;
             this.log("name " + name + " key " + settings.secretkey);
             let cronName = this.getData().id.toLowerCase();
-    
+
+            Homey.ManagerSettings.set('settings',settings);
+
             Homey.ManagerCron.getTask(cronName)
                 .then(task => {
                     this.log("The task exists: " + cronName);
@@ -43,6 +45,8 @@ class device extends Homey.Device {
                         this.log('other cron error: ${err.message}');
                     }
                 });
+            
+ 
         })
 
         this._conditionScoreIaql = new Homey.FlowCardCondition('score_iaql').register().registerRunListener((args, state) => {
@@ -53,7 +57,23 @@ class device extends Homey.Device {
             let result = (this.conditionScorePm25lToString(this.getCapabilityValue('measure_pm25')) == args.argument_main) 
             return Promise.resolve(result);
         }); 
+
+        this.registerCapabilityListener('light_intensity', async (value)  => {
+            return this.setLightIntensityState(value);
+        });   
     }
+
+    setLightIntensityState(value) {
+      this.log('setLightIntensityState:', value);
+      let settings = Homey.ManagerSettings.get('settings');
+      this.log(settings); 
+
+      philipsair.setValueAirData(value,settings).then(data => {
+        this.log(data); 
+        return value  
+      })
+    }
+
 
     conditionScoreIaqlToString(index) {
         if ( index > 9 ) {
@@ -179,6 +199,7 @@ class device extends Homey.Device {
                 } 
                 if(json.hasOwnProperty('aqil')){
                     this.log(`Light brightness: ${json.aqil}`)
+                    this.setCapabilityValue('light_intensity', json.aqil);
                 } 
                 if(json.hasOwnProperty('uil')){
                     let uil_str = {'1': 'ON', '0': 'OFF'}

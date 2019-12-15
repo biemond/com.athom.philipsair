@@ -1,7 +1,10 @@
 Philips Air purifier
 
-Added support for Philip AIR purifiers, it should work for all the philips air devices but I could only test it on 
-- AC5659_10 
+Added support for Philip AIR purifiers, it should work for all the philips air devices but we tested it on 
+- AC5659/10 air purifier 
+- AC3259/10 air purifier 
+- AC3829/10 Humidifier and air purifier 
+
 
 Device
 For adding the device you need to provide Philips device ip address plus Homey has to be on the same network as your purifier. 

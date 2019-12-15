@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
@@ -182,7 +182,20 @@
 			"decimals": 0,
 			"insights": true,
 			"icon": "/assets/images/temp.svg"
-		}
+		},
+		"light_intensity": {
+			"type": "number",
+			"title": {
+			  "en": "Light level"
+			},
+			"getable": true,
+			"setable": true,
+			"uiComponent": "slider",
+			"uiQuickAction": true,
+			"min": 0,
+			"max": 100,
+			"step": 25
+		  }
 	},
 	"flow": {
 		"triggers": [
@@ -403,7 +416,7 @@
 							"label": {
 								"en": "Philips Air device IP address"
 							},
-							"value": "192.168.2.195",
+							"value": "",
 							"hint": {
 								"en": "Enter the IP address key of your Philips Air purifier"
 							}
@@ -431,7 +444,8 @@
 				"pre_filter_clean",
 				"carbon_filter_replace",
 				"herpa_filter_replace",
-				"product"
+				"product",
+				"light_intensity"
 			],
 			"images": {
 				"large": "/drivers/device/assets/images/large.png",

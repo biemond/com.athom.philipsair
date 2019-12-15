@@ -1,6 +1,7 @@
 const https = require('http')
 var aesjs = require('aes-js');
 var bigInt = require("big-integer");
+var pkcs7 = require('pkcs7');
 
 
 let a = bigInt('35315308132206205938053219356172167184243234521329128101814628093311586402304');
@@ -19,13 +20,25 @@ console.log(json)
 // -------------------
 //{"diffie":"328871e20be6b47a63f67a02ea168ced5885fa3eaee5ba19b96296ed1e542752f852a3d7c2df67ea7233a675e67a4ecf26c3e09e513950c4ec12b82385ed465b4e9d101eb21b5d3948850894d88ef33f4a550a27a5d552d11dfb4608dd5c7b853ed5c392d06cb510f8ea672c781edb3502d4b17b721a80f9be116c1a939d78cf"}
 
+let key_128 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+const iv = new Uint8Array(key_128);
+
+var optionsPut
+var dataBytesEncrypted
+
 function aes_decrypt2(data, key) {
-    var key_128 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    const iv = new Uint8Array(key_128);
     var aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
     var decryptedBytes = aesCbc.decrypt(data);
     return decryptedBytes;
 }
+
+function aes_encrypt2(data, key) {
+    var segmentSize = 16;
+    var aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
+    var encryptedBytes = aesCbc.encrypt(data); 
+    return Buffer(encryptedBytes).toString('base64');
+}
+
 
 function clean(data) {
     data = data.trimRight().replace(/\\n/g, "\\n")  
@@ -135,6 +148,51 @@ const req = https.request(options, res => {
         sharedSecretText = aesjs.utils.hex.fromBytes(sharedSecret);
         console.log("sharedSecret: " + sharedSecretText); 
         console.log('-------------------')
+
+        let values = { "aqil": 50}
+        let jsonValues = 'AA' + JSON.stringify(values);
+        console.log(jsonValues); 
+        let dataBytes = pkcs7.pad(aesjs.utils.utf8.toBytes(jsonValues));
+        console.log(dataBytes); 
+        dataBytesEncrypted = aes_encrypt2(dataBytes, Buffer.from(sharedSecretText, 'hex'));
+        console.log(dataBytesEncrypted);
+
+        optionsPut = {
+            protocol: 'http:',
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': dataBytesEncrypted.length
+            }
+        }
+        optionsPut.hostname = hostname;
+        optionsPut.path = '/di/v1/products/1/air';
+
+        const req1 = https.request(optionsPut, res1 => {
+            console.log("put Values");    
+            console.log('-------------------')
+            console.log(`statusCode: ${res1.statusCode}`)
+            res1.on('data', dd => {
+                // console.log(dd.toString('ascii'));
+                var resp = dd.toString('ascii');
+                let payload = new Buffer.from(resp, 'base64');
+                let data = aes_decrypt2(payload,Buffer.from(sharedSecretText, 'hex'));
+                let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
+                let json = clean(dataText);
+                // processStatus(json)
+                console.log(json); 
+                console.log('-------------------')
+            })
+        })  
+        
+        req1.on('error', error => {
+            console.error(error)
+        })
+        req1.write(dataBytesEncrypted)
+        req1.end()
+        
+
+
     })
 })
   
@@ -144,6 +202,8 @@ req.on('error', error => {
   
 req.write(json)
 req.end()
+
+
 
 const optionsGet = {
     protocol: 'http:',
