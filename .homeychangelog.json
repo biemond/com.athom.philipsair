@@ -1,6 +1,6 @@
 {
   "0.0.6": {
-    "en": "remove default ip address"
+    "en": "remove default ip address, new actions light_intensity, button_lights, purifier_mode"
   },  
   "0.0.5": {
     "en": "fix measure_humidity and target_humidity, new trigger measure_humidity. to see target measure_humidity_changed reinstall device"

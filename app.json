@@ -186,7 +186,7 @@
 		"light_intensity": {
 			"type": "number",
 			"title": {
-			  "en": "Light level"
+				"en": "Light level ring"
 			},
 			"getable": true,
 			"setable": true,
@@ -195,110 +195,156 @@
 			"min": 0,
 			"max": 100,
 			"step": 25
-		  }
+		},
+		"button_lights": {
+			"type": "boolean",
+			"title": {
+				"en": "Display enabled"
+			},
+			"getable": true,
+			"setable": true,
+			"uiComponent": "toggle",
+			"uiQuickAction": true
+		},
+		"purifier_mode": {
+			"type": "enum",
+			"title": {
+				"en": "Purifier mode"
+			},
+			"getable": true,
+			"setable": true,
+			"uiComponent": "picker",
+			"uiQuickAction": true,
+			"values": [
+				{
+					"id": "P",
+					"title": {
+						"en": "Auto"
+					}
+				},
+				{
+					"id": "A",
+					"title": {
+						"en": "Allergen"
+					}
+				},
+				{
+					"id": "M",
+					"title": {
+						"en": "Manual"
+					}
+				},
+				{
+					"id": "B",
+					"title": {
+						"en": "Bacteria"
+					}
+				}
+			]
+		}
 	},
 	"flow": {
 		"triggers": [
 			{
 				"id": "measure_pm25_changed",
 				"title": {
-				  "en": "PM2.5 changed"
+					"en": "PM2.5 changed"
 				},
 				"tokens": [
-				  {
-					"name": "measure_pm25",
-					"type": "number",
-					"title": {
-					  "en": "value"
-					},
-					"example": {
-					  "en": "50"
+					{
+						"name": "measure_pm25",
+						"type": "number",
+						"title": {
+							"en": "value"
+						},
+						"example": {
+							"en": "50"
+						}
 					}
-				  }
 				],
 				"args": [
-				  {
-					"name": "device",
-					"type": "device",
-					"filter": "driver_id=device"
-				  }
+					{
+						"name": "device",
+						"type": "device",
+						"filter": "driver_id=device"
+					}
 				]
-			  },
-			  {
+			},
+			{
 				"id": "measure_iaql_changed",
 				"title": {
-				  "en": "IAQL changed"
+					"en": "IAQL changed"
 				},
 				"tokens": [
-				  {
-					"name": "measure_iaql",
-					"type": "number",
-					"title": {
-					  "en": "value"
-					},
-					"example": {
-					  "en": "1"
+					{
+						"name": "measure_iaql",
+						"type": "number",
+						"title": {
+							"en": "value"
+						},
+						"example": {
+							"en": "1"
+						}
 					}
-				  }
 				],
 				"args": [
-				  {
-					"name": "device",
-					"type": "device",
-					"filter": "driver_id=device"
-				  }
+					{
+						"name": "device",
+						"type": "device",
+						"filter": "driver_id=device"
+					}
 				]
-			  },
-			  {
+			},
+			{
 				"id": "measure_tvoc_changed",
 				"title": {
-				  "en": "TVOC changed"
+					"en": "TVOC changed"
 				},
 				"tokens": [
-				  {
-					"name": "measure_tvoc",
-					"type": "number",
-					"title": {
-					  "en": "value"
-					},
-					"example": {
-					  "en": "1"
+					{
+						"name": "measure_tvoc",
+						"type": "number",
+						"title": {
+							"en": "value"
+						},
+						"example": {
+							"en": "1"
+						}
 					}
-				  }
 				],
 				"args": [
-				  {
-					"name": "device",
-					"type": "device",
-					"filter": "driver_id=device"
-				  }
+					{
+						"name": "device",
+						"type": "device",
+						"filter": "driver_id=device"
+					}
 				]
-			  },
-			  {
+			},
+			{
 				"id": "measure_humidity_changed",
 				"title": {
-				  "en": "Humidity changed"
+					"en": "Humidity changed"
 				},
 				"tokens": [
-				  {
-					"name": "measure_humidity",
-					"type": "number",
-					"title": {
-					  "en": "value"
-					},
-					"example": {
-					  "en": "1"
+					{
+						"name": "measure_humidity",
+						"type": "number",
+						"title": {
+							"en": "value"
+						},
+						"example": {
+							"en": "1"
+						}
 					}
-				  }
 				],
 				"args": [
-				  {
-					"name": "device",
-					"type": "device",
-					"filter": "driver_id=device"
-				  }
+					{
+						"name": "device",
+						"type": "device",
+						"filter": "driver_id=device"
+					}
 				]
-			  }
+			}
 		],
 		"conditions": [
 			{
@@ -445,7 +491,9 @@
 				"carbon_filter_replace",
 				"herpa_filter_replace",
 				"product",
-				"light_intensity"
+				"light_intensity",
+				"button_lights",
+				"purifier_mode"
 			],
 			"images": {
 				"large": "/drivers/device/assets/images/large.png",

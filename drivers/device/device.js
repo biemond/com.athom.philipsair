@@ -59,12 +59,31 @@ class device extends Homey.Device {
         }); 
 
         this.registerCapabilityListener('light_intensity', async (value)  => {
-            return this.setLightIntensityState(value);
+            let values = { "aqil": value}
+            this.setState(JSON.stringify(values))
+            return value;
         });   
+
+        this.registerCapabilityListener('button_lights', async (value)  => {
+            let values;
+            if ( value == true ) {
+                values = { "uil": "1"}
+            } else {
+                values = { "uil": "0"}
+            }
+            this.setState(JSON.stringify(values))
+            return value;
+        });  
+
+        this.registerCapabilityListener('purifier_mode', async (value)  => {
+            let values = { "mode": value}
+            this.setState(JSON.stringify(values))
+            return value;
+        });          
     }
 
-    setLightIntensityState(value) {
-      this.log('setLightIntensityState:', value);
+    setState(value) {
+      this.log('setState:', value);
       let settings = Homey.ManagerSettings.get('settings');
       this.log(settings); 
 
@@ -191,6 +210,7 @@ class device extends Homey.Device {
                 } 
                 if(json.hasOwnProperty('mode')){
                     let mode_str = {'P': 'auto', 'A': 'allergen', 'S': 'sleep', 'M': 'manual', 'B': 'bacteria', 'N': 'night'}
+                    this.setCapabilityValue('purifier_mode', json.mode);
                     this.log(`Mode: ${mode_str[json.mode]}`)
                 } 
                 if(json.hasOwnProperty('om')){
@@ -203,6 +223,11 @@ class device extends Homey.Device {
                 } 
                 if(json.hasOwnProperty('uil')){
                     let uil_str = {'1': 'ON', '0': 'OFF'}
+                    if ( json.uil == '1' ) {
+                        this.setCapabilityValue('button_lights', true);
+                    } else {
+                        this.setCapabilityValue('button_lights', false);
+                    }
                     this.log(`Buttons light: ${uil_str[json.uil]}`)
                 } 
                 if(json.hasOwnProperty('ddp')){

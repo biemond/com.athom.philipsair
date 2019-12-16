@@ -149,7 +149,9 @@ const req = https.request(options, res => {
         console.log("sharedSecret: " + sharedSecretText); 
         console.log('-------------------')
 
-        let values = { "aqil": 50}
+        // let values = { "aqil": 50}
+        // let values = { "mode": "P"} 
+        let values = { "uil": '1'}                
         let jsonValues = 'AA' + JSON.stringify(values);
         console.log(jsonValues); 
         let dataBytes = pkcs7.pad(aesjs.utils.utf8.toBytes(jsonValues));
@@ -173,6 +175,7 @@ const req = https.request(options, res => {
             console.log('-------------------')
             console.log(`statusCode: ${res1.statusCode}`)
             res1.on('data', dd => {
+                if (res1.statusCode == 200 ){
                 // console.log(dd.toString('ascii'));
                 var resp = dd.toString('ascii');
                 let payload = new Buffer.from(resp, 'base64');
@@ -181,6 +184,7 @@ const req = https.request(options, res => {
                 let json = clean(dataText);
                 // processStatus(json)
                 console.log(json); 
+                }
                 console.log('-------------------')
             })
         })  
