@@ -11,6 +11,11 @@ For adding the device you need to provide Philips device ip address plus Homey h
 
 When there is a powerloss or the purifier was restarted then also the device need to be re-added in the homey app, this is because the shared key between the purifier and homey is added only once.
 
+Actions
+- light_intensity, Light level ring 
+- button_lights, Display enabled
+- purifier_mode, Purifier mode
+
 Sensors
 - latest_retrieval_date
 - measure_pm25

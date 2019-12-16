@@ -1,14 +1,21 @@
 # Philips Air purifier
 
-Added support for Philip AIR purifiers, it should work for all the philips air devices but I could only test it on 
-- AC5659_10 
+Added support for Philip AIR purifiers, it should work for all the philips air devices but we tested it on 
+- AC5659/10 air purifier 
+- AC3259/10 air purifier 
+- AC3829/10 Humidifier and air purifier 
 
 ## Device
 For adding the device you need to provide Philips device ip address plus Homey has to be on the same network as your purifier. 
 
 When there is a powerloss or the purifier was restarted then also the device need to be re-added in the homey app, this is because the shared key between the purifier and homey is added only once.
 
-Sensors
+### Actions
+- light_intensity, Light level ring 
+- button_lights, Display enabled
+- purifier_mode, Purifier mode
+
+### Sensors
 - latest_retrieval_date
 - measure_pm25
 - measure_iaql
