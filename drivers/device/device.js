@@ -80,6 +80,25 @@ class device extends Homey.Device {
             this.setState(JSON.stringify(values))
             return value;
         });          
+ 
+        this.registerCapabilityListener('display_mode', async (value)  => {
+            let values = { "ddp": value}
+            this.setState(JSON.stringify(values))
+            return value;
+        });            
+
+        this.registerCapabilityListener('child_lock', async (value)  => {
+            let values = { "cl": value}
+            this.setState(JSON.stringify(values))
+            return value;
+        });            
+
+        this.registerCapabilityListener('fan_speed', async (value)  => {
+            let values = { "om": value}
+            this.setState(JSON.stringify(values))
+            return value;
+        });    
+    
     }
 
     setState(value) {
@@ -214,7 +233,8 @@ class device extends Homey.Device {
                     this.log(`Mode: ${mode_str[json.mode]}`)
                 } 
                 if(json.hasOwnProperty('om')){
-                    let om_str = {'s': 'silent', 't': 'turbo'}
+                    let om_str = {'1': 'speed 1', '2': 'speed 2' ,'3': 'speed 3' ,'s': 'silent', 't': 'turbo'}
+                    this.setCapabilityValue('fan_speed', json.om);
                     this.log(`Fan speed: ${om_str[json.om]}`)
                 } 
                 if(json.hasOwnProperty('aqil')){
@@ -233,12 +253,14 @@ class device extends Homey.Device {
                 if(json.hasOwnProperty('ddp')){
                     let ddp_str = {'1': 'PM2.5', '0': 'IAI'}
                     this.log(`Used index: ${ddp_str[json.ddp]}`)
+                    this.setCapabilityValue('display_mode', json.ddp);
                 } 
                 if(json.hasOwnProperty('wl')){
                     this.log(`Water level: ${json.wl}`)
                 } 
                 if(json.hasOwnProperty('cl')){
                     this.log(`Child lock: ${json.cl}`)
+                    this.setCapabilityValue('child_lock', json.cl);
                 }     
                 if(json.hasOwnProperty('dt')){
                     this.log(`Timer hours: ${json.dt}`)

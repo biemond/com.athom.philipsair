@@ -5,16 +5,21 @@ Added support for Philip AIR purifiers, it should work for all the philips air d
 - AC3259/10 air purifier 
 - AC3829/10 Humidifier and air purifier 
 
-
 Device
 For adding the device you need to provide Philips device ip address plus Homey has to be on the same network as your purifier. 
 
 When there is a powerloss or the purifier was restarted then also the device need to be re-added in the homey app, this is because the shared key between the purifier and homey is added only once.
 
+Refresh trigger
+Every minute this app will poll for the latest purifer status.
+
 Actions
 - light_intensity, Light level ring 
 - button_lights, Display enabled
 - purifier_mode, Purifier mode
+- display_mode, Display mode
+- child_lock, Child lock
+- fan_speed, Fan speed
 
 Sensors
 - latest_retrieval_date

@@ -206,6 +206,16 @@
 			"uiComponent": "toggle",
 			"uiQuickAction": true
 		},
+		"child_lock": {
+			"type": "boolean",
+			"title": {
+				"en": "Child lock enabled"
+			},
+			"getable": true,
+			"setable": true,
+			"uiComponent": "toggle",
+			"uiQuickAction": true
+		},
 		"purifier_mode": {
 			"type": "enum",
 			"title": {
@@ -238,6 +248,72 @@
 					"id": "B",
 					"title": {
 						"en": "Bacteria"
+					}
+				}
+			]
+		},
+		"fan_speed": {
+			"type": "enum",
+			"title": {
+				"en": "Fan speed"
+			},
+			"getable": true,
+			"setable": true,
+			"uiComponent": "picker",
+			"uiQuickAction": true,
+			"values": [
+				{
+					"id": "1",
+					"title": {
+						"en": "Speed 1"
+					}
+				},
+				{
+					"id": "2",
+					"title": {
+						"en": "Speed 2"
+					}
+				},
+				{
+					"id": "3",
+					"title": {
+						"en": "Speed 3"
+					}
+				},
+				{
+					"id": "s",
+					"title": {
+						"en": "Silent"
+					}
+				},
+				{
+					"id": "t",
+					"title": {
+						"en": "Turbo"
+					}
+				}
+			]
+		},
+		"display_mode": {
+			"type": "enum",
+			"title": {
+				"en": "Display mode PM2.5/IAI"
+			},
+			"getable": true,
+			"setable": true,
+			"uiComponent": "picker",
+			"uiQuickAction": true,
+			"values": [
+				{
+					"id": "0",
+					"title": {
+						"en": "PM2.5"
+					}
+				},
+				{
+					"id": "1",
+					"title": {
+						"en": "IAI"
 					}
 				}
 			]
@@ -493,7 +569,10 @@
 				"product",
 				"light_intensity",
 				"button_lights",
-				"purifier_mode"
+				"purifier_mode",
+				"display_mode",
+				"child_lock",
+				"fan_speed"
 			],
 			"images": {
 				"large": "/drivers/device/assets/images/large.png",

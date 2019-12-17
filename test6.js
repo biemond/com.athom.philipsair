@@ -151,7 +151,11 @@ const req = https.request(options, res => {
 
         // let values = { "aqil": 50}
         // let values = { "mode": "P"} 
-        let values = { "uil": '1'}                
+        // let values = { "uil": '1'}   
+        // let values = { "ddp": '0'}  
+        // let values = { "om": 's'}  
+        let values = { "cl": false} 
+
         let jsonValues = 'AA' + JSON.stringify(values);
         console.log(jsonValues); 
         let dataBytes = pkcs7.pad(aesjs.utils.utf8.toBytes(jsonValues));
