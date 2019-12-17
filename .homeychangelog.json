@@ -1,5 +1,5 @@
 {
-  "0.0.6": {
+  "0.0.7": {
     "en": "remove default ip address, new actions light_intensity, button_lights, purifier_mode, display_mode, child_lock, fan_speed"
   },  
   "0.0.5": {

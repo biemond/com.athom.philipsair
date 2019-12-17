@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
@@ -305,13 +305,13 @@
 			"uiQuickAction": true,
 			"values": [
 				{
-					"id": "0",
+					"id": "1",
 					"title": {
 						"en": "PM2.5"
 					}
 				},
 				{
-					"id": "1",
+					"id": "0",
 					"title": {
 						"en": "IAI"
 					}
