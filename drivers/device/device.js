@@ -330,7 +330,13 @@ class device extends Homey.Device {
                   let state = {
                     "which": "carbon_filter"
                   }; 
-                  this.flowTriggerFilterReplaceClean(tokens, state);
+                  if (this.carbonFilterTriggered == false) {
+                    this.flowTriggerFilterReplaceClean(tokens, state);
+                    this.carbonFilterTriggered = true;
+                    setTimeout(() => {
+                        this.carbonFilterTriggered = false;
+                    }, 60 * MINUTE);
+                  }
                 }
                 if(data.filter.hasOwnProperty('fltsts1')){
                   this.log(`HEPA ${data.filter.fltt1} filter: replace in ${data.filter.fltsts1} hours`)
@@ -342,7 +348,13 @@ class device extends Homey.Device {
                   let state = {
                     "which": "hepa_filter"
                   }; 
-                  this.flowTriggerFilterReplaceClean(tokens, state);
+                  if (this.hepaFilterTriggered == false) {
+                    this.flowTriggerFilterReplaceClean(tokens, state);
+                    this.hepaFilterTriggered = true;
+                    setTimeout(() => {
+                        this.hepaFilterTriggered = false;
+                    }, 60 * MINUTE);
+                  }
                 }
             }
             this.handleDeviceStatus(data.status);
