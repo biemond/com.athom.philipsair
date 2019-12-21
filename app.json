@@ -75,7 +75,7 @@
 			},
 			"icon": "/assets/images/clock.svg"
 		},
-		"herpa_filter_replace": {
+		"hepa_filter_replace": {
 			"type": "number",
 			"title": {
 				"en": "HEPA filter replace in"
@@ -357,6 +357,60 @@
 				]
 			},
 			{
+				"id": "filter_replace_clean",
+				"title": {
+					"en": "Replace or clean filter"
+				},
+				"tokens": [
+					{
+						"name": "hours",
+						"type": "number",
+						"title": {
+							"en": "hours"
+						},
+						"example": {
+							"en": "50"
+						}
+					},
+					{
+						"name": "filter",
+						"type": "string",
+						"title": {
+							"en": "filter"
+						},
+						"example": {
+							"en": "carbon"
+						}
+					}					
+				],
+				"args": [
+					{
+						"name": "which",
+						"type": "dropdown",
+						"values": [
+						  {
+							"id": "pre_filter",
+							"label": {
+							  "en": "pre filter"
+							}
+						  },
+						  {
+							"id": "carbon_filter",
+							"label": {
+							  "en": "carbon filter"
+							}
+						  },
+						  {
+							"id": "hepa_filter",
+							"label": {
+							  "en": "hepa filter"
+							}
+						  }
+						]
+					}						
+				]
+			},
+			{
 				"id": "measure_iaql_changed",
 				"title": {
 					"en": "IAQL changed"
@@ -575,7 +629,7 @@
 				"measure_temperature",
 				"pre_filter_clean",
 				"carbon_filter_replace",
-				"herpa_filter_replace",
+				"hepa_filter_replace",
 				"product",
 				"light_intensity",
 				"onoff",

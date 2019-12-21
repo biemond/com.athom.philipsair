@@ -41,6 +41,7 @@ Every minute this app will poll for the latest purifer status.
 - measure_iaql_changed
 - measure_tvoc_changed
 - measure_humidity_changed
+- filter_replace_clean ( 1 hour timeout )
 
 ### conditions
 - score_pm25 with good, fair, poor and verypoor

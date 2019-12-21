@@ -3,6 +3,8 @@
 const Homey = require('homey');
 const { ManagerSettings } = require('homey');
 const philipsair = require('index.js');
+const MINUTE = 60000;
+
 
 Date.prototype.timeNow = function(){ 
     return ((this.getHours() < 10)?"0":"") + ((this.getHours()>12)?(this.getHours()-12):this.getHours()) +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() + " " + ((this.getHours()>12)?('PM'):'AM');
@@ -11,6 +13,9 @@ Date.prototype.timeNow = function(){
 class device extends Homey.Device {
 
 	onInit() {
+        this.preFilterTriggered = false;
+        this.carbonFilterTriggered = false;
+        this.hepaFilterTriggered = false;
 		this.log('MyPhilipsAirDevice has been inited');
         let settings = this.getData();
 
@@ -45,9 +50,12 @@ class device extends Homey.Device {
                         this.log('other cron error: ${err.message}');
                     }
                 });
-            
- 
         })
+        // https://apps.developer.athom.com/tutorial-Flow-State.html
+        this._flowTriggerFilterReplaceClean = new Homey.FlowCardTrigger('filter_replace_clean').registerRunListener(( args, state ) => {
+            // If true, this flow should run
+            return Promise.resolve( args.which === state.which );
+        }).register()
 
         this._conditionScoreIaql = new Homey.FlowCardCondition('score_iaql').register().registerRunListener((args, state) => {
             let result = (this.conditionScoreIaqlToString(this.getCapabilityValue('measure_iaql')) == args.argument_main) 
@@ -110,6 +118,14 @@ class device extends Homey.Device {
             return value;
         });    
     
+    }
+
+    // flow triggers
+    flowTriggerFilterReplaceClean(tokens, state) {
+        this._flowTriggerFilterReplaceClean
+            .trigger(tokens, state)
+            .then(this.log("flowTriggerFilterReplaceClean"))
+            .catch(this.error)
     }
 
     setState(value) {
@@ -287,16 +303,46 @@ class device extends Homey.Device {
             }
             if(data.filter != null){
                 if(data.filter.hasOwnProperty('fltsts0')){
-                this.log(`Pre-filter: clean in ${data.filter.fltsts0} hours`)
-                this.setCapabilityValue('pre_filter_clean', data.filter.fltsts0);
+                  this.log(`Pre-filter: clean in ${data.filter.fltsts0} hours`)
+                  this.setCapabilityValue('pre_filter_clean', data.filter.fltsts0);
+                  let tokens = {
+                    "hours": data.filter.fltsts0,
+                    "filter": "pre_filter"
+                  };
+                  let state = {
+                    "which": "pre_filter"
+                  }; 
+                  if (this.preFilterTriggered == false) {
+                    this.flowTriggerFilterReplaceClean(tokens, state);
+                    this.preFilterTriggered = true;
+                    setTimeout(() => {
+                        this.preFilterTriggered = false;
+                    }, 60 * MINUTE);
+                  }
                 }
                 if(data.filter.hasOwnProperty('fltsts2')){
-                this.log(`Active Carbon ${data.filter.fltt2} filter: replace in ${data.filter.fltsts2} hours`)
-                this.setCapabilityValue('carbon_filter_replace', data.filter.fltsts2);
+                  this.log(`Active Carbon ${data.filter.fltt2} filter: replace in ${data.filter.fltsts2} hours`)
+                  this.setCapabilityValue('carbon_filter_replace', data.filter.fltsts2);
+                  let tokens = {
+                    "hours": data.filter.fltsts2,
+                    "filter": "carbon_filter"
+                  };
+                  let state = {
+                    "which": "carbon_filter"
+                  }; 
+                  this.flowTriggerFilterReplaceClean(tokens, state);
                 }
                 if(data.filter.hasOwnProperty('fltsts1')){
-                    this.log(`HEPA ${data.filter.fltt1} filter: replace in ${data.filter.fltsts1} hours`)
-                    this.setCapabilityValue('herpa_filter_replace', data.filter.fltsts1);
+                  this.log(`HEPA ${data.filter.fltt1} filter: replace in ${data.filter.fltsts1} hours`)
+                  this.setCapabilityValue('hepa_filter_replace', data.filter.fltsts1);
+                  let tokens = {
+                    "hours": data.filter.fltsts1,
+                    "filter": "hepa_filter"
+                  };
+                  let state = {
+                    "which": "hepa_filter"
+                  }; 
+                  this.flowTriggerFilterReplaceClean(tokens, state);
                 }
             }
             this.handleDeviceStatus(data.status);
