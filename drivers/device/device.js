@@ -87,6 +87,17 @@ class device extends Homey.Device {
             return value;
         });            
 
+        this.registerCapabilityListener('onoff', async (value)  => {
+            let values;
+            if ( value == true ) {
+                values = { "pwr": "1"}
+            } else {
+                values = { "pwr": "0"}
+            }
+            this.setState(JSON.stringify(values))
+            return value;
+        }); 
+
         this.registerCapabilityListener('child_lock', async (value)  => {
             let values = { "cl": value}
             this.setState(JSON.stringify(values))
@@ -198,6 +209,11 @@ class device extends Homey.Device {
             let json = data.status;
             if(data.status != null){            
                 if(json.hasOwnProperty('pwr')){
+                    if ( json.pwr == '1' ) {
+                        this.setCapabilityValue('onoff', true);
+                    } else {
+                        this.setCapabilityValue('onoff', false);
+                    }
                     this.log(`Power: ${json.pwr == '1' ? 'ON'  : "OFF"}`)
                 }
                 if(json.hasOwnProperty('pm25')){

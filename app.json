@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
@@ -196,6 +196,16 @@
 			"max": 100,
 			"step": 25
 		},
+		"onoff": {
+			"type": "boolean",
+			"title": {
+				"en": "Power"
+			},
+			"getable": true,
+			"setable": true,
+			"uiComponent": "toggle",
+			"uiQuickAction": true
+		},
 		"button_lights": {
 			"type": "boolean",
 			"title": {
@@ -204,7 +214,7 @@
 			"getable": true,
 			"setable": true,
 			"uiComponent": "toggle",
-			"uiQuickAction": true
+			"uiQuickAction": false
 		},
 		"child_lock": {
 			"type": "boolean",
@@ -214,7 +224,7 @@
 			"getable": true,
 			"setable": true,
 			"uiComponent": "toggle",
-			"uiQuickAction": true
+			"uiQuickAction": false
 		},
 		"purifier_mode": {
 			"type": "enum",
@@ -229,25 +239,25 @@
 				{
 					"id": "P",
 					"title": {
-						"en": "Auto"
+						"en": "General mode"
 					}
 				},
 				{
 					"id": "A",
 					"title": {
-						"en": "Allergen"
+						"en": "Allergen mode"
 					}
 				},
 				{
 					"id": "M",
 					"title": {
-						"en": "Manual"
+						"en": "Manual mode"
 					}
 				},
 				{
 					"id": "B",
 					"title": {
-						"en": "Bacteria"
+						"en": "Bacteria & Virus mode"
 					}
 				}
 			]
@@ -568,6 +578,7 @@
 				"herpa_filter_replace",
 				"product",
 				"light_intensity",
+				"onoff",
 				"button_lights",
 				"purifier_mode",
 				"display_mode",
