@@ -1,4 +1,7 @@
 {
+  "0.0.8": {
+    "en": "new action onoff, refresh current state after a change"
+  }, 
   "0.0.7": {
     "en": "remove default ip address, new actions light_intensity, button_lights, purifier_mode, display_mode, child_lock, fan_speed"
   },  

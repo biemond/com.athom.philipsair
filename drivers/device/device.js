@@ -118,7 +118,10 @@ class device extends Homey.Device {
       this.log(settings); 
 
       philipsair.setValueAirData(value,settings).then(data => {
+        this.log("-setValueAirData-begin-"); 
         this.log(data); 
+        this.handleDeviceStatus(data);
+        this.log("-setValueAirData-end-"); 
         return value  
       })
     }
@@ -177,10 +180,100 @@ class device extends Homey.Device {
         }
     }   
 
+    handleDeviceStatus(json) {
+        if(json != null){            
+            let currentdate =new Date().timeNow();
+            this.log("refresh now " + currentdate);
+            this.setCapabilityValue('latest_retrieval_date', currentdate);
+    
+            if(json.hasOwnProperty('pwr')){
+                if ( json.pwr == '1' ) {
+                    this.setCapabilityValue('onoff', true);
+                } else {
+                    this.setCapabilityValue('onoff', false);
+                }
+                this.log(`Power: ${json.pwr == '1' ? 'ON'  : "OFF"}`)
+            }
+            if(json.hasOwnProperty('pm25')){
+                this.log(`PM25: ${json.pm25}`)
+                this.setCapabilityValue('measure_pm25', json.pm25);
+            }
+            if(json.hasOwnProperty('tvoc')){
+                this.log(`GAS (TVOC): ${json.tvoc}`)
+                this.setCapabilityValue('measure_tvoc', json.tvoc);
+            }
+            if(json.hasOwnProperty('rh')){
+                this.log(`Humidity: ${json.rh}`)
+                this.setCapabilityValue('measure_humidity', json.rh);
+            }  
+            if(json.hasOwnProperty('rhset')){
+                this.log(`Target humidity: ${json.rhset}`)
+                this.setCapabilityValue('target_humidity', json.rhset);
+            }     
+            if(json.hasOwnProperty('iaql')){
+                this.log(`Allergen index: ${json.iaql}`)
+                this.setCapabilityValue('measure_iaql', json.iaql);
+            } 
+            if(json.hasOwnProperty('temp')){
+                this.log(`Temperature: ${json.temp}`)
+                this.setCapabilityValue('measure_temperature', json.temp);
+            } 
+            if(json.hasOwnProperty('func')){
+                this.log(`Function: ${json.pwr == 'P' ? 'Purification'  : "Purification & Humidification"}`)
+            } 
+            if(json.hasOwnProperty('mode')){
+                let mode_str = {'P': 'auto', 'A': 'allergen', 'S': 'sleep', 'M': 'manual', 'B': 'bacteria', 'N': 'night'}
+                this.setCapabilityValue('purifier_mode', json.mode);
+                this.log(`Mode: ${mode_str[json.mode]}`)
+            } 
+            if(json.hasOwnProperty('om')){
+                let om_str = {'1': 'speed 1', '2': 'speed 2' ,'3': 'speed 3' ,'s': 'silent', 't': 'turbo'}
+                this.setCapabilityValue('fan_speed', json.om);
+                this.log(`Fan speed: ${om_str[json.om]}`)
+            } 
+            if(json.hasOwnProperty('aqil')){
+                this.log(`Light brightness: ${json.aqil}`)
+                this.setCapabilityValue('light_intensity', json.aqil);
+            } 
+            if(json.hasOwnProperty('uil')){
+                let uil_str = {'1': 'ON', '0': 'OFF'}
+                if ( json.uil == '1' ) {
+                    this.setCapabilityValue('button_lights', true);
+                } else {
+                    this.setCapabilityValue('button_lights', false);
+                }
+                this.log(`Buttons light: ${uil_str[json.uil]}`)
+            } 
+            if(json.hasOwnProperty('ddp')){
+                let ddp_str = {'1': 'PM2.5', '0': 'IAI'}
+                this.log(`Used index: ${ddp_str[json.ddp]}`)
+                this.setCapabilityValue('display_mode', json.ddp);
+            } 
+            if(json.hasOwnProperty('wl')){
+                this.log(`Water level: ${json.wl}`)
+            } 
+            if(json.hasOwnProperty('cl')){
+                this.log(`Child lock: ${json.cl}`)
+                this.setCapabilityValue('child_lock', json.cl);
+            }     
+            if(json.hasOwnProperty('dt')){
+                this.log(`Timer hours: ${json.dt}`)
+            } 
+            if(json.hasOwnProperty('dtrs')){
+                this.log(`Timer minutes: ${json.dtrs}`)
+            }  
+            if(json.hasOwnProperty('err')){
+                if ( json.err != 0) {
+                    let err_str = {49408: 'no water', 32768: 'water tank open'}
+                    this.log(`Error: ${ddp_str[json.err]}`)
+                } {
+                    this.log(`Error: -`)
+                }
+            }
+        }            
+    }
+
 	pollAirDevice(settings) {
-        let currentdate =new Date().timeNow();
-        this.log("refresh now " + currentdate);
-        this.setCapabilityValue('latest_retrieval_date', currentdate);
         this.log(settings);
         philipsair.getCurrentStatusData(settings).then(data => {
             
@@ -206,93 +299,7 @@ class device extends Homey.Device {
                     this.setCapabilityValue('herpa_filter_replace', data.filter.fltsts1);
                 }
             }
-            let json = data.status;
-            if(data.status != null){            
-                if(json.hasOwnProperty('pwr')){
-                    if ( json.pwr == '1' ) {
-                        this.setCapabilityValue('onoff', true);
-                    } else {
-                        this.setCapabilityValue('onoff', false);
-                    }
-                    this.log(`Power: ${json.pwr == '1' ? 'ON'  : "OFF"}`)
-                }
-                if(json.hasOwnProperty('pm25')){
-                    this.log(`PM25: ${json.pm25}`)
-                    this.setCapabilityValue('measure_pm25', json.pm25);
-                }
-                if(json.hasOwnProperty('tvoc')){
-                    this.log(`GAS (TVOC): ${json.tvoc}`)
-                    this.setCapabilityValue('measure_tvoc', json.tvoc);
-                }
-                if(json.hasOwnProperty('rh')){
-                    this.log(`Humidity: ${json.rh}`)
-                    this.setCapabilityValue('measure_humidity', json.rh);
-                }  
-                if(json.hasOwnProperty('rhset')){
-                    this.log(`Target humidity: ${json.rhset}`)
-                    this.setCapabilityValue('target_humidity', json.rhset);
-                }     
-                if(json.hasOwnProperty('iaql')){
-                    this.log(`Allergen index: ${json.iaql}`)
-                    this.setCapabilityValue('measure_iaql', json.iaql);
-                } 
-                if(json.hasOwnProperty('temp')){
-                    this.log(`Temperature: ${json.temp}`)
-                    this.setCapabilityValue('measure_temperature', json.temp);
-                } 
-                if(json.hasOwnProperty('func')){
-                    this.log(`Function: ${json.pwr == 'P' ? 'Purification'  : "Purification & Humidification"}`)
-                } 
-                if(json.hasOwnProperty('mode')){
-                    let mode_str = {'P': 'auto', 'A': 'allergen', 'S': 'sleep', 'M': 'manual', 'B': 'bacteria', 'N': 'night'}
-                    this.setCapabilityValue('purifier_mode', json.mode);
-                    this.log(`Mode: ${mode_str[json.mode]}`)
-                } 
-                if(json.hasOwnProperty('om')){
-                    let om_str = {'1': 'speed 1', '2': 'speed 2' ,'3': 'speed 3' ,'s': 'silent', 't': 'turbo'}
-                    this.setCapabilityValue('fan_speed', json.om);
-                    this.log(`Fan speed: ${om_str[json.om]}`)
-                } 
-                if(json.hasOwnProperty('aqil')){
-                    this.log(`Light brightness: ${json.aqil}`)
-                    this.setCapabilityValue('light_intensity', json.aqil);
-                } 
-                if(json.hasOwnProperty('uil')){
-                    let uil_str = {'1': 'ON', '0': 'OFF'}
-                    if ( json.uil == '1' ) {
-                        this.setCapabilityValue('button_lights', true);
-                    } else {
-                        this.setCapabilityValue('button_lights', false);
-                    }
-                    this.log(`Buttons light: ${uil_str[json.uil]}`)
-                } 
-                if(json.hasOwnProperty('ddp')){
-                    let ddp_str = {'1': 'PM2.5', '0': 'IAI'}
-                    this.log(`Used index: ${ddp_str[json.ddp]}`)
-                    this.setCapabilityValue('display_mode', json.ddp);
-                } 
-                if(json.hasOwnProperty('wl')){
-                    this.log(`Water level: ${json.wl}`)
-                } 
-                if(json.hasOwnProperty('cl')){
-                    this.log(`Child lock: ${json.cl}`)
-                    this.setCapabilityValue('child_lock', json.cl);
-                }     
-                if(json.hasOwnProperty('dt')){
-                    this.log(`Timer hours: ${json.dt}`)
-                } 
-                if(json.hasOwnProperty('dtrs')){
-                    this.log(`Timer minutes: ${json.dtrs}`)
-                }  
-                if(json.hasOwnProperty('err')){
-                    if ( json.err != 0) {
-                        let err_str = {49408: 'no water', 32768: 'water tank open'}
-                        this.log(`Error: ${ddp_str[json.err]}`)
-                    } {
-                        this.log(`Error: -`)
-                    }
-                }
-            }     
+            this.handleDeviceStatus(data.status);
         })
     }
 }
