@@ -1,4 +1,7 @@
 {
+  "0.0.9": {
+    "en": "new device Purifier and Humidifier, restrict current Purifier device"
+  }, 
   "0.0.8": {
     "en": "new action onoff, refresh current state after a change, filter_replace_clean trigger"
   }, 

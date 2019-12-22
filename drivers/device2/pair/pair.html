@@ -1,0 +1,90 @@
+<style type="text/css">
+    .input-wrap {
+      position: relative;
+    }
+    .fa {
+      position: absolute;
+      margin-left: 5px;
+      margin-top: 7px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+    .fa.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+  </style>
+  <p class="form-group">
+    <label for="ipkey"><span data-i18n="pair.start.ipkey"></span>
+    </label>
+    <span class="input-wrap">
+      <input type="text" id="ipkey" placeholder="192.168.2.2" value="" />
+    </span>
+    <br/>
+    <button class="button" id="validate"><span data-i18n="pair.start.saveSettings"></span>
+    </button>
+    <i class="air-status air-loading fa fa-circle-o-notch fa-spin">
+    </i>
+    <i class="air-status air-ok fa fa-check" style="color: #96ff00;">
+    </i>
+    <i class="air-status air-err fa fa-times" style="color: #ff6300;">
+    </i>
+  </p>
+  <p class="air-err-msg" style="color: #ff6300;">
+  </p>
+  
+  <script type="text/javascript">
+      $(function() {
+          $('#validate').click(function() {
+              // variables
+              var deviceId = Math.random().toString(36).substr(2,5).toLowerCase();
+              var id = Math.round(Math.random() * (100000 - 10000) + 10000);
+              var IPKey = document.getElementById('ipkey').value;
+              // IPKey is required
+              if (IPKey == "") {
+                  // Give error, required values
+                  Homey.alert(__('pair.start.required'), 'error');
+                  return;
+                  // Homey.done() would close the pairing window, but we want to give the user the chance to correct and resubmit
+              }
+
+              var secretKey = "-";   
+
+              $('.air-status').removeClass('visible');
+              $('.air-loading').addClass('visible');
+              Homey.emit('validate', {
+                  id: deviceId,
+                  ipkey: IPKey,
+                  secretkey: secretKey
+              }, function(err, result) {
+                  $('.air-status').removeClass('visible');
+                  if (!err) {
+                      $('.air-ok').addClass('visible');
+                      $('.air-err-msg').html('');
+                      var device_data = {
+                          data: {
+                              id: deviceId,
+                              ipkey: IPKey,
+                              secretkey: secretKey
+                          },
+                          name: 'air_' + deviceId
+                        };
+                      Homey.addDevice({
+                          data: device_data.data,
+                          name: device_data.name,
+                      }, function(err, result) {
+                          if (err) return Homey.alert(err.message || err.toString());
+                          Homey.emit('get_devices', device_data, function(err, result) {
+                              if (err) return Homey.alert(err.message || err.toString());
+                              Homey.done();
+                          })
+                      })
+                  } else {
+                      $('.air-err').addClass('visible');
+                      $('.air-err-msg').html(err.message || err.toString());
+                  }
+              })
+          });
+      })
+  </script>

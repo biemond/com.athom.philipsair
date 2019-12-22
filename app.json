@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.8",
+	"version": "0.0.9",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
@@ -352,7 +352,7 @@
 					{
 						"name": "device",
 						"type": "device",
-						"filter": "driver_id=device"
+						"filter": "driver_id=device|device2"
 					}
 				]
 			},
@@ -381,9 +381,24 @@
 						"example": {
 							"en": "carbon"
 						}
+					},					
+					{
+						"name": "device",
+						"type": "string",
+						"title": {
+							"en": "device"
+						},
+						"example": {
+							"en": "air_v4wok"
+						}
 					}					
 				],
 				"args": [
+					{
+						"name": "device",
+						"type": "device",
+						"filter": "driver_id=device|device2"
+					},
 					{
 						"name": "which",
 						"type": "dropdown",
@@ -431,7 +446,7 @@
 					{
 						"name": "device",
 						"type": "device",
-						"filter": "driver_id=device"
+						"filter": "driver_id=device|device2"
 					}
 				]
 			},
@@ -456,7 +471,7 @@
 					{
 						"name": "device",
 						"type": "device",
-						"filter": "driver_id=device"
+						"filter": "driver_id=device|device2"
 					}
 				]
 			},
@@ -481,7 +496,7 @@
 					{
 						"name": "device",
 						"type": "device",
-						"filter": "driver_id=device"
+						"filter": "driver_id=device2"
 					}
 				]
 			}
@@ -496,11 +511,6 @@
 					"en": "Allergen index"
 				},
 				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device"
-					},
 					{
 						"name": "argument_main",
 						"type": "dropdown",
@@ -542,11 +552,6 @@
 					"en": "pm2.5 measurement"
 				},
 				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device"
-					},
 					{
 						"name": "argument_main",
 						"type": "dropdown",
@@ -612,6 +617,65 @@
 			],
 			"name": {
 				"en": "Purifier"
+			},
+			"class": "other",
+			"energy": {
+				"approximation": {
+					"usageConstant": 20
+				}
+			},
+			"capabilities": [
+				"latest_retrieval_date",
+				"measure_pm25",
+				"measure_iaql",
+				"measure_tvoc",
+				"pre_filter_clean",
+				"carbon_filter_replace",
+				"hepa_filter_replace",
+				"product",
+				"light_intensity",
+				"onoff",
+				"button_lights",
+				"purifier_mode",
+				"display_mode",
+				"child_lock",
+				"fan_speed"
+			],
+			"images": {
+				"large": "/drivers/device/assets/images/large.png",
+				"small": "/drivers/device/assets/images/small.png"
+			}
+		},
+		{
+			"id": "device2",
+			"pair": [
+				{
+					"id": "pair"
+				}
+			],
+			"settings": [
+				{
+					"type": "group",
+					"label": {
+						"en": "General settings"
+					},
+					"children": [
+						{
+							"id": "ipkey",
+							"type": "text",
+							"label": {
+								"en": "Philips Air device IP address"
+							},
+							"value": "",
+							"hint": {
+								"en": "Enter the IP address key of your Philips Air purifier"
+							}
+						}
+					]
+				}
+			],
+			"name": {
+				"en": "Purifier and Humidifier"
 			},
 			"class": "other",
 			"energy": {

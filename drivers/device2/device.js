@@ -4,13 +4,13 @@ const Homey = require('homey');
 const philipsair = require('index.js');
 const AirDevice = require('../air');
 
-class device extends AirDevice {
+class device2 extends AirDevice {
 
 	onInit() {
         this.preFilterTriggered = false;
         this.carbonFilterTriggered = false;
         this.hepaFilterTriggered = false;
-		this.log('MyPhilipsAirDevice has been inited');
+		this.log('MyPhilipsAirHumidifierDevice has been inited');
         let settings = this.getData();
 
         let secretKey = "-";   
@@ -33,7 +33,7 @@ class device extends AirDevice {
                 .catch(err => {
                     if (err.code == 404) {
                         this.log("The task has not been registered yet, registering task: " + cronName);
-                        Homey.ManagerCron.registerTask(cronName, "*/2 * * * *", settings)
+                        Homey.ManagerCron.registerTask(cronName, "1-59/2 * * * *", settings)
                             .then(task => {
                                 task.on('run', settings => this.pollAirDevice(settings));
                             })
@@ -44,7 +44,7 @@ class device extends AirDevice {
                         this.log('other cron error: ${err.message}');
                     }
                 });
-            this.pollAirDevice(settings)    
+            this.pollAirDevice(settings)      
         })
         // https://apps.developer.athom.com/tutorial-Flow-State.html
         this._flowTriggerFilterReplaceClean = new Homey.FlowCardTriggerDevice('filter_replace_clean').register();
@@ -114,8 +114,7 @@ class device extends AirDevice {
             this.setState(JSON.stringify(values))
             return value;
         });    
-    
     }
 }
 
-module.exports = device;
+module.exports = device2;
