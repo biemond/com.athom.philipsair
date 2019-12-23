@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.9",
+	"version": "0.0.10",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
@@ -760,8 +760,8 @@
 				"water_level"
 			],
 			"images": {
-				"large": "/drivers/device/assets/images/large.png",
-				"small": "/drivers/device/assets/images/small.png"
+				"large": "/drivers/device2/assets/images/large.png",
+				"small": "/drivers/device2/assets/images/small.png"
 			}
 		}
 	]
