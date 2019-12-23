@@ -116,7 +116,7 @@ class AirDevice extends Homey.Device{
                 }  
                 if(json.hasOwnProperty('rhset')){
                     this.log(`Target humidity: ${json.rhset}`)
-                    this.setCapabilityValue('target_humidity', json.rhset);
+                    this.setCapabilityValue('target_humidity',json.rhset);
                 } 
                 if(json.hasOwnProperty('iaql')){
                     this.log(`Allergen index: ${json.iaql}`)
@@ -127,7 +127,9 @@ class AirDevice extends Homey.Device{
                     this.setCapabilityValue('measure_temperature', json.temp);
                 } 
                 if(json.hasOwnProperty('func')){
+                    // P or PH
                     this.log(`Function: ${json.func == 'P' ? 'Purification'  : "Purification & Humidification"}`)
+                    this.setCapabilityValue('func_mode', json.func);
                 } 
                 if(json.hasOwnProperty('mode')){
                     let mode_str = {'P': 'auto', 'A': 'allergen', 'S': 'sleep', 'M': 'manual', 'B': 'bacteria', 'N': 'night'}
@@ -163,12 +165,13 @@ class AirDevice extends Homey.Device{
                 }     
                 if(json.hasOwnProperty('wl')){
                     this.log(`Water level: ${json.wl}`)
+                    this.setCapabilityValue('water_level', json.wl);
                 } 
                 if(json.hasOwnProperty('dt')){
                     this.log(`Timer hours: ${json.dt}`)
                 } 
                 if(json.hasOwnProperty('dtrs')){
-                    this.log(`Timer minutes: ${json.dtrs}`)
+                    this.log(`Timer total minutes left: ${json.dtrs}`)
                 }  
                 if(json.hasOwnProperty('err')){
                     if ( json.err != 0) {
@@ -194,6 +197,8 @@ class AirDevice extends Homey.Device{
                     this.setCapabilityValue('product', `${data.firmware.name} ${data.firmware.version}`);
                 }
                 if(data.filter != null){
+                    // if 'wicksts' in filters:
+                    // print('Wick filter: replace in {} hours'.format(filters['wicksts']))
                     if(data.filter.hasOwnProperty('fltsts0')){
                       this.log(`Pre-filter: clean in ${data.filter.fltsts0} hours`)
                       this.setCapabilityValue('pre_filter_clean', data.filter.fltsts0);

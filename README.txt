@@ -21,15 +21,17 @@ Actions
 - display_mode, Display mode
 - child_lock, Child lock
 - fan_speed, Fan speed
+- target_humidity ( 40,50,60 0r -- only Humidifier)
+- func_mode ( purifier or both -- only Humidifier)
 
 Sensors
 - latest_retrieval_date
 - measure_pm25
 - measure_iaql
 - measure_tvoc
-- target_humidity ( only Humidifier)
 - measure_humidity ( only Humidifier)
 - measure_temperature ( only Humidifier)
+- water_level ( only Humidifier)
 - pre_filter_clean
 - carbon_filter_replace
 - herpa_filter_replace

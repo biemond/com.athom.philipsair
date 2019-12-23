@@ -136,18 +136,40 @@
 			"uiComponent": "sensor"
 		},
 		"target_humidity": {
-			"type": "number",
+			"type": "enum",
 			"title": {
 				"en": "Target humidity"
 			},
 			"getable": true,
-			"setable": false,
-			"units": {
-				"en": ""
-			},
-			"min": 1,
-			"max": 99,
-			"decimals": 0,
+			"setable": true,
+			"uiComponent": "picker",
+			"uiQuickAction": true,
+			"values": [
+				{
+					"id": "40",
+					"title": {
+						"en": "40%"
+					}
+				},
+				{
+					"id": "50",
+					"title": {
+						"en": "50%"
+					}
+				},
+				{
+					"id": "60",
+					"title": {
+						"en": "60%"
+					}
+				},
+				{
+					"id": "70",
+					"title": {
+						"en": "--"
+					}
+				}
+			],
 			"insights": true,
 			"icon": "/assets/images/humidity.svg"
 		},
@@ -159,7 +181,7 @@
 			"getable": true,
 			"setable": false,
 			"units": {
-				"en": ""
+				"en": "%"
 			},
 			"min": 1,
 			"max": 99,
@@ -195,6 +217,14 @@
 			"min": 0,
 			"max": 100,
 			"step": 25
+		},
+		"water_level": {
+			"type": "string",
+			"title": {
+				"en": "Water level"
+			},
+			"getable": true,
+			"setable": false
 		},
 		"onoff": {
 			"type": "boolean",
@@ -258,6 +288,30 @@
 					"id": "B",
 					"title": {
 						"en": "Bacteria & Virus mode"
+					}
+				}
+			]
+		},
+		"func_mode": {
+			"type": "enum",
+			"title": {
+				"en": "Purification/Humidification"
+			},
+			"getable": true,
+			"setable": true,
+			"uiComponent": "picker",
+			"uiQuickAction": true,
+			"values": [
+				{
+					"id": "P",
+					"title": {
+						"en": "Purification mode"
+					}
+				},
+				{
+					"id": "PH",
+					"title": {
+						"en": "Both"
 					}
 				}
 			]
@@ -701,7 +755,9 @@
 				"purifier_mode",
 				"display_mode",
 				"child_lock",
-				"fan_speed"
+				"fan_speed",
+				"func_mode",
+				"water_level"
 			],
 			"images": {
 				"large": "/drivers/device/assets/images/large.png",

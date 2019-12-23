@@ -69,6 +69,18 @@ class device2 extends AirDevice {
             return value;
         });   
 
+        this.registerCapabilityListener('func_mode', async (value)  => {
+            let values = { "func": value}
+            this.setState(JSON.stringify(values))
+            return value;
+        });   
+
+        this.registerCapabilityListener('target_humidity', async (value)  => {
+            let values = { "func": value}
+            this.setState(JSON.stringify(values))
+            return value;
+        });   
+
         this.registerCapabilityListener('button_lights', async (value)  => {
             let values;
             if ( value == true ) {

@@ -154,7 +154,8 @@ const req = https.request(options, res => {
         // let values = { "uil": '1'}   
         // let values = { "ddp": '0'}  
         // let values = { "om": 's'}  
-        let values = { "cl": false} 
+        //let values = { "cl": false} 
+        // let values = { "dt": '1'}
 
         let jsonValues = 'AA' + JSON.stringify(values);
         console.log(jsonValues); 
