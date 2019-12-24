@@ -73,6 +73,7 @@
                       Homey.addDevice({
                           data: device_data.data,
                           name: device_data.name,
+                          settings: device_data.data,
                       }, function(err, result) {
                           if (err) return Homey.alert(err.message || err.toString());
                           Homey.emit('get_devices', device_data, function(err, result) {
