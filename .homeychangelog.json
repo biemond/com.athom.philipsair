@@ -1,6 +1,6 @@
 {
-  "0.0.10": {
-    "en": "new device Purifier and Humidifier, restrict current Purifier device, new action Target humidity, mode, new sensor water_level"
+  "0.0.11": {
+    "en": "new device Purifier and Humidifier, restrict current Purifier device, new action Target humidity, mode, new sensor water_level, new icons, fixed advanced settings"
   }, 
   "0.0.8": {
     "en": "new action onoff, refresh current state after a change, filter_replace_clean trigger"
