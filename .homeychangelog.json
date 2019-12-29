@@ -1,5 +1,5 @@
 {
-  "0.0.12": {
+  "0.0.13": {
     "en": "new device Purifier and Humidifier, restrict current Purifier device, new action Target humidity, mode, new sensor water_level, new icons, fixed advanced settings"
   }, 
   "0.0.8": {
