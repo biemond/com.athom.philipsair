@@ -156,6 +156,7 @@ const req = https.request(options, res => {
         // let values = { "om": 's'}  
         let values = { "cl": false} 
         // let values = { "dt": '1'}
+        // let values = { "func": 'P'} 
 
         let jsonValues = 'AA' + JSON.stringify(values);
         console.log(jsonValues); 

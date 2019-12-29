@@ -70,7 +70,13 @@ class device2 extends AirDevice {
         });   
 
         this.registerCapabilityListener('func_mode', async (value)  => {
-            let values = { "func": value}
+            // P or PH
+            let values;
+            if ( value == true ) {
+                values = { "func": "PH"}
+            } else {
+                values = { "func": "P"}
+            }
             this.setState(JSON.stringify(values))
             return value;
         });   
