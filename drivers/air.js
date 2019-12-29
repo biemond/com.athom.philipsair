@@ -116,7 +116,7 @@ class AirDevice extends Homey.Device{
                 }  
                 if(json.hasOwnProperty('rhset')){
                     this.log(`Target humidity: ${json.rhset}`)
-                    this.setCapabilityValue('target_humidity',json.rhset);
+                    this.setCapabilityValue('target_humidity',json.rhset.toString());
                 } 
                 if(json.hasOwnProperty('iaql')){
                     this.log(`Allergen index: ${json.iaql}`)
@@ -129,7 +129,11 @@ class AirDevice extends Homey.Device{
                 if(json.hasOwnProperty('func')){
                     // P or PH
                     this.log(`Function: ${json.func == 'P' ? 'Purification'  : "Purification & Humidification"}`)
-                    this.setCapabilityValue('func_mode', json.func);
+                    if ( json.func == 'P' ) {
+                        this.setCapabilityValue('func_mode', false);
+                    } else {
+                        this.setCapabilityValue('func_mode', true);
+                    }
                 } 
                 if(json.hasOwnProperty('mode')){
                     let mode_str = {'P': 'auto', 'A': 'allergen', 'S': 'sleep', 'M': 'manual', 'B': 'bacteria', 'N': 'night'}
@@ -165,7 +169,11 @@ class AirDevice extends Homey.Device{
                 }     
                 if(json.hasOwnProperty('wl')){
                     this.log(`Water level: ${json.wl}`)
-                    this.setCapabilityValue('water_level', json.wl);
+                    if ( json.wl == 100 ) {
+                        this.setCapabilityValue('water_level', "Ok");
+                    } else {
+                        this.setCapabilityValue('water_level', "Empty");
+                    }
                 } 
                 if(json.hasOwnProperty('dt')){
                     this.log(`Timer hours: ${json.dt}`)

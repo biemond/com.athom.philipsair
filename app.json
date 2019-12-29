@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.11",
+	"version": "0.0.12",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
@@ -168,7 +168,7 @@
 				{
 					"id": "70",
 					"title": {
-						"en": "--"
+						"en": "Maximum"
 					}
 				}
 			],
@@ -242,7 +242,7 @@
 		"button_lights": {
 			"type": "boolean",
 			"title": {
-				"en": "Display enabled"
+				"en": "Display"
 			},
 			"getable": true,
 			"setable": true,
@@ -252,7 +252,7 @@
 		"child_lock": {
 			"type": "boolean",
 			"title": {
-				"en": "Child lock enabled"
+				"en": "Childlock"
 			},
 			"getable": true,
 			"setable": true,
@@ -296,28 +296,14 @@
 			]
 		},
 		"func_mode": {
-			"type": "enum",
+			"type": "boolean",
 			"title": {
-				"en": "Purification/Humidification"
+				"en": "Humidification"
 			},
 			"getable": true,
 			"setable": true,
-			"uiComponent": "picker",
-			"uiQuickAction": true,
-			"values": [
-				{
-					"id": "P",
-					"title": {
-						"en": "Purification mode"
-					}
-				},
-				{
-					"id": "PH",
-					"title": {
-						"en": "Both"
-					}
-				}
-			]
+			"uiComponent": "toggle",
+			"uiQuickAction": true
 		},
 		"fan_speed": {
 			"type": "enum",

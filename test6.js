@@ -283,7 +283,8 @@ const req4 = https.request(optionsGet, req4 => {
         let data = aes_decrypt2(payload,Buffer.from(sharedSecretText, 'hex'));
         let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
         let json = clean(dataText);
-        // console.log(json); 
+
+        console.log(json); 
         console.log(`Pre-filter: clean in ${json.fltsts0} hours`)
         console.log(`Active Carbon ${json.fltt2} filter: replace in ${json.fltsts2} hours`)
         console.log(`HEPA ${json.fltt1} filter: replace in ${json.fltsts1} hours`)

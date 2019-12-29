@@ -76,7 +76,7 @@ class device2 extends AirDevice {
         });   
 
         this.registerCapabilityListener('target_humidity', async (value)  => {
-            let values = { "func": value}
+            let values = { "rhset": Number(value)}
             this.setState(JSON.stringify(values))
             return value;
         });   
