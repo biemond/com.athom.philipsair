@@ -1,4 +1,7 @@
 {
+  "0.0.14": {
+    "en": "Better error handling when shared key exchange does not work"
+  }, 
   "0.0.13": {
     "en": "new device Purifier and Humidifier, restrict current Purifier device, new action Target humidity, mode, new sensor water_level, new icons, fixed advanced settings"
   }, 

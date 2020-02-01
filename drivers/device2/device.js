@@ -16,35 +16,38 @@ class device2 extends AirDevice {
         let secretKey = "-";   
         philipsair.getInitData(settings).then(data => {
             secretKey =  data;
+            if (secretKey != "ERROR") {
+                this.getData().secretkey = secretKey;
+                settings.secretkey = secretKey;
+                let name = this.getData().id;
+                this.log("name " + name + " key " + settings.secretkey);
+                let cronName = this.getData().id.toLowerCase();
 
-            this.getData().secretkey = secretKey;
-            settings.secretkey = secretKey;
-            let name = this.getData().id;
-            this.log("name " + name + " key " + settings.secretkey);
-            let cronName = this.getData().id.toLowerCase();
+                Homey.ManagerSettings.set('settings',settings);
 
-            Homey.ManagerSettings.set('settings',settings);
-
-            Homey.ManagerCron.getTask(cronName)
-                .then(task => {
-                    this.log("The task exists: " + cronName);
-                    task.on('run', settings => this.pollAirDevice(settings));
-                })
-                .catch(err => {
-                    if (err.code == 404) {
-                        this.log("The task has not been registered yet, registering task: " + cronName);
-                        Homey.ManagerCron.registerTask(cronName, "1-59/2 * * * *", settings)
-                            .then(task => {
-                                task.on('run', settings => this.pollAirDevice(settings));
-                            })
-                            .catch(err => {
-                                this.log('problem with registering cronjob: ${err.message}');
-                            });
-                    } else {
-                        this.log('other cron error: ${err.message}');
-                    }
-                });
-            this.pollAirDevice(settings)      
+                Homey.ManagerCron.getTask(cronName)
+                    .then(task => {
+                        this.log("The task exists: " + cronName);
+                        task.on('run', settings => this.pollAirDevice(settings));
+                    })
+                    .catch(err => {
+                        if (err.code == 404) {
+                            this.log("The task has not been registered yet, registering task: " + cronName);
+                            Homey.ManagerCron.registerTask(cronName, "1-59/2 * * * *", settings)
+                                .then(task => {
+                                    task.on('run', settings => this.pollAirDevice(settings));
+                                })
+                                .catch(err => {
+                                    this.log('problem with registering cronjob: ${err.message}');
+                                });
+                        } else {
+                            this.log('other cron error: ${err.message}');
+                        }
+                    });
+                this.pollAirDevice(settings)      
+            }  else {
+                this.setUnavailable("Not able to get the shared secret key, please re-add the device")
+            }  
         })
         // https://apps.developer.athom.com/tutorial-Flow-State.html
         this._flowTriggerFilterReplaceClean = new Homey.FlowCardTriggerDevice('filter_replace_clean').register();

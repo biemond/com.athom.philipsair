@@ -176,30 +176,30 @@ const req = https.request(options, res => {
         optionsPut.hostname = hostname;
         optionsPut.path = '/di/v1/products/1/air';
 
-        const req1 = https.request(optionsPut, res1 => {
-            console.log("put Values");    
-            console.log('-------------------')
-            console.log(`statusCode: ${res1.statusCode}`)
-            res1.on('data', dd => {
-                if (res1.statusCode == 200 ){
-                // console.log(dd.toString('ascii'));
-                var resp = dd.toString('ascii');
-                let payload = new Buffer.from(resp, 'base64');
-                let data = aes_decrypt2(payload,Buffer.from(sharedSecretText, 'hex'));
-                let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
-                let json = clean(dataText);
-                // processStatus(json)
-                console.log(json); 
-                }
-                console.log('-------------------')
-            })
-        })  
+        // const req1 = https.request(optionsPut, res1 => {
+        //     console.log("put Values");    
+        //     console.log('-------------------')
+        //     console.log(`statusCode: ${res1.statusCode}`)
+        //     res1.on('data', dd => {
+        //         if (res1.statusCode == 200 ){
+        //         // console.log(dd.toString('ascii'));
+        //         var resp = dd.toString('ascii');
+        //         let payload = new Buffer.from(resp, 'base64');
+        //         let data = aes_decrypt2(payload,Buffer.from(sharedSecretText, 'hex'));
+        //         let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
+        //         let json = clean(dataText);
+        //         // processStatus(json)
+        //         console.log(json); 
+        //         }
+        //         console.log('-------------------')
+        //     })
+        // })  
         
-        req1.on('error', error => {
-            console.error(error)
-        })
-        req1.write(dataBytesEncrypted)
-        req1.end()
+        // req1.on('error', error => {
+        //     console.error(error)
+        // })
+        // req1.write(dataBytesEncrypted)
+        // req1.end()
         
 
 
