@@ -46,7 +46,7 @@ class device extends AirDevice {
                     });
                 this.pollAirDevice(settings)
             }  else {
-                this.setUnavailable("Not able to get the shared secret key, please re-add the device")
+                this.setUnavailable("Not able to get the shared secret key, please re-add the device and check if the IP address exists")
             }  
         })
         // https://apps.developer.athom.com/tutorial-Flow-State.html
