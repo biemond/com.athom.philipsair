@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.14",
+	"version": "0.0.15",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
@@ -626,6 +626,34 @@
 						]
 					}
 				]
+			}
+		],
+		"actions": [
+			{
+			  "id": "on",
+			  "title": {
+				"en": "Startup purifier"
+			  },
+			  "args": [
+				{
+					"name": "device",
+					"type": "device",
+					"filter": "driver_id=device|device2"
+				}
+			  ]
+			},
+			{
+				"id": "off",
+				"title": {
+				  "en": "Shutoff purifier"
+				},
+				"args": [
+					{
+						"name": "device",
+						"type": "device",
+						"filter": "driver_id=device|device2"
+					}
+				  ]
 			}
 		]
 	},

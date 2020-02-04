@@ -66,6 +66,19 @@ class device extends AirDevice {
             return Promise.resolve(result);
         }); 
 
+        let onAction = new Homey.FlowCardAction('on');
+        onAction.register().registerRunListener(( args, state ) => {
+            let values = { "pwr": "1"}
+            this.setState(JSON.stringify(values))
+            return Promise.resolve( true );
+        })
+        let offAction = new Homey.FlowCardAction('off');
+        offAction.register().registerRunListener(( args, state ) => {
+            let values = { "pwr": "0"}
+            this.setState(JSON.stringify(values))
+            return Promise.resolve( true );
+        })
+
         this.registerCapabilityListener('light_intensity', async (value)  => {
             let values = { "aqil": value}
             this.setState(JSON.stringify(values))
@@ -117,7 +130,9 @@ class device extends AirDevice {
             this.setState(JSON.stringify(values))
             return value;
         });    
-    
+
+
+
     }
 }
 

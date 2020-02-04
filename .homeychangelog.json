@@ -1,4 +1,7 @@
 {
+  "0.0.15": {
+    "en": "On & Off flow actions"
+  }, 
   "0.0.14": {
     "en": "Better error handling when shared key exchange does not work"
   }, 

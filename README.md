@@ -50,6 +50,11 @@ Every 2 minutes this app will poll for the latest purifer status.
 - score_pm25 with good, fair, poor and verypoor
 - score_iaql (allergen) with good, fair, poor and verypoor
 
+### actions
+- on
+- off
+
+
 ## Thanks
 Special thanks to Radoslav Gerganov for reverse enginering and security work. 
 For more info see the following links
