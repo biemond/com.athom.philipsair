@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.15",
+	"version": "0.0.16",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
@@ -654,6 +654,98 @@
 						"filter": "driver_id=device|device2"
 					}
 				  ]
+			},
+			{
+				"id": "fan_speed",
+				"title": {
+				  "en": "Fan speed"
+				},
+				"args": [
+				  {
+					  "name": "device",
+					  "type": "device",
+					  "filter": "driver_id=device|device2"
+				  },
+				  {
+					"name": "mode",
+					"type": "dropdown",
+					"values": [
+						{
+							"id": "1",
+							"title": {
+								"en": "Speed 1"
+							}
+						},
+						{
+							"id": "2",
+							"title": {
+								"en": "Speed 2"
+							}
+						},
+						{
+							"id": "3",
+							"title": {
+								"en": "Speed 3"
+							}
+						},
+						{
+							"id": "s",
+							"title": {
+								"en": "Silent"
+							}
+						},
+						{
+							"id": "t",
+							"title": {
+								"en": "Turbo"
+							}
+						}						
+					]	
+				  }
+				]
+			},		  	
+			{
+				"id": "purifier_mode",
+				"title": {
+				  "en": "purifier mode"
+				},
+				"args": [
+				  {
+					  "name": "device",
+					  "type": "device",
+					  "filter": "driver_id=device|device2"
+				  },
+				  {
+					"name": "mode",
+					"type": "dropdown",
+					"values": [
+						{
+							"id": "P",
+							"title": {
+								"en": "General mode"
+							}
+						},
+						{
+							"id": "A",
+							"title": {
+								"en": "Allergen mode"
+							}
+						},
+						{
+							"id": "M",
+							"title": {
+								"en": "Manual mode"
+							}
+						},
+						{
+							"id": "B",
+							"title": {
+								"en": "Bacteria & Virus mode"
+							}
+						}
+					]
+				}										  
+			  ]
 			}
 		]
 	},

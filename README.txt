@@ -53,9 +53,11 @@ conditions
 actions
 - on
 - off
-
+- purifier_mode
+- fan_speed
 
 Thanks
+
 Special thanks to Radoslav Gerganov for reverse enginering and security work. 
 For more info see the following links
 - https://xakcop.com/post/ctrl-air-purifier/ 

@@ -66,6 +66,20 @@ class device extends AirDevice {
             return Promise.resolve(result);
         }); 
 
+        let purifierModeAction = new Homey.FlowCardAction('purifier_mode');
+        purifierModeAction.register().registerRunListener(( args, state ) => {
+            let values = { "mode": args.mode}
+            this.setState(JSON.stringify(values))
+            return Promise.resolve( true );
+        })
+
+        let fanSpeedAction = new Homey.FlowCardAction('fan_speed');
+        fanSpeedAction.register().registerRunListener(( args, state ) => {
+            let values = { "om": args.mode}
+            this.setState(JSON.stringify(values))
+            return Promise.resolve( true );
+        })
+
         let onAction = new Homey.FlowCardAction('on');
         onAction.register().registerRunListener(( args, state ) => {
             let values = { "pwr": "1"}

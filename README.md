@@ -53,6 +53,8 @@ Every 2 minutes this app will poll for the latest purifer status.
 ### actions
 - on
 - off
+- purifier_mode
+- fan_speed
 
 
 ## Thanks
