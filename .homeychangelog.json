@@ -1,4 +1,7 @@
 {
+  "0.0.17": {
+    "en": "Reset data again after an error occured"
+  },
   "0.0.16": {
     "en": "Purifier mode, Fan speed flow actions"
   }, 
