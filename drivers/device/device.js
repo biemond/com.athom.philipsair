@@ -17,6 +17,7 @@ class device extends AirDevice {
         philipsair.getInitData(settings).then(data => {
             secretKey =  data;
             if (secretKey != "ERROR") {
+                this.log('create cronjob');
                 this.getData().secretkey = secretKey;
                 settings.secretkey = secretKey;
                 let name = this.getData().id;
@@ -24,11 +25,20 @@ class device extends AirDevice {
                 let cronName = this.getData().id.toLowerCase();
 
                 Homey.ManagerSettings.set('settings',settings);
-
+                this.log('cronjob: '+cronName);
                 Homey.ManagerCron.getTask(cronName)
                     .then(task => {
                         this.log("The task exists: " + cronName);
-                        task.on('run', settings => this.pollAirDevice(settings));
+                        this.log('Unregistering cron:', cronName);
+                        Homey.ManagerCron.unregisterTask(cronName, function (err, success) {});
+                        Homey.ManagerCron.registerTask(cronName, "*/2 * * * *", settings)
+                        .then(task => {
+                            task.on('run', settings => this.pollAirDevice(settings));
+                        })
+                        .catch(err => {
+                            this.log('problem with registering cronjob: ${err.message}');
+                        });            
+                        // task.on('run', settings => this.pollAirDevice(settings));
                     })
                     .catch(err => {
                         if (err.code == 404) {
@@ -46,6 +56,7 @@ class device extends AirDevice {
                     });
                 this.pollAirDevice(settings)
             }  else {
+                this.log('failed  to get the shared secret key');
                 this.setUnavailable("Not able to get the shared secret key, please re-add the device and check if the IP address exists")
             }  
         })

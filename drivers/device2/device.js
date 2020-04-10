@@ -28,7 +28,16 @@ class device2 extends AirDevice {
                 Homey.ManagerCron.getTask(cronName)
                     .then(task => {
                         this.log("The task exists: " + cronName);
-                        task.on('run', settings => this.pollAirDevice(settings));
+                        this.log('Unregistering cron:', cronName);
+                        Homey.ManagerCron.unregisterTask(cronName, function (err, success) {});
+                        Homey.ManagerCron.registerTask(cronName, "1-59/2 * * * *", settings)
+                        .then(task => {
+                            task.on('run', settings => this.pollAirDevice(settings));
+                        })
+                        .catch(err => {
+                            this.log('problem with registering cronjob: ${err.message}');
+                        });            
+                        // task.on('run', settings => this.pollAirDevice(settings));
                     })
                     .catch(err => {
                         if (err.code == 404) {

@@ -1,4 +1,7 @@
 {
+  "0.0.18": {
+    "en": "Re-init/start of the app will now also re-create the cron task"
+  },
   "0.0.17": {
     "en": "Reset data again after an error occured"
   },
