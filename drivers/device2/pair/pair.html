@@ -49,14 +49,11 @@
                   // Homey.done() would close the pairing window, but we want to give the user the chance to correct and resubmit
               }
 
-              var secretKey = "-";   
-
               $('.air-status').removeClass('visible');
               $('.air-loading').addClass('visible');
               Homey.emit('validate', {
                   id: deviceId,
-                  ipkey: IPKey,
-                  secretkey: secretKey
+                  ipkey: IPKey
               }, function(err, result) {
                   $('.air-status').removeClass('visible');
                   if (!err) {
@@ -65,8 +62,7 @@
                       var device_data = {
                           data: {
                               id: deviceId,
-                              ipkey: IPKey,
-                              secretkey: secretKey
+                              ipkey: IPKey
                           },
                           name: 'air_' + deviceId
                         };

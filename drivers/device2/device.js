@@ -17,14 +17,15 @@ class device2 extends AirDevice {
         philipsair.getInitData(settings).then(data => {
             secretKey =  data;
             if (secretKey != "ERROR") {
-                this.getData().secretkey = secretKey;
-                settings.secretkey = secretKey;
+                this.log('create cronjob');
+                // this.getData().secretkey = secretKey;
+                // settings.secretkey = secretKey;
                 let name = this.getData().id;
-                this.log("name " + name + " key " + settings.secretkey);
+                this.log("name " + name + " key " + secretKey);
                 let cronName = this.getData().id.toLowerCase();
-
+                this.setStoreValue('secretKey',secretKey);
                 Homey.ManagerSettings.set('settings',settings);
-
+                this.log('cronjob: '+cronName);
                 Homey.ManagerCron.getTask(cronName)
                     .then(task => {
                         this.log("The task exists: " + cronName);

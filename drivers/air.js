@@ -24,7 +24,14 @@ class AirDevice extends Homey.Device{
           this.log('setState:', value);
           let settings = Homey.ManagerSettings.get('settings');
           this.log(settings); 
-    
+
+          let deviceSecret =  this.getStoreValue('secretKey');
+          // this.log(this);
+          this.log(deviceSecret);
+          settings.secretkey = deviceSecret;
+          this.log(settings)
+          this.log("setValueAirData");          
+          
           philipsair.setValueAirData(value,settings).then(data => {
             this.log("-setValueAirData-begin-"); 
             this.log(data); 
@@ -193,12 +200,30 @@ class AirDevice extends Homey.Device{
         }
     
         pollAirDevice(settings) {
+            this.log("pollAirDevice");
             this.log(settings);
+            let deviceSecret =  this.getStoreValue('secretKey');
+            // this.log(this);
+            this.log(deviceSecret);
+            settings.secretkey = deviceSecret;
+            this.log(settings)
+            this.log("getCurrentStatusData");
             philipsair.getCurrentStatusData(settings).then(data => {
-                
+
                 this.log("pollAirDevice: "+ JSON.stringify(data));
                 if (data.error != null) {
                     this.setCapabilityValue('product', data.error);
+                    philipsair.getInitData(settings).then(data => {
+                        let secretKey =  data;
+                        if (secretKey != "ERROR") {
+                            this.log('refresh key');
+                            this.log('old key: '+ deviceSecret);
+                            this.log('new key: '+ secretKey);
+                            this.setStoreValue('secretKey',secretKey);
+                        } else {
+                            this.log('failed  to get the shared secret key');
+                        }
+                    })
                 }
                 if(data.firmware != null){
                     this.log(`Product: ${data.firmware.name} version ${data.firmware.version} upgrade ${data.firmware.upgrade != '' ? data.firmware.upgrade  : "-"} status ${data.firmware.statusmsg != '' ? data.firmware.statusmsg  : "-"}`)
