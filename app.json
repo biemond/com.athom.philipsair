@@ -1,13 +1,13 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.19",
+	"version": "0.0.20",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
 		"en": "Philips Air"
 	},
 	"description": {
-		"en": "Philips Air Purifier"
+		"en": "Healthy air, always"
 	},
 	"tags": {
 		"en": [

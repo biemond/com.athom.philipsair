@@ -1,4 +1,7 @@
 {
+  "0.0.20": {
+    "en": "Fail device when ip address is not correct"
+  },
   "0.0.19": {
     "en": "Re-init/start of the app will now also re-create the cron task, re-fresh of the secret after an error"
   },
