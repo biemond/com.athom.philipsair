@@ -1,4 +1,4 @@
-Warning: This will work fine on philips devices produced before late 2019, Philips changed their firmware and I don't have a test device to make the required changes.
+Warning: This will work fine on philips devices produced before late 2019, Philips changed their firmware and protocol from http to COAP and I don't have a test device to make the required changes.
 
 Added support for Philip AIR purifiers, it should work for all the philips air devices but we tested it on 
 - AC5659/10 air purifier 

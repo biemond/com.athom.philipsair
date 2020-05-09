@@ -1,7 +1,7 @@
 'use strict';
 
 const Homey = require('homey');
-const philipsair = require('index.js');
+const philipsair = require('../philipsair.js');
 const AirDevice = require('../air');
 
 class device extends AirDevice {
