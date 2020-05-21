@@ -36,7 +36,7 @@ function aes_encrypt2(data, key) {
     var segmentSize = 16;
     var aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
     var encryptedBytes = aesCbc.encrypt(data); 
-    return Buffer(encryptedBytes).toString('base64');
+    return Buffer.from(encryptedBytes).toString('base64');
 }
 
 
@@ -132,9 +132,13 @@ const req = https.request(options, res => {
     console.log("exchange keys");    
     console.log('-------------------')    
     console.log(`statusCode: ${res.statusCode}`)
-  
-    res.on('data', d => {
-        respJson = JSON.parse(d.toString());
+
+    let body = "";
+    res.on("data", data => {
+      body += data;
+    });
+    res.on("end", () => {    
+        respJson = JSON.parse(body.toString());
         let key = respJson.key
         console.log("key: " + key)
         console.log("hellman: " + respJson.hellman)
@@ -214,86 +218,83 @@ req.write(json)
 req.end()
 
 
+function sendRequest(url, hostname, callback) {
 
-const optionsGet = {
-    protocol: 'http:',
-    method: 'GET',
-    headers: {
+    const options = {
+        protocol: 'http:',
+        method: 'GET',
+        headers: {
+        }
     }
-}
-optionsGet.hostname = hostname;
-optionsGet.path = '/di/v1/products/1/air';
-
-
-const req2 = https.request(optionsGet, res2 => {
-    console.log("get Status");    
-    console.log('-------------------')
-    // console.log(`statusCode: ${res2.statusCode}`)
-    res2.on('data', dd => {
-        // console.log(dd.toString('ascii'));
-        var resp = dd.toString('ascii');
-        let payload = new Buffer.from(resp, 'base64');
-        let data = aes_decrypt2(payload,Buffer.from(sharedSecretText, 'hex'));
-        let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
-        let json = clean(dataText);
-        processStatus(json)
-        // console.log(json); 
+    options.hostname = hostname;
+    options.path = url;
+    
+    const reqX = https.request(options, resX => {
         console.log('-------------------')
+        let body = "";
+        resX.on("data", data => {
+          body += data;
+        });
+        resX.on("end", () => {
+            console.log(body.toString('ascii'));
+            let payload = new Buffer.from(body.toString('ascii'), 'base64');
+            let data = aes_decrypt2(payload,Buffer.from(sharedSecretText, 'hex'));
+            let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
+            // let json = clean(dataText);
+            let json = "";
+            try {
+                json = clean(dataText);
+            }
+            catch(error) {
+                console.error(error);
+                json = "Error status"
+            }
+            console.log(json); 
+            console.log('-------------------')
+            return callback(null, json); 
+        });
+    })  
+    
+    reqX.on('error', error => {
+        console.error(error)
     })
-})  
+    reqX.end()
 
-req2.on('error', error => {
-    console.error(error)
-})
-req2.end()
+}    
 
+new Promise((resolve, reject) => {
+    sendRequest('/di/v1/products/1/air',hostname, (error, jsonobj) => {
+        if (jsonobj) {
+            resolve(jsonobj);
+            processStatus(jsonobj)
+        } else {
+            reject(error);
+        }
+    });
+});
 
-optionsGet.path = '/di/v1/products/0/firmware';
+new Promise((resolve, reject) => {
+    sendRequest('/di/v1/products/0/firmware',hostname, (error, json) => {
+        if (json) {
+            resolve(json);
+            console.log(`Product: ${json.name} version ${json.version} upgrade ${json.upgrade != '' ? json.upgrade  : "-"} status ${json.statusmsg != '' ? json.statusmsg  : "-"}`)
+        } else {
+            reject(error);
+        }
+    });
+});
 
-const req3 = https.request(optionsGet, res3 => {
-    console.log("get firmware");    
-    console.log('-------------------')
-    // console.log(`statusCode: ${res3.statusCode}`)
-    res3.on('data', dd => {
-        var resp = dd.toString('ascii');
-        let payload = new Buffer.from(resp, 'base64');
-        let data = aes_decrypt2(payload,Buffer.from(sharedSecretText, 'hex'));
-        let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
-        let json = clean(dataText);
-        // console.log(json); 
-        console.log(`Product: ${json.name} version ${json.version} upgrade ${json.upgrade != '' ? json.upgrade  : "-"} status ${json.statusmsg != '' ? json.statusmsg  : "-"}`)
-        console.log('-------------------')
-    })
-})  
+new Promise((resolve, reject) => {
+    sendRequest('/di/v1/products/1/fltsts',hostname, (error, json) => {
+        if (json) {
+            resolve(json);
+            console.log(`Pre-filter: clean in ${json.fltsts0} hours`)
+            console.log(`Active Carbon ${json.fltt2} filter: replace in ${json.fltsts2} hours`)
+            console.log(`HEPA ${json.fltt1} filter: replace in ${json.fltsts1} hours`)
+            console.log('-------------------')
+        } else {
+            reject(error);
+        }
+    });
+});
 
-req3.on('error', error => {
-    console.error(error)
-})
-req3.end()
-
-
-optionsGet.path = '/di/v1/products/1/fltsts';
-
-const req4 = https.request(optionsGet, req4 => {
-    console.log("get filters");    
-    console.log('-------------------')
-    // console.log(`statusCode: ${req4.statusCode}`)
-    req4.on('data', dd => {
-        var resp = dd.toString('ascii');
-        let payload = new Buffer.from(resp, 'base64');
-        let data = aes_decrypt2(payload,Buffer.from(sharedSecretText, 'hex'));
-        let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
-        let json = clean(dataText);
-
-        console.log(json); 
-        console.log(`Pre-filter: clean in ${json.fltsts0} hours`)
-        console.log(`Active Carbon ${json.fltt2} filter: replace in ${json.fltsts2} hours`)
-        console.log(`HEPA ${json.fltt1} filter: replace in ${json.fltsts1} hours`)
-        console.log('-------------------')
-    })
-})  
-
-req4.on('error', error => {
-    console.error(error)
-})
-req4.end()

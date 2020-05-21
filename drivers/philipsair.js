@@ -23,7 +23,7 @@
     function aes_encrypt2(data, key) {
         var aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
         var encryptedBytes = aesCbc.encrypt(data); 
-        return Buffer(encryptedBytes).toString('base64');
+        return Buffer.from(encryptedBytes).toString('base64');
     }
        
 
@@ -109,11 +109,15 @@
             console.log("exchange keys");    
             console.log('-------------------')    
             console.log(`statusCode: ${res.statusCode}`)
-          
-            res.on('data', d => {
+
+            let body = "";
+            res.on("data", data => {
+              body += data;
+            });
+            res.on("end", () => {                
                 if (res.statusCode == 200 ){
                     try {
-                        respJson = JSON.parse(d.toString());
+                        respJson = JSON.parse(body.toString());
                         let key = respJson.key
                         console.log("key: " + key)
                         console.log("hellman: " + respJson.hellman)
@@ -150,113 +154,105 @@
         req.end()
     }
 
-    function getCurrentData(settings, callback) {
-        console.log("getCurrentData " + settings.ipkey + " secret " + settings.secretkey );
+    function sendRequest(url, hostname, callback) {
 
-        const optionsGet = {
+        const options = {
             protocol: 'http:',
             method: 'GET',
             headers: {
             }
         }
-        optionsGet.hostname = settings.ipkey;
-        optionsGet.path = '/di/v1/products/1/air';
+        options.hostname = hostname;
+        options.path = url;
+        
+        const reqX = https.request(options, resX => {
+            // console.log('-------------------')
+            let body = "";
+            resX.on("data", data => {
+              body += data;
+            });
+            resX.on("end", () => {
+                console.log(body.toString('ascii'));
+                let payload = new Buffer.from(body.toString('ascii'), 'base64');
+                let data = aes_decrypt2(payload,Buffer.from(sharedSecretText, 'hex'));
+                let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
+                let json = "";
+                try {
+                    json = clean(dataText);
+                }
+                catch(error) {
+                    console.error(error);
+                    json = "Error status"
+                }
+                // console.log(json); 
+                // console.log('-------------------')
+                return callback(null, json); 
+            });
+        })  
+        
+        reqX.on('error', error => {
+            console.error(error)
+        })
+        reqX.end()
+    }    
+
+    function getCurrentData(settings, callback) {
+        console.log("getCurrentData " + settings.ipkey + " secret " + settings.secretkey );
         
         let jsonStatus = null;
         let jsonFilter = null;
         let jsonFirmware = null;
         let jsonError = null;
-        
-        const req2 = https.request(optionsGet, res2 => {
-            console.log("get Status");    
-            console.log(`statusCode: ${res2.statusCode}`)
-            res2.on('data', dd => {
-                console.log(dd.toString('ascii'));
-                if (res2.statusCode == 200 ){
-                    var resp = dd.toString('ascii');
-                    let payload = new Buffer.from(resp, 'base64');
-                    let data = aes_decrypt2(payload,Buffer.from(settings.secretkey, 'hex'));
-                    let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
-                    try {
-                        jsonStatus = clean(dataText);
-                    }
-                    catch(error) {
-                        console.error(error);
-                        jsonError = "Error status"
-                    }
+
+        new Promise((resolve, reject) => {
+            sendRequest('/di/v1/products/1/air', settings.ipkey, (error, jsonobj) => {
+                if (jsonobj) {
+                    resolve(jsonobj);
+                    jsonStatus = jsonobj;
+                } else {
+                    reject(error);
+                    jsonError = "Error status"
                 }
-            })
-        })  
-        
-        req2.on('error', error => {
-            console.error(error)
-        })
-        req2.end()
-        
-        
-        optionsGet.path = '/di/v1/products/0/firmware';
-        
-        const req3 = https.request(optionsGet, res3 => {
-            console.log("get firmware");
-            console.log(`statusCode: ${res3.statusCode}`)    
-            res3.on('data', dd => {
-                if (res3.statusCode == 200 ){
-                    console.log(dd.toString('ascii'));
-                    var resp = dd.toString('ascii');
-                    let payload = new Buffer.from(resp, 'base64');
-                    let data = aes_decrypt2(payload,Buffer.from(settings.secretkey, 'hex'));
-                    let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
-                    try {
-                        jsonFirmware = clean(dataText);
+            });
+        });        
+
+        new Promise((resolve, reject) => {
+            setTimeout(function(){ 
+                sendRequest('/di/v1/products/0/firmware', settings.ipkey, (error, jsonobj) => {
+                    if (jsonobj) {
+                        resolve(jsonobj);
+                        jsonFirmware = jsonobj;
+                    } else {
+                        reject(error);
+                        jsonError = "Error firmware"
                     }
-                    catch(error) {
-                        console.error(error);
-                        jsonError = "Error on firmware"
+                });
+            }, 1000)
+        });        
+
+        new Promise((resolve, reject) => {
+            setTimeout(function(){ 
+                sendRequest('/di/v1/products/1/fltsts', settings.ipkey, (error, jsonobj) => {
+                    if (jsonobj) {
+                        resolve(jsonobj);
+                        jsonFilter = jsonobj;
+                    } else {
+                        reject(error);
+                        jsonError = "Error filter"
                     }
-                }
-            })
-        })  
-        
-        req3.on('error', error => {
-            console.error(error)
-        })
-        req3.end()
-        
-        
-        optionsGet.path = '/di/v1/products/1/fltsts';
-        
-        const res4 = https.request(optionsGet, res4 => {
-            console.log("get filters"); 
-            console.log(`statusCode: ${res4.statusCode}`)       
-            res4.on('data', dd => {
-                if (res4.statusCode == 200 ){
-                    console.log(dd.toString('ascii'));
-                    var resp = dd.toString('ascii');
-                    let payload = new Buffer.from(resp, 'base64');
-                    let data = aes_decrypt2(payload,Buffer.from(settings.secretkey, 'hex'));
-                    let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
-                    try {
-                        jsonFilter = clean(dataText);
-                    }
-                    catch(error) {
-                        console.error(error);
-                        jsonError = "Error on filter"
-                    }
-                    var response = {
-                        status: jsonStatus,
-                        firmware: jsonFirmware,
-                        filter: jsonFilter,
-                        error: jsonError
-                    };
-                    return callback(null, response); 
-                }
-            })
-        })  
-        
-        res4.on('error', error => {
-            console.error(error)
-        })
-        res4.end()
+                });
+            }, 2000)
+        });        
+
+        setTimeout(function(){ 
+            var response = {
+                status: jsonStatus,
+                firmware: jsonFirmware,
+                filter: jsonFilter,
+                error: jsonError
+            };
+            return callback(null, response); 
+        }, 5000)
     }
 
     function setValueData(value, settings, callback) {
@@ -281,20 +277,22 @@
         optionsPut2.path = '/di/v1/products/1/air';
         
         const req10 = https.request(optionsPut2, res10 => {
-            console.log("put Values");    
-            console.log('-------------------')
-            console.log(`statusCode: ${res10.statusCode}`)
-            res10.on('data', dd => {
+            // console.log("put Values");    
+            // console.log('-------------------')
+            // console.log(`statusCode: ${res10.statusCode}`)
+            let body = "";
+            res10.on("data", data => {
+              body += data;
+            });
+            res10.on("end", () => {
                 if (res10.statusCode == 200 ){
-                    console.log(dd.toString('ascii'));
-                    var resp = dd.toString('ascii');
-                    let payload = new Buffer.from(resp, 'base64');
+                    console.log(body.toString('ascii'));
+                    let payload = new Buffer.from(body.toString('ascii'), 'base64');
                     let data = aes_decrypt2(payload,Buffer.from(settings.secretkey, 'hex'));
                     let dataText = aesjs.utils.utf8.fromBytes(data.slice(2));
                     let json = clean(dataText);
-                    // processStatus(json)
                     console.log(json); 
-                    console.log('-------------------')
+                    // console.log('-------------------')
                     return callback(null, json); 
                 }
             })
