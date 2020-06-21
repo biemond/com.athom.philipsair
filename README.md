@@ -64,3 +64,10 @@ Special thanks to Radoslav Gerganov for reverse enginering and security work.
 For more info see the following links
 - https://xakcop.com/post/ctrl-air-purifier/ 
 - https://github.com/rgerganov/py-air-control
+
+
+## Testing
+
+node test6.js
+
+DEBUG=node-coap-client node testCoap.js

@@ -4,8 +4,10 @@
   "description": "Added support for Philip AIR purifiers, it should work for all the philips air devices but we tested it on  - AC5659/10 air purifier  - AC3259/10 air purifier  - AC3829/10 Humidifier and air purifier",
   "main": "app.js",
   "dependencies": {
-    "big-integer": "^1.6.36",
     "aes-js": "^3.1.2",
+    "big-integer": "^1.6.36",
+    "crypto": "^1.0.1",
+    "node-coap-client": "^1.0.8",
     "pkcs7": "^1.0.2"
   },
   "devDependencies": {},
