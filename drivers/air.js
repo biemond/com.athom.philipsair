@@ -2,6 +2,7 @@
 
 const Homey = require('homey');
 const philipsair = require('./philipsair.js');
+const philipsairCoap = require('./philipsairCoap.js');
 const MINUTE = 60000;
 
 Date.prototype.timeNow = function(){ 
@@ -95,7 +96,7 @@ class AirDevice extends Homey.Device{
             }
         }   
 
-        handleDeviceStatus(json) {
+        handleDeviceStatus(json,settings) {
             if(json != null){            
                 let currentdate =new Date().timeNow();
                 this.log("refresh now " + currentdate);
@@ -157,6 +158,7 @@ class AirDevice extends Homey.Device{
                     this.setCapabilityValue('light_intensity', json.aqil);
                 } 
                 if(json.hasOwnProperty('uil')){
+                    // uil_str = {'1': 'ON', '0': 'OFF', '2': 'XXX'}
                     let uil_str = {'1': 'ON', '0': 'OFF'}
                     if ( json.uil == '1' ) {
                         this.setCapabilityValue('button_lights', true);
@@ -196,9 +198,90 @@ class AirDevice extends Homey.Device{
                         this.log(`Error: -`)
                     }
                 }
+                if(json.hasOwnProperty('modelid')){
+                    this.log(`Location: ${json.name} modelid ${json.modelid} `)
+                    this.setCapabilityValue('product', `${json.modelid} ${json.swversion}`);
+                }
+ 
+                // if 'wicksts' in filters:
+                // print('Wick filter: replace in {} hours'.format(filters['wicksts']))
+                if(json.hasOwnProperty('fltsts0')){
+                    this.log(`Pre-filter: clean in ${json.fltsts0} hours`)
+                    this.setCapabilityValue('pre_filter_clean', json.fltsts0);
+                    let tokens = {
+                        "hours": json.fltsts0,
+                        "filter": "pre_filter",
+                        "device": "air_" + settings.id.toLowerCase()
+                    };
+                    let state = {
+                        "which": "pre_filter"
+                    }; 
+
+                    this.log("preFilterTriggered: " + this.preFilterTriggered)
+                    if (this.preFilterTriggered == false) {
+                    this.log("is preFilterTriggered ")
+                        this.flowTriggerFilterReplaceClean(tokens, state);
+                        this.preFilterTriggered = true;
+                        setTimeout(() => {
+                            this.preFilterTriggered = false;
+                        }, 60 * MINUTE);
+                    }
+
+                }
+                if(json.hasOwnProperty('fltsts2')){
+                    this.log(`Active Carbon ${json.fltt2} filter: replace in ${json.fltsts2} hours`)
+                    this.setCapabilityValue('carbon_filter_replace', json.fltsts2);
+                    let tokens = {
+                        "hours": json.fltsts2,
+                        "filter": "carbon_filter",
+                        "device": "air_" + settings.id.toLowerCase()
+                    };
+                    let state = {
+                        "which": "carbon_filter"
+                    };
+
+                    if (this.carbonFilterTriggered == false) {
+                        this.flowTriggerFilterReplaceClean(tokens, state);
+                        this.carbonFilterTriggered = true;
+                        setTimeout(() => {
+                            this.carbonFilterTriggered = false;
+                        }, 60 * MINUTE);
+                    }
+
+                }
+                if(json.hasOwnProperty('fltsts1')){
+                    this.log(`HEPA ${json.fltt1} filter: replace in ${json.fltsts1} hours`)
+                    this.setCapabilityValue('hepa_filter_replace', json.fltsts1);
+                    let tokens = {
+                        "hours": json.fltsts1,
+                        "filter": "hepa_filter",
+                        "device": "air_" + settings.id.toLowerCase()
+                    };
+                    let state = {
+                        "which": "hepa_filter"
+                    };
+
+                    if (this.hepaFilterTriggered == false) {
+                        this.flowTriggerFilterReplaceClean(tokens, state);
+                        this.hepaFilterTriggered = true;
+                        setTimeout(() => {
+                            this.hepaFilterTriggered = false;
+                        }, 60 * MINUTE);
+                    }
+                }
             }            
         }
     
+        pollAirCoapDevice(settings) {
+            this.log("pollAirCoapDevice");
+            this.log(settings)
+            this.log("getCurrentStatusDataCoap");
+            philipsairCoap.getCurrentStatusDataCoap(settings).then(data => {
+                this.log("pollAirDevice: "+ JSON.stringify(data));
+                this.handleDeviceStatus(data.status, settings);
+            })
+        }
+
         pollAirDevice(settings) {
             this.log("pollAirDevice");
             this.log(settings);
@@ -236,12 +319,12 @@ class AirDevice extends Homey.Device{
                       this.log(`Pre-filter: clean in ${data.filter.fltsts0} hours`)
                       this.setCapabilityValue('pre_filter_clean', data.filter.fltsts0);
                       let tokens = {
-                        "hours": data.filter.fltsts0,
-                        "filter": "pre_filter",
-                        "device": "air_" + settings.id.toLowerCase()
+                            "hours": data.filter.fltsts0,
+                            "filter": "pre_filter",
+                            "device": "air_" + settings.id.toLowerCase()
                       };
                       let state = {
-                        "which": "pre_filter"
+                            "which": "pre_filter"
                       }; 
                       this.log("preFilterTriggered: " + this.preFilterTriggered)
                       if (this.preFilterTriggered == false) {
@@ -257,12 +340,12 @@ class AirDevice extends Homey.Device{
                       this.log(`Active Carbon ${data.filter.fltt2} filter: replace in ${data.filter.fltsts2} hours`)
                       this.setCapabilityValue('carbon_filter_replace', data.filter.fltsts2);
                       let tokens = {
-                        "hours": data.filter.fltsts2,
-                        "filter": "carbon_filter",
-                        "device": "air_" + settings.id.toLowerCase()
+                            "hours": data.filter.fltsts2,
+                            "filter": "carbon_filter",
+                            "device": "air_" + settings.id.toLowerCase()
                       };
                       let state = {
-                        "which": "carbon_filter"
+                            "which": "carbon_filter"
                       }; 
                       if (this.carbonFilterTriggered == false) {
                         this.flowTriggerFilterReplaceClean(tokens, state);
@@ -277,11 +360,11 @@ class AirDevice extends Homey.Device{
                       this.setCapabilityValue('hepa_filter_replace', data.filter.fltsts1);
                       let tokens = {
                         "hours": data.filter.fltsts1,
-                        "filter": "hepa_filter",
-                        "device": "air_" + settings.id.toLowerCase()
+                            "filter": "hepa_filter",
+                            "device": "air_" + settings.id.toLowerCase()
                       };
                       let state = {
-                        "which": "hepa_filter"
+                            "which": "hepa_filter"
                       }; 
                       if (this.hepaFilterTriggered == false) {
                         this.flowTriggerFilterReplaceClean(tokens, state);
@@ -292,7 +375,7 @@ class AirDevice extends Homey.Device{
                       }
                     }
                 }
-                this.handleDeviceStatus(data.status);
+                this.handleDeviceStatus(data.status,settings);
             })
         }        
 }
