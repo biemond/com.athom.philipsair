@@ -45,7 +45,7 @@
     // active functions()  -------------------------------------  active functions()  --------------------------------------------
 
     philipsair.getInitData = function getInitData(settings) {
-        console.log("node_modules settings " +  JSON.stringify(settings));
+        console.log("settings " +  JSON.stringify(settings));
         
         return new Promise((resolve, reject) => {
             getSecretData(settings, (error, jsonobj) => {
@@ -59,7 +59,7 @@
     }
 
     philipsair.getCurrentStatusData = function getCurrentStatusData(settings) {
-        console.log("node_modules settings " +  JSON.stringify(settings));
+        console.log("settings " +  JSON.stringify(settings));
         
         return new Promise((resolve, reject) => {
             getCurrentData(settings, (error, jsonobj) => {
@@ -74,7 +74,7 @@
 
     philipsair.setValueAirData = function setValueAirData(value, settings) {
         console.log("value "+ value)
-        console.log("node_modules settings " +  JSON.stringify(settings));
+        console.log("settings " +  JSON.stringify(settings));
         
         return new Promise((resolve, reject) => {
             setValueData(value, settings, (error, jsonobj) => {
@@ -304,6 +304,4 @@
         req10.write(dataBytesEncrypted)
         req10.end()
     }
-
-    
 })();

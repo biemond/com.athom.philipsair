@@ -395,7 +395,7 @@
 					{
 						"name": "device",
 						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap"
+						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
 					}
 				]
 			},
@@ -440,7 +440,7 @@
 					{
 						"name": "device",
 						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap"
+						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
 					},
 					{
 						"name": "which",
@@ -489,7 +489,7 @@
 					{
 						"name": "device",
 						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap"
+						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
 					}
 				]
 			},
@@ -514,7 +514,7 @@
 					{
 						"name": "device",
 						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap"
+						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
 					}
 				]
 			},
@@ -539,7 +539,7 @@
 					{
 						"name": "device",
 						"type": "device",
-						"filter": "driver_id=device2"
+						"filter": "driver_id=device2|deviceCoap2"
 					}
 				]
 			}
@@ -638,7 +638,7 @@
 				{
 					"name": "device",
 					"type": "device",
-					"filter": "driver_id=device|device2|deviceCoap"
+					"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
 				}
 			  ]
 			},
@@ -651,7 +651,7 @@
 					{
 						"name": "device",
 						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap"
+						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
 					}
 				  ]
 			},
@@ -664,7 +664,7 @@
 				  {
 					  "name": "device",
 					  "type": "device",
-					  "filter": "driver_id=device|device2|deviceCoap"
+					  "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
 				  },
 				  {
 					"name": "mode",
@@ -713,7 +713,7 @@
 				  {
 					  "name": "device",
 					  "type": "device",
-					  "filter": "driver_id=device|device2|deviceCoap"
+					  "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
 				  },
 				  {
 					"name": "mode",
@@ -928,8 +928,72 @@
 				"fan_speed"
 			],
 			"images": {
-				"large": "/drivers/device/assets/images/large.png",
-				"small": "/drivers/device/assets/images/small.png"
+				"large": "/drivers/deviceCoap/assets/images/large.png",
+				"small": "/drivers/deviceCoap/assets/images/small.png"
+			}
+		},
+		{
+			"id": "deviceCoap2",
+			"pair": [
+				{
+					"id": "pair"
+				}
+			],
+			"settings": [
+				{
+					"type": "group",
+					"label": {
+						"en": "General settings"
+					},
+					"children": [
+						{
+							"id": "ipkey",
+							"type": "text",
+							"label": {
+								"en": "Philips Air device IP address"
+							},
+							"value": "",
+							"hint": {
+								"en": "Enter the IP address key of your Philips Air purifier"
+							}
+						}
+					]
+				}
+			],
+			"name": {
+				"en": "Purifier, Humidifier 2020"
+			},
+			"class": "other",
+			"energy": {
+				"approximation": {
+					"usageConstant": 20
+				}
+			},
+			"capabilities": [
+				"latest_retrieval_date",
+				"measure_pm25",
+				"measure_iaql",
+				"measure_tvoc",
+				"measure_humidity",
+				"target_humidity",
+				"measure_temperature",
+				"pre_filter_clean",
+				"carbon_filter_replace",
+				"hepa_filter_replace",
+				"product",
+				"light_intensity",
+				"onoff",
+				"button_lights",
+				"purifier_mode",
+				"display_mode",
+				"child_lock",
+				"fan_speed",
+				"func_mode",
+				"water_level"
+			],
+			"images": {
+				"large": "/drivers/deviceCoap2/assets/images/large.png",
+				"small": "/drivers/deviceCoap2/assets/images/small.png"
 			}
 		}
 	]

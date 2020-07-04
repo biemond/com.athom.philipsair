@@ -23,8 +23,7 @@ class device2 extends AirDevice {
                 let name = this.getData().id;
                 this.log("name " + name + " key " + secretKey);
                 let cronName = this.getData().id.toLowerCase();
-                this.setStoreValue('secretKey',secretKey);
-                Homey.ManagerSettings.set('settings',settings);
+                this.setStoreValue('secretKey'+cronName,secretKey);
                 this.log('cronjob: '+cronName);
                 Homey.ManagerCron.getTask(cronName)
                     .then(task => {

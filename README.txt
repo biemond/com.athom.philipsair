@@ -1,9 +1,9 @@
-Warning: This will work fine on philips devices produced before late 2019, Philips changed their firmware and protocol from http to COAP and I don't have a test device to make the required changes.
-
-Added support for Philip AIR purifiers, it should work for all the philips air devices but we tested it on 
-- AC5659/10 air purifier 
-- AC3259/10 air purifier 
-- AC3829/10 Humidifier and air purifier 
+Added support for Philip AIR purifiers, it should work for all the philips air devices (also the new 2020 devices with COAP protocol) 
+Verified on 
+- AC5659/10 Air purifier 2019 model
+- AC3259/10 Air purifier 2019 model
+- AC3829/10 Humidifier and air purifier 2019 model
+- AC2889/10 Air purifier 2020 model
 
 Purifier ( + Humidifier ) Device
 For adding the device you need to provide Philips device ip address plus Homey has to be on the same network as your purifier. 
@@ -56,7 +56,6 @@ actions
 - purifier_mode
 - fan_speed
 
-Thanks
 
 Special thanks to Radoslav Gerganov for reverse enginering and security work. 
 For more info see the following links

@@ -4,7 +4,7 @@ const Homey = require('homey');
 const philipsairCoap = require('../philipsairCoap.js');
 const AirDevice = require('../air');
 
-class deviceCoap extends AirDevice {
+class deviceCoap2 extends AirDevice {
 
 	onInit() {
 		this.log('MyPhilipsAirDevice has been inited');
@@ -25,7 +25,7 @@ class deviceCoap extends AirDevice {
                 this.log("The task exists: " + cronName);
                 this.log('Unregistering cron:', cronName);
                 Homey.ManagerCron.unregisterTask(cronName, function (err, success) {});
-                Homey.ManagerCron.registerTask(cronName, "1-59/2 * * * *", settings)
+                Homey.ManagerCron.registerTask(cronName, "*/2 * * * *", settings)
                 .then(task => {
                     task.on('run', settings => this.pollAirCoapDevice(settings));
                 })
@@ -36,7 +36,7 @@ class deviceCoap extends AirDevice {
             .catch(err => {
                 if (err.code == 404) {
                     this.log("The task has not been registered yet, registering task: " + cronName);
-                    Homey.ManagerCron.registerTask(cronName, "1-59/2 * * * *", settings)
+                    Homey.ManagerCron.registerTask(cronName, "*/2 * * * *", settings)
                         .then(task => {
                             task.on('run', settings => this.pollAirCoapDevice(settings));
                         })
@@ -94,6 +94,23 @@ class deviceCoap extends AirDevice {
             return value;
         });   
 
+        this.registerCapabilityListener('func_mode', async (value)  => {
+            // P or PH
+            let values;
+            if ( value == true ) {
+                values = "PH";
+            } else {
+                values =  "P";
+            }
+            this.setStateCoap("func", values);
+            return value;
+        });   
+
+        this.registerCapabilityListener('target_humidity', async (value)  => {
+            this.setStateCoap("rhset", Number(value));
+            return value;
+        });   
+
         this.registerCapabilityListener('button_lights', async (value)  => {
             let values;
             if ( value == true ) {
@@ -139,4 +156,4 @@ class deviceCoap extends AirDevice {
     }
 }
 
-module.exports = deviceCoap;
+module.exports = deviceCoap2;

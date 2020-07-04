@@ -1,6 +1,6 @@
 {
   "0.0.23": {
-    "en": "Support the latest philips firmware (COAP) on late 2019 produced devices"
+    "en": "Support the latest philips firmware (COAP) on late 2019 produced devices, multi device support"
   },
   "0.0.22": {
     "en": "Refactor some more code"
