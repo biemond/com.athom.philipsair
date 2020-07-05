@@ -5,8 +5,8 @@ var aesjs = require('aes-js');
 var pkcs7 = require('pkcs7');
 
 
-var target = new origin.Origin('coap:', '192.168.2.196', 5683);
-var targetString = 'coap://192.168.2.196:5683';
+var target = new origin.Origin('coap:', '192.168.107.196', 5683);
+var targetString = 'coap://192.168.107.196:5683';
 var sharedKey = 'JiangPan';
 
 var statusCounter = 0;
@@ -108,7 +108,7 @@ function processStatus(json) {
         console.log(`Light brightness: ${json.aqil}`)
     } 
     if(json.hasOwnProperty('uil')){
-        uil_str = {'1': 'ON', '0': 'OFF', '2': 'XXX'}
+        uil_str = {'1': 'ON', '0': 'OFF', '2': 'Fixed'}
         console.log(`Buttons light: ${uil_str[json.uil]}`)
     } 
     if(json.hasOwnProperty('ddp')){
@@ -153,10 +153,7 @@ function processStatus(json) {
     if(json.hasOwnProperty('fltsts1')){
         console.log(`HEPA ${json.fltt1} filter: replace in ${json.fltsts1} hours`)
     }     
-
 }    
-
-
 
 // sleep time expects milliseconds
 function sleep (time) {
@@ -260,7 +257,7 @@ sleep(3000).then(() => {
             let json = clean(dataText);
             console.log(json);
             processStatus(json.state.reported);
-            coap.stopObserving('coap://192.168.2.196:5683/sys/dev/status')        
+            coap.stopObserving('coap://192.168.107.196:5683/sys/dev/status')        
 
         }
     }, undefined, {
@@ -277,11 +274,14 @@ sleep(3000).then(() => {
 //     coap.stopObserving('coap://192.168.2.196:5683/sys/dev/status')
 // });
 
+
+
+
 sleep(6000).then(() => {
     console.log('-------------------') 
 
-    key = 'pwr'
-    value = '0'  
+    key = 'uil'
+    value = '1'  
 
     let message = {
         state: {

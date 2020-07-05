@@ -127,12 +127,7 @@ class device2 extends AirDevice {
         });   
 
         this.registerCapabilityListener('button_lights', async (value)  => {
-            let values;
-            if ( value == true ) {
-                values = { "uil": "1"}
-            } else {
-                values = { "uil": "0"}
-            }
+            let values = { "uil": value};
             this.setState(JSON.stringify(values))
             return value;
         });  
@@ -171,6 +166,13 @@ class device2 extends AirDevice {
             this.setState(JSON.stringify(values))
             return value;
         });    
+
+        this.registerCapabilityListener('timer', async (value)  => {
+            let values = { "dt": value}
+            this.setState(JSON.stringify(values))
+            return value;
+        });         
+
     }
 }
 

@@ -1,4 +1,7 @@
 {
+  "0.0.24": {
+    "en": "Added timer func. plus handle button lights when it is not supported"
+  },  
   "0.0.23": {
     "en": "Support the latest philips firmware (COAP) on late 2019 produced devices, multi device support"
   },

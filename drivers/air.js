@@ -169,13 +169,8 @@ class AirDevice extends Homey.Device{
                     this.setCapabilityValue('light_intensity', json.aqil);
                 } 
                 if(json.hasOwnProperty('uil')){
-                    // uil_str = {'1': 'ON', '0': 'OFF', '2': 'XXX'}
-                    let uil_str = {'1': 'ON', '0': 'OFF'};
-                    if ( json.uil == '1' ) {
-                        this.setCapabilityValue('button_lights', true);
-                    } else {
-                        this.setCapabilityValue('button_lights', false);
-                    }
+                    let uil_str = {'1': 'ON', '0': 'OFF','2': 'FIXED' };
+                    this.setCapabilityValue('button_lights', json.uil.toString());
                     this.log(`Buttons light: ${uil_str[json.uil]}`)
                 } 
                 if(json.hasOwnProperty('ddp')){
@@ -196,10 +191,12 @@ class AirDevice extends Homey.Device{
                     }
                 } 
                 if(json.hasOwnProperty('dt')){
-                    this.log(`Timer hours: ${json.dt}`)
+                    this.log(`Timer hours: ${json.dt}`);
+                    this.setCapabilityValue('timer', json.dt.toString());
                 } 
                 if(json.hasOwnProperty('dtrs')){
                     this.log(`Timer total minutes left: ${json.dtrs}`);
+                    this.setCapabilityValue('timer_remaining', json.dtrs);
                 }  
                 if(json.hasOwnProperty('err')){
                     if ( json.err != 0) {

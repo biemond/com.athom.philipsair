@@ -95,13 +95,7 @@ class deviceCoap extends AirDevice {
         });   
 
         this.registerCapabilityListener('button_lights', async (value)  => {
-            let values;
-            if ( value == true ) {
-                values =  "1";
-            } else {
-                values =  "0";
-            }
-            this.setStateCoap("uil",values );
+            this.setStateCoap("uil",value );
             return value;
         });  
 
@@ -135,6 +129,11 @@ class deviceCoap extends AirDevice {
             this.setStateCoap("om", value);
             return value;
         });    
+
+        this.registerCapabilityListener('timer', async (value)  => {
+            this.setStateCoap("dt", value)
+            return value;
+        }); 
 
     }
 }

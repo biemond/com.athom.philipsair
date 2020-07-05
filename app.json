@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.23",
+	"version": "0.0.24",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
@@ -240,14 +240,34 @@
 			"uiQuickAction": true
 		},
 		"button_lights": {
-			"type": "boolean",
+			"type": "enum",
 			"title": {
-				"en": "Display"
+				"en": "Button lights"
 			},
 			"getable": true,
 			"setable": true,
-			"uiComponent": "toggle",
-			"uiQuickAction": false
+			"uiComponent": "picker",
+			"uiQuickAction": false,
+			"values": [
+				{
+					"id": "0",
+					"title": {
+						"en": "Off"
+					}
+				},
+				{
+					"id": "1",
+					"title": {
+						"en": "On"
+					}
+				},
+				{
+					"id": "2",
+					"title": {
+						"en": "Fixed"
+					}
+				}
+			]
 		},
 		"child_lock": {
 			"type": "boolean",
@@ -370,6 +390,115 @@
 					}
 				}
 			]
+		},
+		"timer_remaining": {
+			"type": "number",
+			"title": {
+				"en": "Remaining timer minutes"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": "Min"
+			},
+			"min": 0,
+			"max": 720,
+			"decimals": 0,
+			"insights": false,
+			"uiComponent": "sensor",
+			"icon": "/assets/images/clock.svg"
+		},
+		"timer": {
+			"type": "enum",
+			"title": {
+				"en": "Timer in hours"
+			},
+			"getable": true,
+			"setable": true,
+			"uiComponent": "picker",
+			"uiQuickAction": true,
+			"values": [
+				{
+					"id": "0",
+					"title": {
+						"en": "Off"
+					}
+				},
+				{
+					"id": "1",
+					"title": {
+						"en": "1"
+					}
+				},
+				{
+					"id": "2",
+					"title": {
+						"en": "2"
+					}
+				},
+				{
+					"id": "3",
+					"title": {
+						"en": "3"
+					}
+				},
+				{
+					"id": "4",
+					"title": {
+						"en": "4"
+					}
+				},
+				{
+					"id": "5",
+					"title": {
+						"en": "5"
+					}
+				},
+				{
+					"id": "6",
+					"title": {
+						"en": "6"
+					}
+				},
+				{
+					"id": "7",
+					"title": {
+						"en": "7"
+					}
+				},
+				{
+					"id": "8",
+					"title": {
+						"en": "8"
+					}
+				},
+				{
+					"id": "9",
+					"title": {
+						"en": "9"
+					}
+				},
+				{
+					"id": "10",
+					"title": {
+						"en": "10"
+					}
+				},
+				{
+					"id": "11",
+					"title": {
+						"en": "11"
+					}
+				},
+				{
+					"id": "12",
+					"title": {
+						"en": "12"
+					}
+				}		
+			],
+			"insights": true,
+			"icon": "/assets/images/clock.svg"
 		}
 	},
 	"flow": {
@@ -802,7 +931,9 @@
 				"purifier_mode",
 				"display_mode",
 				"child_lock",
-				"fan_speed"
+				"fan_speed",
+				"timer_remaining",
+				"timer"
 			],
 			"images": {
 				"large": "/drivers/device/assets/images/large.png",
@@ -866,7 +997,9 @@
 				"child_lock",
 				"fan_speed",
 				"func_mode",
-				"water_level"
+				"water_level",
+				"timer_remaining",
+				"timer"
 			],
 			"images": {
 				"large": "/drivers/device2/assets/images/large.png",
@@ -925,7 +1058,9 @@
 				"purifier_mode",
 				"display_mode",
 				"child_lock",
-				"fan_speed"
+				"fan_speed",
+				"timer_remaining",
+				"timer"
 			],
 			"images": {
 				"large": "/drivers/deviceCoap/assets/images/large.png",
@@ -989,7 +1124,9 @@
 				"child_lock",
 				"fan_speed",
 				"func_mode",
-				"water_level"
+				"water_level",
+				"timer_remaining",
+				"timer"
 			],
 			"images": {
 				"large": "/drivers/deviceCoap2/assets/images/large.png",

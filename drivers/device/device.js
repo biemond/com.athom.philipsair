@@ -102,30 +102,25 @@ class device extends AirDevice {
         })
 
         this.registerCapabilityListener('light_intensity', async (value)  => {
-            let values = { "aqil": value}
+            let values = { "aqil": value};
             this.setState(JSON.stringify(values))
             return value;
         });   
 
         this.registerCapabilityListener('button_lights', async (value)  => {
-            let values;
-            if ( value == true ) {
-                values = { "uil": "1"}
-            } else {
-                values = { "uil": "0"}
-            }
+            let values = { "uil": value};
             this.setState(JSON.stringify(values))
             return value;
         });  
 
         this.registerCapabilityListener('purifier_mode', async (value)  => {
-            let values = { "mode": value}
+            let values = { "mode": value};
             this.setState(JSON.stringify(values))
             return value;
         });          
  
         this.registerCapabilityListener('display_mode', async (value)  => {
-            let values = { "ddp": value}
+            let values = { "ddp": value};
             this.setState(JSON.stringify(values))
             return value;
         });            
@@ -153,8 +148,11 @@ class device extends AirDevice {
             return value;
         });    
 
-
-
+        this.registerCapabilityListener('timer', async (value)  => {
+            let values = { "dt": value}
+            this.setState(JSON.stringify(values))
+            return value;
+        });   
     }
 }
 
