@@ -138,7 +138,7 @@ class device2 extends AirDevice {
             return value;
         });          
  
-        this.registerCapabilityListener('display_mode', async (value)  => {
+        this.registerCapabilityListener('display_mode_ph', async (value)  => {
             let values = { "ddp": value}
             this.setState(JSON.stringify(values))
             return value;

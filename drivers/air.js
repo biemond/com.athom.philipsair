@@ -174,9 +174,14 @@ class AirDevice extends Homey.Device{
                     this.log(`Buttons light: ${uil_str[json.uil]}`)
                 } 
                 if(json.hasOwnProperty('ddp')){
-                    let ddp_str = {'1': 'PM2.5', '0': 'IAI'};
+                    let ddp_str = {'1': 'PM2.5', '0': 'IAI', '3': 'Humidity'};
                     this.log(`Used index: ${ddp_str[json.ddp]}`);
-                    this.setCapabilityValue('display_mode', json.ddp);
+                    if (this.hasCapability('display_mode')) {
+                      this.setCapabilityValue('display_mode', json.ddp);
+                    }
+                    if (this.hasCapability('display_mode_ph')) {
+                      this.setCapabilityValue('display_mode_ph', json.ddp);
+                    }  
                 } 
                 if(json.hasOwnProperty('cl')){
                     this.log(`Child lock: ${json.cl}`);

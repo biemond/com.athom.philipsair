@@ -121,7 +121,7 @@ class deviceCoap2 extends AirDevice {
             return value;
         });          
  
-        this.registerCapabilityListener('display_mode', async (value)  => {
+        this.registerCapabilityListener('display_mode_ph', async (value)  => {
             this.setStateCoap("ddp", value);
             return value;
         });            
