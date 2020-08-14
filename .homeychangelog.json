@@ -1,4 +1,7 @@
 {
+  "0.0.25": {
+    "en": "fixed flows + app actions when used with multiple air devices."
+  },  
   "0.0.24": {
     "en": "Added timer func. plus handle button lights when it is not supported, humidifier display mode"
   },  

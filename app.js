@@ -1,13 +1,61 @@
 'use strict';
 
 const Homey = require('homey');
+const philipsair = require('./drivers/philipsair.js');
+const AirDevice = require('./drivers/air');
 
 class MyApp extends Homey.App {
 	
 	onInit() {
 		this.log('philipsair is running...');
+
+        let purifierModeAction = new Homey.FlowCardAction('purifier_mode');
+        purifierModeAction.register().registerRunListener(( args, state ) => {
+			if(args.device.constructor.name === 'deviceCoap') {
+				args.device.setStateCoap("mode", args.mode, args.device.getSettings());
+			} else {
+				let values = { "mode": args.mode}
+				args.device.setState(JSON.stringify(values), args.device.getSettings());
+			}
+            return Promise.resolve( true );
+        })
+
+        let fanSpeedAction = new Homey.FlowCardAction('fan_speed');
+        fanSpeedAction.register().registerRunListener(( args, state ) => {
+			this.log('---');
+            this.log(args.device.constructor.name);
+			this.log('---');
+			if(args.device.constructor.name === 'deviceCoap') {
+				args.device.setStateCoap( "om", args.mode, args.device.getSettings());
+			} else {
+				let values = { "om": args.mode}
+				args.device.setState(JSON.stringify(values), args.device.getSettings());
+			}
+            return Promise.resolve( true );
+        })
+
+        let onAction = new Homey.FlowCardAction('on');
+        onAction.register().registerRunListener(( args, state ) => {
+			if(args.device.constructor.name === 'deviceCoap') {
+				args.device.setStateCoap( "pwr", "1", args.device.getSettings());
+			} else {
+				let values = { "pwr": "1"}
+				args.device.setState(JSON.stringify(values), args.device.getSettings());
+			}
+            return Promise.resolve( true );
+        })
+        
+        let offAction = new Homey.FlowCardAction('off');
+        offAction.register().registerRunListener(( args, state ) => {
+			if(args.device.constructor.name === 'deviceCoap') {
+				args.device.setStateCoap("pwr", "0", args.device.getSettings());
+			} else {
+				let values = { "pwr": "0"}
+				args.device.setState(JSON.stringify(values), args.device.getSettings());
+			}
+            return Promise.resolve( true );
+        })
 	}
-	
 }
 
 module.exports = MyApp;

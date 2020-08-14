@@ -66,46 +66,23 @@ class deviceCoap extends AirDevice {
             return Promise.resolve(result);
         }); 
 
-        let purifierModeAction = new Homey.FlowCardAction('purifier_mode');
-        purifierModeAction.register().registerRunListener(( args, state ) => {
-            this.setStateCoap("mode", args.mode)
-            return Promise.resolve( true );
-        })
-
-        let fanSpeedAction = new Homey.FlowCardAction('fan_speed');
-        fanSpeedAction.register().registerRunListener(( args, state ) => {
-            this.setStateCoap( "om", args.mode);
-            return Promise.resolve( true );
-        })
-
-        let onAction = new Homey.FlowCardAction('on');
-        onAction.register().registerRunListener(( args, state ) => {
-            this.setStateCoap( "pwr", "1");
-            return Promise.resolve( true );
-        })
-        let offAction = new Homey.FlowCardAction('off');
-        offAction.register().registerRunListener(( args, state ) => {
-            this.setStateCoap("pwr", "0");
-            return Promise.resolve( true );
-        })
-
         this.registerCapabilityListener('light_intensity', async (value)  => {
-            this.setStateCoap( "aqil", value);
+            this.setStateCoap( "aqil", value, this.getSettings());
             return value;
         });   
 
         this.registerCapabilityListener('button_lights', async (value)  => {
-            this.setStateCoap("uil",value );
+            this.setStateCoap("uil",value , this.getSettings());
             return value;
         });  
 
         this.registerCapabilityListener('purifier_mode', async (value)  => {
-            this.setStateCoap("mode", value);
+            this.setStateCoap("mode", value, this.getSettings());
             return value;
         });          
  
         this.registerCapabilityListener('display_mode', async (value)  => {
-            this.setStateCoap("ddp", value);
+            this.setStateCoap("ddp", value, this.getSettings());
             return value;
         });            
 
@@ -116,22 +93,22 @@ class deviceCoap extends AirDevice {
             } else {
                 values = "0";
             }
-            this.setStateCoap( "pwr", values);
+            this.setStateCoap( "pwr", values, this.getSettings());
             return value;
         }); 
 
         this.registerCapabilityListener('child_lock', async (value)  => {
-            this.setStateCoap("cl", value);
+            this.setStateCoap("cl", value, this.getSettings());
             return value;
         });            
 
         this.registerCapabilityListener('fan_speed', async (value)  => {
-            this.setStateCoap("om", value);
+            this.setStateCoap("om", value, this.getSettings());
             return value;
         });    
 
         this.registerCapabilityListener('timer', async (value)  => {
-            this.setStateCoap("dt", value)
+            this.setStateCoap("dt", value, this.getSettings());
             return value;
         }); 
 

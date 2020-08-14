@@ -74,54 +74,27 @@ class device extends AirDevice {
             return Promise.resolve(result);
         }); 
 
-        let purifierModeAction = new Homey.FlowCardAction('purifier_mode');
-        purifierModeAction.register().registerRunListener(( args, state ) => {
-            let values = { "mode": args.mode}
-            this.setState(JSON.stringify(values))
-            return Promise.resolve( true );
-        })
-
-        let fanSpeedAction = new Homey.FlowCardAction('fan_speed');
-        fanSpeedAction.register().registerRunListener(( args, state ) => {
-            let values = { "om": args.mode}
-            this.setState(JSON.stringify(values))
-            return Promise.resolve( true );
-        })
-
-        let onAction = new Homey.FlowCardAction('on');
-        onAction.register().registerRunListener(( args, state ) => {
-            let values = { "pwr": "1"}
-            this.setState(JSON.stringify(values))
-            return Promise.resolve( true );
-        })
-        let offAction = new Homey.FlowCardAction('off');
-        offAction.register().registerRunListener(( args, state ) => {
-            let values = { "pwr": "0"}
-            this.setState(JSON.stringify(values))
-            return Promise.resolve( true );
-        })
-
         this.registerCapabilityListener('light_intensity', async (value)  => {
             let values = { "aqil": value};
-            this.setState(JSON.stringify(values))
+            this.setState(JSON.stringify(values), this.getSettings());
             return value;
         });   
 
         this.registerCapabilityListener('button_lights', async (value)  => {
             let values = { "uil": value};
-            this.setState(JSON.stringify(values))
+            this.setState(JSON.stringify(values), this.getSettings());
             return value;
         });  
 
         this.registerCapabilityListener('purifier_mode', async (value)  => {
             let values = { "mode": value};
-            this.setState(JSON.stringify(values))
+            this.setState(JSON.stringify(values), this.getSettings());
             return value;
         });          
  
         this.registerCapabilityListener('display_mode', async (value)  => {
             let values = { "ddp": value};
-            this.setState(JSON.stringify(values))
+            this.setState(JSON.stringify(values), this.getSettings());
             return value;
         });            
 
@@ -132,25 +105,25 @@ class device extends AirDevice {
             } else {
                 values = { "pwr": "0"}
             }
-            this.setState(JSON.stringify(values))
+            this.setState(JSON.stringify(values), this.getSettings());
             return value;
         }); 
 
         this.registerCapabilityListener('child_lock', async (value)  => {
             let values = { "cl": value}
-            this.setState(JSON.stringify(values))
+            this.setState(JSON.stringify(values), this.getSettings());
             return value;
         });            
 
         this.registerCapabilityListener('fan_speed', async (value)  => {
             let values = { "om": value}
-            this.setState(JSON.stringify(values))
+            this.setState(JSON.stringify(values), this.getSettings());
             return value;
         });    
 
         this.registerCapabilityListener('timer', async (value)  => {
             let values = { "dt": value}
-            this.setState(JSON.stringify(values))
+            this.setState(JSON.stringify(values), this.getSettings());
             return value;
         });   
     }

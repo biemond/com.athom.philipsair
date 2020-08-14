@@ -21,9 +21,9 @@ class AirDevice extends Homey.Device{
             return this;
         }
     
-        setState(value) {
+        setState(value, settings) {
           this.log('setState:', value);
-          let settings = this.getSettings();
+          //   let settings = this.getSettings();
           this.log(settings); 
 
           let deviceSecret =  this.getStoreValue('secretKey'+settings.id);
@@ -41,9 +41,9 @@ class AirDevice extends Homey.Device{
           })
         }
  
-        setStateCoap(key,value) {
+        setStateCoap(key, value, settings) {
             this.log('setStateCoap: '+key + ":" + value);
-            let settings = this.getSettings();
+            // let settings = this.getSettings();
             this.log(settings); 
             philipsairCoap.setValueAirDataCoap(key,value,settings).then(data => {
               this.log("-setValueCoapAirData-begin-"); 
