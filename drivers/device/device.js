@@ -4,6 +4,11 @@ const Homey = require('homey');
 const philipsair = require('../philipsair.js');
 const AirDevice = require('../air');
 
+// sleep time expects milliseconds
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 class device extends AirDevice {
 
 	onInit() {
@@ -116,8 +121,12 @@ class device extends AirDevice {
         });            
 
         this.registerCapabilityListener('fan_speed', async (value)  => {
-            let values = { "om": value}
+            let values = { "mode": "M"};
             this.setState(JSON.stringify(values), this.getSettings());
+            sleep(2000).then(() => {
+               let values = { "om": value}
+               this.setState(JSON.stringify(values), this.getSettings());
+            });
             return value;
         });    
 
