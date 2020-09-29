@@ -1,4 +1,7 @@
 {
+  "0.0.27": {
+    "en": "fixed ddp_str issue on err on combi devices"
+  },
   "0.0.26": {
     "en": "fixed action flows for 2020 coap combi devices, set manual 1st when changing speed on 2019 devices"
   },  

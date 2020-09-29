@@ -206,7 +206,7 @@ class AirDevice extends Homey.Device{
                 if(json.hasOwnProperty('err')){
                     if ( json.err != 0) {
                         let err_str = {49408: 'no water', 32768: 'water tank open'};
-                        this.log(`Error: ${ddp_str[json.err]}`);
+                        this.log(`Error: ${err_str[json.err]}`);
                     } {
                         this.log(`Error: -`);
                     }
