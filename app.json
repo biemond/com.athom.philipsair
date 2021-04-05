@@ -1,8 +1,9 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.27",
+	"version": "0.0.28",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
+	"brandColor": "#002aff",
 	"name": {
 		"en": "Philips Air"
 	},
@@ -571,6 +572,9 @@
 				"title": {
 					"en": "Replace or clean filter"
 				},
+				"titleFormatted": {
+					"en": "Replace or clean filter [[which]]"
+				},				
 				"tokens": [
 					{
 						"name": "hours",
@@ -715,10 +719,13 @@
 			{
 				"id": "score_iaql",
 				"title": {
-					"en": "Allergen index:"
+					"en": "Allergen level:"
 				},
+				"titleFormatted": {
+					"en": "Allergen level [[argument_main]]"
+				},				
 				"hint": {
-					"en": "Allergen index"
+					"en": "Allergen level"
 				},
 				"args": [
 					{
@@ -758,6 +765,9 @@
 				"title": {
 					"en": "pm2.5 measurement"
 				},
+				"titleFormatted": {
+					"en": "pm2.5 level [[argument_main]]"
+				},	
 				"hint": {
 					"en": "pm2.5 measurement"
 				},
@@ -827,6 +837,9 @@
 				"title": {
 				  "en": "Fan speed"
 				},
+				"titleFormatted": {
+					"en": "Fan [[mode]]"
+				},	
 				"args": [
 				  {
 					  "name": "device",
@@ -876,6 +889,9 @@
 				"title": {
 				  "en": "purifier mode"
 				},
+				"titleFormatted": {
+					"en": "purifier [[mode]]"
+				},
 				"args": [
 				  {
 					  "name": "device",
@@ -913,6 +929,32 @@
 					]
 				}										  
 			  ]
+			},
+			{
+				"id": "func_mode_on",
+				"title": {
+				  "en": "Enable Humidification"
+				},
+				"args": [
+				  {
+					  "name": "device",
+					  "type": "device",
+					  "filter": "driver_id=device2|deviceCoap2"
+				  }
+				]
+			},
+			{
+				"id": "func_mode_off",
+				"title": {
+					"en": "Disable Humidification"
+				},
+				"args": [
+					  {
+						  "name": "device",
+						  "type": "device",
+						  "filter": "driver_id=device2|deviceCoap2"
+					  }
+				]
 			}
 		]
 	},

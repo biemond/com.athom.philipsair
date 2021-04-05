@@ -65,7 +65,32 @@ class MyApp extends Homey.App {
 			}
             return Promise.resolve( true );
         })
+
+        let funcModeOnAction = new Homey.FlowCardAction('func_mode_on');
+        funcModeOnAction.register().registerRunListener(( args, state ) => {
+			if(coapDevices.includes( args.device.constructor.name ) ) {
+				args.device.setStateCoap( "func", "PH", args.device.getSettings());
+			} else {
+				let values = { "func": "PH"}
+				args.device.setState(JSON.stringify(values), args.device.getSettings());
+			}
+            return Promise.resolve( true );
+        })
+        
+        let funcModeOffAction = new Homey.FlowCardAction('func_mode_off');
+        funcModeOffAction.register().registerRunListener(( args, state ) => {
+			if(coapDevices.includes( args.device.constructor.name ) ) {
+				args.device.setStateCoap("func", "P", args.device.getSettings());
+			} else {
+				let values = { "func": "P"}
+				args.device.setState(JSON.stringify(values), args.device.getSettings());
+			}
+            return Promise.resolve( true );
+        })
+
 	}
+
+
 }
 
 module.exports = MyApp;

@@ -1,4 +1,7 @@
 {
+  "0.0.28": {
+    "en": "flow actions func_mode_on and off for humidifier devices, flow titleFormatted updates"
+  },  
   "0.0.27": {
     "en": "fixed ddp_str issue on err on combi devices"
   },
