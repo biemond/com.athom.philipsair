@@ -1,4 +1,7 @@
 {
+  "0.0.29":{
+    "en": "flow action light_intensity"
+  },
   "0.0.28": {
     "en": "flow actions func_mode_on and off for humidifier devices, flow titleFormatted updates"
   },  

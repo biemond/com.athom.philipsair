@@ -44,6 +44,24 @@ class MyApp extends Homey.App {
             return Promise.resolve( true );
         })
 
+        let lightIntensityAction = new Homey.FlowCardAction('light_intensity');
+        lightIntensityAction.register().registerRunListener(( args, state ) => {
+			this.log('---');
+            this.log(args.device.constructor.name);
+			this.log('---');
+			if(coapDevices.includes( args.device.constructor.name ) ) {
+				args.device.setStateCoap( "aqil", parseInt(args.mode), args.device.getSettings());
+			} else {
+				let values = { "aqil": 50};
+				args.device.setState(JSON.stringify(values), args.device.getSettings());
+				sleep(2000).then(() => {
+				   let values = { "aqil": parseInt(args.mode)};
+				   args.device.setState(JSON.stringify(values), args.device.getSettings());
+				});				
+			}
+            return Promise.resolve( true );
+        })
+
         let onAction = new Homey.FlowCardAction('on');
         onAction.register().registerRunListener(( args, state ) => {
 			if(coapDevices.includes( args.device.constructor.name ) ) {

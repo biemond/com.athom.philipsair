@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.28",
+	"version": "0.0.29",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"brandColor": "#002aff",
@@ -832,6 +832,58 @@
 					}
 				  ]
 			},
+			{
+				"id": "light_intensity",
+				"title": {
+				  "en": "Light level ring"
+				},
+				"titleFormatted": {
+					"en": "Light level ring [[mode]]"
+				},	
+				"args": [
+				  {
+					  "name": "device",
+					  "type": "device",
+					  "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+				  },
+				  {
+					"name": "mode",
+					"type": "dropdown",
+					"values": [
+						{
+							"id": "0",
+							"title": {
+								"en": "0"
+							}
+						},
+						{
+							"id": "25",
+							"title": {
+								"en": "25"
+							}
+						},
+						{
+							"id": "50",
+							"title": {
+								"en": "50"
+							}
+						},
+						{
+							"id": "75",
+							"title": {
+								"en": "75"
+							}
+						},
+						{
+							"id": "100",
+							"title": {
+								"en": "100"
+							}
+						}						
+					]	
+				  }
+				]
+			},					
 			{
 				"id": "fan_speed",
 				"title": {
