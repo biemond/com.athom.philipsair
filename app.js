@@ -14,6 +14,7 @@ class MyApp extends Homey.App {
 	onInit() {
 		this.log('philipsair is running...');
 		const coapDevices = [ 'deviceCoap', 'deviceCoap2']
+		const newCoapDevices = [ 'AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10', 'AC3059/10']
 
         let purifierModeAction = new Homey.FlowCardAction('purifier_mode');
         purifierModeAction.register().registerRunListener(( args, state ) => {
@@ -30,9 +31,40 @@ class MyApp extends Homey.App {
         fanSpeedAction.register().registerRunListener(( args, state ) => {
 			this.log('---');
             this.log(args.device.constructor.name);
+            this.log(args.device.getCapabilityValue('product'));
 			this.log('---');
+            let model = args.device.getCapabilityValue('product')
+
 			if(coapDevices.includes( args.device.constructor.name ) ) {
-				args.device.setStateCoap( "om", args.mode, args.device.getSettings());
+
+	            if (  args.mode == "AUTO") {
+	                // auto
+	                if ( newCoapDevices.includes( model) ) {
+	                  args.device.setStateCoap("mode", "AG", args.device.getSettings());
+	                } else { 
+	                  args.device.setStateCoap("mode", "P", args.device.getSettings());
+	                }
+	            } else { 
+	                if (  args.mode == "s" ||  args.mode == "t" ) {
+	                    // turbo / sleep
+	                    if (newCoapDevices.includes( model) ) {
+	                      args.device.setStateCoap("mode",  args.mode.toUpperCase(), args.device.getSettings());
+	                      sleep(2000).then(() => {
+	                         args.device.setStateCoap("om",  args.mode, args.device.getSettings());    
+	                      });                         
+	                    } else { 
+	                      args.device.setStateCoap("mode", "M", args.device.getSettings());
+	                      sleep(2000).then(() => {
+	                         args.device.setStateCoap("om",  args.mode, args.device.getSettings());    
+	                      });                         
+	                    }
+	                } else {
+	                    args.device.setStateCoap("mode", "M", args.device.getSettings());
+	                    sleep(2000).then(() => {
+	                       args.device.setStateCoap("om",  args.mode, args.device.getSettings());    
+	                    });                       
+	                }
+	            }
 			} else {
 				let values = { "mode": "M"};
 				args.device.setState(JSON.stringify(values), args.device.getSettings());

@@ -1,4 +1,7 @@
 {
+  "0.0.30":{
+    "en": "fixing AC4236 fan options"
+  },
   "0.0.29":{
     "en": "flow action light_intensity"
   },

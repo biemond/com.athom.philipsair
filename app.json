@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.29",
+	"version": "0.0.30",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"brandColor": "#002aff",
@@ -301,7 +301,7 @@
 				{
 					"id": "P",
 					"title": {
-						"en": "General mode"
+						"en": "General / Auto mode"
 					}
 				},
 				{
@@ -360,6 +360,12 @@
 					"id": "3",
 					"title": {
 						"en": "Speed 3"
+					}
+				},
+				{
+					"id": "AUTO",
+					"title": {
+						"en": "Auto"
 					}
 				},
 				{
@@ -918,6 +924,12 @@
 							"id": "3",
 							"title": {
 								"en": "Speed 3"
+							}
+						},
+						{
+							"id": "AUTO",
+							"title": {
+								"en": "Auto"
 							}
 						},
 						{

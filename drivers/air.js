@@ -155,15 +155,23 @@ class AirDevice extends Homey.Device{
                     }
                 } 
                 if(json.hasOwnProperty('mode')){
-                    let mode_str = {'P': 'auto', 'A': 'allergen', 'S': 'sleep', 'M': 'manual', 'B': 'bacteria', 'N': 'night'}
+                    let mode_str = {'P': 'auto', 'AG': 'auto', 'A': 'allergen', 'S': 'sleep', 'M': 'manual', 'B': 'bacteria', 'N': 'night'}
                     this.setCapabilityValue('purifier_mode', json.mode);
+
                     this.log(`Mode: ${mode_str[json.mode]}`)
+                    if (json.mode == 'P' || json.mode == 'AG') {
+                        this.setCapabilityValue('fan_speed', 'AUTO');
+                        this.log(`Fan speed: auto`);
+                    } else {
+                        if(json.hasOwnProperty('om')){
+                            let om_str = {'1': 'speed 1', '2': 'speed 2' ,'3': 'speed 3','P': 'auto','AG': 'auto' ,'s': 'silent', 't': 'turbo'}
+                            this.setCapabilityValue('fan_speed', json.om);
+                            this.log(`Fan speed: ${om_str[json.om]}`)
+                        } 
+                    }
+
                 } 
-                if(json.hasOwnProperty('om')){
-                    let om_str = {'1': 'speed 1', '2': 'speed 2' ,'3': 'speed 3' ,'s': 'silent', 't': 'turbo'}
-                    this.setCapabilityValue('fan_speed', json.om);
-                    this.log(`Fan speed: ${om_str[json.om]}`)
-                } 
+
                 if(json.hasOwnProperty('aqil')){
                     this.log(`Light brightness: ${json.aqil}`);
                     this.setCapabilityValue('light_intensity', json.aqil);
@@ -213,7 +221,7 @@ class AirDevice extends Homey.Device{
                 }
                 if(json.hasOwnProperty('modelid')){
                     this.log(`Location: ${json.name} modelid ${json.modelid} `);
-                    this.setCapabilityValue('product', `${json.modelid} ${json.swversion}`);
+                    this.setCapabilityValue('product', `${json.modelid}`);
                 }
  
                 // if 'wicksts' in filters:
@@ -291,7 +299,7 @@ class AirDevice extends Homey.Device{
             this.log("getCurrentStatusDataCoap");
             philipsairCoap.getCurrentStatusDataCoap(settings).then(data => {
                 if ( data != null ){
-                    this.log("pollAirDevice: "+ JSON.stringify(data));
+                    this.log("pollAirCoapDevice: "+ JSON.stringify(data));
                     this.handleDeviceStatus(data.status, settings);
                 } else {
                     this.log("pollAirDevice went wrong");

@@ -202,7 +202,7 @@
             }).catch(reason => console.log(reason));
         });
 
-        sleep(7000).then(() => {
+        sleep(20000).then(() => {
             console.log('--------reset-----------');    
             coap.reset(target);
             console.log('---------end----------');
@@ -213,7 +213,7 @@
                 status: jsonStatus
             };
             return callback(null, response); 
-        }, 8000)
+        }, 22000)
     }
 
     function setValueDataCoap(key, value, settings, callback) {

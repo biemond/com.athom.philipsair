@@ -4,6 +4,13 @@ const Homey = require('homey');
 const philipsairCoap = require('../philipsairCoap.js');
 const AirDevice = require('../air');
 
+
+// sleep time expects milliseconds
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+
 class deviceCoap extends AirDevice {
 
 	onInit() {
@@ -103,7 +110,37 @@ class deviceCoap extends AirDevice {
         });            
 
         this.registerCapabilityListener('fan_speed', async (value)  => {
-            this.setStateCoap("om", value, this.getSettings());
+            let model = this.getCapabilityValue('product')
+            const newCoapDevices = [ 'AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10', 'AC3059/10']
+
+            if ( value == "AUTO") {
+                // auto
+                if ( newCoapDevices.includes( model) ) {
+                  this.setStateCoap("mode", "AG", this.getSettings());
+                } else { 
+                  this.setStateCoap("mode", "P", this.getSettings());
+                }
+            } else { 
+                if ( value == "s" || value == "t" ) {
+                    // turbo / sleep
+                    if (newCoapDevices.includes( model) ) {
+                      this.setStateCoap("mode", value.toUpperCase(), this.getSettings());
+                      sleep(2000).then(() => {
+                         this.setStateCoap("om", value, this.getSettings());    
+                      });                         
+                    } else { 
+                      this.setStateCoap("mode", "M", this.getSettings());
+                      sleep(2000).then(() => {
+                         this.setStateCoap("om", value, this.getSettings());    
+                      });                         
+                    }
+                } else {
+                    this.setStateCoap("mode", "M", this.getSettings());
+                    sleep(2000).then(() => {
+                       this.setStateCoap("om", value, this.getSettings());    
+                    });                       
+                }
+            }
             return value;
         });    
 
