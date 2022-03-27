@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.31",
+	"version": "0.0.32",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"brandColor": "#002aff",
@@ -305,6 +305,36 @@
 					}
 				},
 				{
+					"id": "AG",
+					"title": {
+						"en": "Auto mode, some devices"
+					}
+				},
+				{
+					"id": "GT",
+					"title": {
+						"en": "Gentle, some devices"
+					}
+				},				
+				{
+					"id": "S",
+					"title": {
+						"en": "Sleep, some devices"
+					}
+				},
+				{
+					"id": "N",
+					"title": {
+						"en": "Night, some devices"
+					}
+				},				
+				{
+					"id": "T",
+					"title": {
+						"en": "Turbo, some devices"
+					}
+				},									
+				{
 					"id": "A",
 					"title": {
 						"en": "Allergen mode"
@@ -359,7 +389,7 @@
 				{
 					"id": "3",
 					"title": {
-						"en": "Speed 3"
+						"en": "Speed 3, some devices"
 					}
 				},
 				{
@@ -371,13 +401,13 @@
 				{
 					"id": "s",
 					"title": {
-						"en": "Silent"
+						"en": "Silent, some devices"
 					}
 				},
 				{
 					"id": "t",
 					"title": {
-						"en": "Turbo"
+						"en": "Turbo, some devices"
 					}
 				}
 			]
@@ -923,7 +953,7 @@
 							{
 								"id": "3",
 								"title": {
-									"en": "Speed 3"
+									"en": "Speed 3, some devices"
 								}
 							},
 							{
@@ -935,13 +965,13 @@
 							{
 								"id": "s",
 								"title": {
-									"en": "Silent"
+									"en": "Silent, some devices"
 								}
 							},
 							{
 								"id": "t",
 								"title": {
-									"en": "Turbo"
+									"en": "Turbo, some devices"
 								}
 							}
 						]
@@ -989,7 +1019,37 @@
 								"title": {
 									"en": "Bacteria & Virus mode"
 								}
-							}
+							},
+							{
+								"id": "AG",
+								"title": {
+									"en": "Auto mode, some devices"
+								}
+							},
+							{
+								"id": "GT",
+								"title": {
+									"en": "Gentle, some devices"
+								}
+							},				
+							{
+								"id": "S",
+								"title": {
+									"en": "Sleep, some devices"
+								}
+							},
+							{
+								"id": "N",
+								"title": {
+									"en": "Night, some devices"
+								}
+							},				
+							{
+								"id": "T",
+								"title": {
+									"en": "Turbo, some devices"
+								}
+							}									
 						]
 					}
 				]
