@@ -1112,7 +1112,7 @@
 				}
 			],
 			"name": {
-				"en": "Purifier, 2019"
+				"en": "Purifier <= 2019"
 			},
 			"class": "other",
 			"energy": {
@@ -1174,7 +1174,7 @@
 				}
 			],
 			"name": {
-				"en": "Purifier, Humidifier 2019"
+				"en": "Purifier + Humidifier <= 2019"
 			},
 			"class": "other",
 			"energy": {
@@ -1241,7 +1241,7 @@
 				}
 			],
 			"name": {
-				"en": "Purifier, 2020"
+				"en": "Purifier >= 2020"
 			},
 			"class": "other",
 			"energy": {
@@ -1303,7 +1303,7 @@
 				}
 			],
 			"name": {
-				"en": "Purifier, Humidifier 2020"
+				"en": "Purifier + Humidifier >= 2020"
 			},
 			"class": "other",
 			"energy": {
