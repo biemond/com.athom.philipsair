@@ -192,7 +192,7 @@ const { resolve } = require("path");
                 // TODO: nothing?
         }).catch(reason => console.log(reason));
 
-        sleep(20000).then(() => {
+        sleep(30000).then(() => {
             console.log('--------reset-----------');    
             coap.reset(target);
             console.log('---------end----------');
@@ -203,7 +203,7 @@ const { resolve } = require("path");
                 status: jsonStatus
             };
             return callback(null, response); 
-        }, 22000)
+        }, 32000)
     }
 
     async function setValueDataCoap(key, value, settings, callback) {

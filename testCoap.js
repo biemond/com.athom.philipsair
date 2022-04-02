@@ -161,18 +161,18 @@ function sleep (time) {
 }
 
 console.log('-------------------')
-// coap.ping(target, 2000)
-// .then((success) => { 
-//     console.log('ping ' + success);
-// });
+coap.ping(target, 2000)
+.then((success) => { 
+    console.log('ping ' + success);
+});
 
-// sleep(2500).then(() => {
+sleep(2500).then(() => {
     console.log('-------------------')
     coap.request(targetString+'/sys/dev/sync', 'post',
         Buffer.from(encodeCounter(statusCounter, 8 )), 
         {keepAlive: false}) 
     .then( response => {
-        // console.log(response);
+        console.log(response);
         if (response.payload) {
             const payload = response.payload.toString('utf-8');
             controlCounter = decodeCounter(payload);
@@ -183,9 +183,9 @@ console.log('-------------------')
     }).catch( err => {
         console.log(err);
     });
-// });
+});
 
-sleep(2000).then(() => {
+sleep(5000).then(() => {
     console.log('-------------------')
     coap.tryToConnect(target).then((result) => {
         console.log('tryToConnect ' + result);
@@ -194,26 +194,26 @@ sleep(2000).then(() => {
     });
 });
 
-// sleep(4000).then(() => {
-//     console.log('-------------------')
-//     // coap.tryToConnect(target).then((result) => {
-//     //     console.log('tryToConnect ' + result);
-//         coap.request(targetString+'/sys/dev/info', 'get',null, options) 
-//         .then( response => {
-//             if (response.payload) {
-//                 // console.log(response.payload);
-//                 const response2 = response.payload.toString('utf-8');
-//                 console.log(response2);
-//             }
-//         }).catch( err => {
-//             console.log(err);
-//         });         
-//     // }).catch( err => {
-//     //     console.log(err);
-//     // });
-// });
+sleep(7000).then(() => {
+    console.log('-------------------')
+    // coap.tryToConnect(target).then((result) => {
+    //     console.log('tryToConnect ' + result);
+        coap.request(targetString+'/sys/dev/info', 'get',null, {}) 
+        .then( response => {
+            if (response.payload) {
+                console.log(response.payload);
+                const response2 = response.payload.toString('utf-8');
+                console.log(response2);
+            }
+        }).catch( err => {
+            console.log(err);
+        });         
+    // }).catch( err => {
+    //     console.log(err);
+    // });
+});
 
-sleep(3000).then(() => {
+sleep(10000).then(() => {
     console.log('-------------------')
     coap.observe(targetString+'/sys/dev/status', 'get', resp => {
         if (resp.payload) {
@@ -223,7 +223,7 @@ sleep(3000).then(() => {
             console.log("counter " +counter);
             const hash = response.substring(response.length - 64);
             const encodedMessageAndCounter = response.substring(0, response.length - 64);
-            // console.log(encodedMessageAndCounter);
+            console.log(encodedMessageAndCounter);
             const hashedMessage = Buffer.from(toSha256(encodedMessageAndCounter)).toString('hex').toUpperCase();
 
             if (counter < 1 || counter > 2000000000 ||
@@ -257,7 +257,7 @@ sleep(3000).then(() => {
             let json = clean(dataText);
             console.log(json);
             processStatus(json.state.reported);
-            coap.stopObserving('coap://192.168.107.196:5683/sys/dev/status')        
+        //   coap.stopObserving('coap://192.168.107.196:5683/sys/dev/status')        
 
         }
     }, undefined, {
@@ -269,10 +269,10 @@ sleep(3000).then(() => {
     }).catch(reason => console.log(reason));
 });
 
-// sleep(14000).then(() => {
-//     console.log('-------------------')
-//     coap.stopObserving('coap://192.168.2.196:5683/sys/dev/status')
-// });
+sleep(34000).then(() => {
+    console.log('-------------------')
+    coap.stopObserving('coap://192.168.2.196:5683/sys/dev/status')
+});
 
 
 
@@ -334,7 +334,7 @@ sleep(3000).then(() => {
 //     console.log('-------------------');
 // });
 
-sleep(22000).then(() => {
+sleep(50000).then(() => {
     console.log('-------------------');    
     coap.reset(target);
     console.log('-------------------');
