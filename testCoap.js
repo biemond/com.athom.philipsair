@@ -277,64 +277,64 @@ sleep(3000).then(() => {
 
 
 
-sleep(6000).then(() => {
-    console.log('-------------------') 
+// sleep(6000).then(() => {
+//     console.log('-------------------') 
 
-    key = 'dt'
-    value = 1  
+//     key = 'dt'
+//     value = 1  
 
-    let message = {
-        state: {
-            desired: {
-                CommandType: 'app',
-                DeviceId: '',
-                EnduserId: '1'
-            }
-        }
-    };
+//     let message = {
+//         state: {
+//             desired: {
+//                 CommandType: 'app',
+//                 DeviceId: '',
+//                 EnduserId: '1'
+//             }
+//         }
+//     };
 
-    (message.state.desired)[key] = value;
-    const messageString = JSON.stringify(message);
-    console.log('messageString '+messageString);
+//     (message.state.desired)[key] = value;
+//     const messageString = JSON.stringify(message);
+//     console.log('messageString '+messageString);
 
-    if (controlCounter == 2000000000) {
-        controlCounter = 1;
-    } else {
-        controlCounter = controlCounter + 1;
-    }
+//     if (controlCounter == 2000000000) {
+//         controlCounter = 1;
+//     } else {
+//         controlCounter = controlCounter + 1;
+//     }
 
-    let encodedCounter = encodeCounter(controlCounter, 8);
-    let keyAndIv = toMD5(sharedKey + encodedCounter).toString('hex').toUpperCase();
+//     let encodedCounter = encodeCounter(controlCounter, 8);
+//     let keyAndIv = toMD5(sharedKey + encodedCounter).toString('hex').toUpperCase();
 
-    const secretKey = keyAndIv.substring(0, keyAndIv.length / 2);
-    const iv = keyAndIv.substring(keyAndIv.length / 2, keyAndIv.length);
+//     const secretKey = keyAndIv.substring(0, keyAndIv.length / 2);
+//     const iv = keyAndIv.substring(keyAndIv.length / 2, keyAndIv.length);
 
-    let dataBytes = pkcs7.pad(aesjs.utils.utf8.toBytes(messageString));   
-    const encodedMessage = Buffer.from(aes_encrypt2(dataBytes, Buffer.from(secretKey,'utf-8'), Buffer.from(iv,'utf-8'))).toString('hex').toUpperCase();
-    // console.log('encodedMessage '+encodedMessage);
-    let result = encodedCounter + encodedMessage;
+//     let dataBytes = pkcs7.pad(aesjs.utils.utf8.toBytes(messageString));   
+//     const encodedMessage = Buffer.from(aes_encrypt2(dataBytes, Buffer.from(secretKey,'utf-8'), Buffer.from(iv,'utf-8'))).toString('hex').toUpperCase();
+//     // console.log('encodedMessage '+encodedMessage);
+//     let result = encodedCounter + encodedMessage;
 
-    const hash = Buffer.from(toSha256(result)).toString('hex').toUpperCase();
+//     const hash = Buffer.from(toSha256(result)).toString('hex').toUpperCase();
 
-    result = encodedCounter + encodedMessage + hash;
+//     result = encodedCounter + encodedMessage + hash;
  
-    coap.request(targetString+'/sys/dev/control', 'post',
-        Buffer.from(result), {keepAlive: false})
-        .then( response => {
-            // console.log(response);
-            if (response.payload) {
-                const payload = response.payload.toString('utf-8');
-                console.log(payload);
-            } else {
-                throw new Error('No response received for call. Cannot proceed');
-            }
-        }).catch( err => {
-            console.log(err);
-        });         
-    console.log('-------------------');
-});
+//     coap.request(targetString+'/sys/dev/control', 'post',
+//         Buffer.from(result), {keepAlive: false})
+//         .then( response => {
+//             // console.log(response);
+//             if (response.payload) {
+//                 const payload = response.payload.toString('utf-8');
+//                 console.log(payload);
+//             } else {
+//                 throw new Error('No response received for call. Cannot proceed');
+//             }
+//         }).catch( err => {
+//             console.log(err);
+//         });         
+//     console.log('-------------------');
+// });
 
-sleep(10000).then(() => {
+sleep(22000).then(() => {
     console.log('-------------------');    
     coap.reset(target);
     console.log('-------------------');

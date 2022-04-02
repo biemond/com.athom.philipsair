@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.philipsair",
-	"version": "0.0.32",
+	"version": "0.0.33",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"brandColor": "#002aff",
@@ -1174,7 +1174,7 @@
 				}
 			],
 			"name": {
-				"en": "Purifier + Humidifier <= 2019"
+				"en": "Purifier + Hum <= 2019"
 			},
 			"class": "other",
 			"energy": {
@@ -1303,7 +1303,7 @@
 				}
 			],
 			"name": {
-				"en": "Purifier + Humidifier >= 2020"
+				"en": "Purifier + Hum >= 2020"
 			},
 			"class": "other",
 			"energy": {
