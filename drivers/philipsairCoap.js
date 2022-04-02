@@ -1,3 +1,5 @@
+const { resolve } = require("path");
+
 (function () {
 
     var philipsairCoap = exports;
@@ -82,9 +84,10 @@
     philipsairCoap.getCurrentStatusDataCoap = function getCurrentStatusDataCoap(settings) {
         console.log("settings " +  JSON.stringify(settings));
         
-        return new Promise((resolve, reject) => {
-            getCurrentDataCoap(settings, (error, jsonobj) => {
+        return new Promise(async (resolve, reject) => {
+          await  getCurrentDataCoap(settings, (error, jsonobj) => {
                 if (jsonobj) {
+                    console.log('getCurrentDataCoap res ',jsonobj)
                     resolve(jsonobj);
                 } else {
                     reject(error);
@@ -114,7 +117,7 @@
         return new Promise((resolve) => setTimeout(resolve, time));
     }
 
-    function getCurrentDataCoap(settings, callback) {
+    async function getCurrentDataCoap(settings, callback) {
         console.log("getCurrentDataCoap " + settings.ipkey );
         var target = new origin.Origin('coap:', settings.ipkey, 5683);
         var targetString = 'coap://'+settings.ipkey+':5683';
@@ -137,18 +140,12 @@
             console.log(err);
         });
 
-        sleep(2000).then(() => {
-            console.log('--------tryToConnect-----------')
-            coap.tryToConnect(target).then((result) => {
-                console.log('tryToConnect ' + result);
-            }).catch( err => {
-                console.log(err);
-            });
-        });
+        const connectResult = await coap.tryToConnect(target);
+        console.log('tryToConnect ' + connectResult);
 
-        sleep(3000).then(() => {
+
             console.log('-------status------------')
-            coap.observe(targetString+'/sys/dev/status', 'get', resp => {
+          const statusR= await coap.observe(targetString+'/sys/dev/status', 'get', resp => {
                 if (resp.payload) {
                     const response = resp.payload.toString('utf-8');
                     const encodedCounter = response.substring(0, 8);
@@ -189,10 +186,12 @@
                     let dataText = aesjs.utils.utf8.fromBytes(data);
                     jsonStatus = clean(dataText).state.reported;
                     console.log(jsonStatus);
-                    console.log('-------stopObserving------------')
+                    console.log('-------stopObserving------------',jsonStatus)
                     coap.stopObserving('coap://'+settings.ipkey+':5683/sys/dev/status')        
-                    console.log('---------end----------');
+                    console.log('---------end----------',coap.getConnection(target));
+                    
                 }
+
             }, undefined, {
                     confirmable: false, // we expect no answer here in the typical coap way.
                     retransmit: true
@@ -200,18 +199,18 @@
             ).then(() => {
                 // TODO: nothing?
             }).catch(reason => console.log(reason));
-        });
 
-        sleep(20000).then(() => {
-            console.log('--------reset-----------');    
-            coap.reset(target);
-            console.log('---------end----------');
-        });
+        // sleep(20000).then(() => {
+        //     console.log('--------reset-----------');    
+        //     coap.reset(target);
+        //     console.log('---------end----------');
+        // });
 
         setTimeout(function(){ 
             var response = {
                 status: jsonStatus
             };
+            console.log('statusR ',statusR)
             return callback(null, response); 
         }, 22000)
     }

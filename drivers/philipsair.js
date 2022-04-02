@@ -196,7 +196,7 @@
         reqX.end()
     }    
 
-    function getCurrentData(settings, callback) {
+   async function getCurrentData(settings, callback) {
         console.log("getCurrentData " + settings.ipkey + " secret " + settings.secretkey );
         
         let jsonStatus = null;
@@ -204,7 +204,7 @@
         let jsonFirmware = null;
         let jsonError = null;
 
-        new Promise((resolve, reject) => {
+      await  new Promise((resolve, reject) => {
             sendRequest('/di/v1/products/1/air', settings.ipkey, (error, jsonobj) => {
                 if (jsonobj) {
                     resolve(jsonobj);
@@ -216,8 +216,7 @@
             });
         });        
 
-        new Promise((resolve, reject) => {
-            setTimeout(function(){ 
+       await new Promise((resolve, reject) => {
                 sendRequest('/di/v1/products/0/firmware', settings.ipkey, (error, jsonobj) => {
                     if (jsonobj) {
                         resolve(jsonobj);
@@ -227,11 +226,10 @@
                         jsonError = "Error firmware"
                     }
                 });
-            }, 1000)
         });        
 
-        new Promise((resolve, reject) => {
-            setTimeout(function(){ 
+
+     await   new Promise((resolve, reject) => {
                 sendRequest('/di/v1/products/1/fltsts', settings.ipkey, (error, jsonobj) => {
                     if (jsonobj) {
                         resolve(jsonobj);
@@ -241,10 +239,8 @@
                         jsonError = "Error filter"
                     }
                 });
-            }, 2000)
         });        
 
-        setTimeout(function(){ 
             var response = {
                 status: jsonStatus,
                 firmware: jsonFirmware,
@@ -252,7 +248,6 @@
                 error: jsonError
             };
             return callback(null, response); 
-        }, 5000)
     }
 
     function setValueData(value, settings, callback) {
