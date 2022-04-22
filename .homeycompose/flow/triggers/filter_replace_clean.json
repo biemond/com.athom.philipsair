@@ -1,0 +1,71 @@
+{
+    "title": {
+        "en": "Replace or clean filter"
+    },
+    "titleFormatted": {
+        "en": "Replace or clean filter [[which]]"
+    },
+    "tokens": [
+        {
+            "name": "hours",
+            "type": "number",
+            "title": {
+                "en": "hours"
+            },
+            "example": {
+                "en": "50"
+            }
+        },
+        {
+            "name": "filter",
+            "type": "string",
+            "title": {
+                "en": "filter"
+            },
+            "example": {
+                "en": "carbon"
+            }
+        },
+        {
+            "name": "device",
+            "type": "string",
+            "title": {
+                "en": "device"
+            },
+            "example": {
+                "en": "air_v4wok"
+            }
+        }
+    ],
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+        },
+        {
+            "name": "which",
+            "type": "dropdown",
+            "values": [
+                {
+                    "id": "pre_filter",
+                    "label": {
+                        "en": "pre filter"
+                    }
+                },
+                {
+                    "id": "carbon_filter",
+                    "label": {
+                        "en": "carbon filter"
+                    }
+                },
+                {
+                    "id": "hepa_filter",
+                    "label": {
+                        "en": "hepa filter"
+                    }
+                }
+            ]
+        }
+    ]
+}

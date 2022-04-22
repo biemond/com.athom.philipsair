@@ -1,0 +1,17 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Current Allergen index"
+    },
+    "getable": true,
+    "setable": false,
+    "units": {
+        "en": ""
+    },
+    "min": 1,
+    "max": 12,
+    "decimals": 0,
+    "insights": true,
+    "uiComponent": "sensor",
+    "icon": "/assets/images/flower.svg"
+}

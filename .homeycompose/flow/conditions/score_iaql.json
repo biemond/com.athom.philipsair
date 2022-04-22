@@ -1,0 +1,43 @@
+{
+    "title": {
+        "en": "Allergen level:"
+    },
+    "titleFormatted": {
+        "en": "Allergen level [[argument_main]]"
+    },
+    "hint": {
+        "en": "Allergen level"
+    },
+    "args": [
+        {
+            "name": "argument_main",
+            "type": "dropdown",
+            "values": [
+                {
+                    "id": "good",
+                    "label": {
+                        "en": "good, score below 4"
+                    }
+                },
+                {
+                    "id": "fair",
+                    "label": {
+                        "en": "average, between 4 and 6"
+                    }
+                },
+                {
+                    "id": "poor",
+                    "label": {
+                        "en": "poor, between 7 and 9"
+                    }
+                },
+                {
+                    "id": "verypoor",
+                    "label": {
+                        "en": "very poor, above 9"
+                    }
+                }
+            ]
+        }
+    ]
+}

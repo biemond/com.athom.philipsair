@@ -1,0 +1,38 @@
+{
+    "type": "enum",
+    "title": {
+        "en": "Target humidity"
+    },
+    "getable": true,
+    "setable": true,
+    "uiComponent": "picker",
+    "uiQuickAction": true,
+    "values": [
+        {
+            "id": "40",
+            "title": {
+                "en": "40%"
+            }
+        },
+        {
+            "id": "50",
+            "title": {
+                "en": "50%"
+            }
+        },
+        {
+            "id": "60",
+            "title": {
+                "en": "60%"
+            }
+        },
+        {
+            "id": "70",
+            "title": {
+                "en": "Maximum"
+            }
+        }
+    ],
+    "insights": true,
+    "icon": "/assets/images/humidity.svg"
+}

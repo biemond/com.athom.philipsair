@@ -1,0 +1,12 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Pre-filter clean in"
+    },
+    "getable": true,
+    "setable": false,
+    "units": {
+        "en": "hours"
+    },
+    "icon": "/assets/images/clock.svg"
+}

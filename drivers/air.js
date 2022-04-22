@@ -1,15 +1,15 @@
-'use strict';
+import Homey from 'homey';
 
-const Homey = require('homey');
 const philipsair = require('./philipsair.js');
 const philipsairCoap = require('./philipsairCoap.js');
+
 const MINUTE = 60000;
 
 Date.prototype.timeNow = function () {
     return ((this.getHours() < 10) ? "0" : "") + ((this.getHours() > 12) ? (this.getHours() - 12) : this.getHours()) + ":" + ((this.getMinutes() < 10) ? "0" : "") + this.getMinutes() + " " + ((this.getHours() > 12) ? ('PM') : 'AM');
 };
 
-class AirDevice extends Homey.Device {
+export class AirDevice extends Homey.Device {
 
     // flow triggers
     flowTriggerFilterReplaceClean(tokens, state) {
@@ -78,34 +78,7 @@ class AirDevice extends Homey.Device {
         }
     }
 
-    onDeleted() {
-        let id = this.getData().id;
-        let name = this.getData().id;
-        let cronName = name.toLowerCase();
-        this.log('Unregistering cron:', cronName);
-        Homey.ManagerCron.unregisterTask(cronName, function (err, success) { });
-        this.log('device deleted:', id);
-    } // end onDeleted
 
-    onSettings(settings, newSettingsObj, changedKeysArr, callback) {
-        try {
-            for (var i = 0; i < changedKeysArr.length; i++) {
-                switch (changedKeysArr[i]) {
-                    case 'ipkey':
-                        this.log('IPKey changed to ' + newSettingsObj.ipkey);
-                        settings.ipkey = newSettingsObj.ipkey;
-                        break;
-
-                    default:
-                        this.log("Key not matched: " + i);
-                        break;
-                }
-            }
-            callback(null, true)
-        } catch (error) {
-            callback(error, null)
-        }
-    }
 
     handleDeviceStatus(json, settings) {
         if (json != null) {
@@ -293,23 +266,27 @@ class AirDevice extends Homey.Device {
         }
     }
 
-    pollAirCoapDevice(settings) {
+    pollAirCoapDevice() {
         this.log("pollAirCoapDevice");
+        let settings  = this.getSettings();
         this.log(settings);
+        this.log(JSON.stringify(settings));
         this.log("getCurrentStatusDataCoap");
         philipsairCoap.getCurrentStatusDataCoap(settings).then(data => {
             if (data != null) {
                 this.log("pollAirCoapDevice: " + JSON.stringify(data));
                 this.handleDeviceStatus(data.status, settings);
             } else {
-                this.log("pollAirDevice went wrong");
+                this.log("pollAirCoapDevice went wrong");
             }
         })
     }
 
-    pollAirDevice(settings) {
+    pollAirDevice() {
         this.log("pollAirDevice");
+        let settings  = this.getSettings();
         this.log(settings);
+        this.log(JSON.stringify(settings));
         let deviceSecret = this.getStoreValue('secretKey' + settings.id);
         // this.log(this);
         this.log(deviceSecret);
@@ -405,4 +382,4 @@ class AirDevice extends Homey.Device {
     }
 }
 
-module.exports = AirDevice;
+// module.exports = AirDevice;

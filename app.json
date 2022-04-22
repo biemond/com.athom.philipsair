@@ -1,1345 +1,1371 @@
 {
-	"id": "com.athom.philipsair",
-	"version": "0.0.33",
-	"compatibility": ">=1.5.0",
-	"sdk": 2,
-	"brandColor": "#002aff",
-	"name": {
-		"en": "Philips Air"
-	},
-	"description": {
-		"en": "Healthy air, always"
-	},
-	"tags": {
-		"en": [
-			"air",
-			"philips",
-			"purifier"
-		]
-	},
-	"category": [
-		"climate"
-	],
-	"bugs": {
-		"url": "https://github.com/biemond/com.athom.philipsair/issues"
-	},
-	"source": "https://github.com/biemond/com.athom.philipsair",
-	"support": "mailto:biemond@gmail.com",
-	"permissions": [],
-	"images": {
-		"large": "/assets/images/large.png",
-		"small": "/assets/images/small.png"
-	},
-	"author": {
-		"name": "Edwin Biemond",
-		"email": "biemond@gmail.com"
-	},
-	"contributors": {
-		"developers": [
-			{
-				"name": "Radoslav Gerganov, https://github.com/rgerganov/py-air-control"
-			}
-		]
-	},
-	"homeyCommunityTopicId": 32151,
-	"capabilities": {
-		"latest_retrieval_date": {
-			"type": "string",
-			"title": {
-				"en": "Latest update date"
-			},
-			"getable": true,
-			"setable": false,
-			"icon": "/assets/images/clock.svg"
-		},
-		"product": {
-			"type": "string",
-			"title": {
-				"en": "product"
-			},
-			"getable": true,
-			"setable": false
-		},
-		"pre_filter_clean": {
-			"type": "number",
-			"title": {
-				"en": "Pre-filter clean in"
-			},
-			"getable": true,
-			"setable": false,
-			"units": {
-				"en": "hours"
-			},
-			"icon": "/assets/images/clock.svg"
-		},
-		"carbon_filter_replace": {
-			"type": "number",
-			"title": {
-				"en": "Active Carbon replace in"
-			},
-			"getable": true,
-			"setable": false,
-			"units": {
-				"en": "hours"
-			},
-			"icon": "/assets/images/clock.svg"
-		},
-		"hepa_filter_replace": {
-			"type": "number",
-			"title": {
-				"en": "HEPA filter replace in"
-			},
-			"getable": true,
-			"setable": false,
-			"units": {
-				"en": "hours"
-			},
-			"icon": "/assets/images/clock.svg"
-		},
-		"measure_pm25": {
-			"type": "number",
-			"title": {
-				"en": "Current PM2.5 value"
-			},
-			"getable": true,
-			"setable": false,
-			"units": {
-				"en": "ug/m"
-			},
-			"min": 0,
-			"max": 999,
-			"decimals": 0,
-			"insights": true,
-			"uiComponent": "sensor"
-		},
-		"measure_iaql": {
-			"type": "number",
-			"title": {
-				"en": "Current Allergen index"
-			},
-			"getable": true,
-			"setable": false,
-			"units": {
-				"en": ""
-			},
-			"min": 1,
-			"max": 12,
-			"decimals": 0,
-			"insights": true,
-			"uiComponent": "sensor",
-			"icon": "/assets/images/flower.svg"
-		},
-		"measure_tvoc": {
-			"type": "number",
-			"title": {
-				"en": "Current GAS (TVOC)"
-			},
-			"getable": true,
-			"setable": false,
-			"units": {
-				"en": ""
-			},
-			"min": 1,
-			"max": 20,
-			"decimals": 0,
-			"insights": true,
-			"uiComponent": "sensor",
-			"icon": "/assets/images/co2.svg"
-		},
-		"target_humidity": {
-			"type": "enum",
-			"title": {
-				"en": "Target humidity"
-			},
-			"getable": true,
-			"setable": true,
-			"uiComponent": "picker",
-			"uiQuickAction": true,
-			"values": [
-				{
-					"id": "40",
-					"title": {
-						"en": "40%"
-					}
-				},
-				{
-					"id": "50",
-					"title": {
-						"en": "50%"
-					}
-				},
-				{
-					"id": "60",
-					"title": {
-						"en": "60%"
-					}
-				},
-				{
-					"id": "70",
-					"title": {
-						"en": "Maximum"
-					}
-				}
-			],
-			"insights": true,
-			"icon": "/assets/images/humidity.svg"
-		},
-		"measure_humidity": {
-			"type": "number",
-			"title": {
-				"en": "Humidity"
-			},
-			"getable": true,
-			"setable": false,
-			"units": {
-				"en": "%"
-			},
-			"min": 1,
-			"max": 99,
-			"decimals": 0,
-			"insights": true,
-			"icon": "/assets/images/humidity.svg"
-		},
-		"measure_temperature": {
-			"type": "number",
-			"title": {
-				"en": "Temperature"
-			},
-			"getable": true,
-			"setable": false,
-			"units": {
-				"en": "C"
-			},
-			"min": -10,
-			"max": 50,
-			"decimals": 0,
-			"insights": true,
-			"icon": "/assets/images/temp.svg"
-		},
-		"light_intensity": {
-			"type": "number",
-			"title": {
-				"en": "Light level ring"
-			},
-			"getable": true,
-			"setable": true,
-			"uiComponent": "slider",
-			"uiQuickAction": true,
-			"min": 0,
-			"max": 100,
-			"step": 25
-		},
-		"water_level": {
-			"type": "string",
-			"title": {
-				"en": "Water level"
-			},
-			"getable": true,
-			"setable": false,
-			"icon": "/assets/images/water-tank.svg"
-		},
-		"onoff": {
-			"type": "boolean",
-			"title": {
-				"en": "Power"
-			},
-			"getable": true,
-			"setable": true,
-			"uiComponent": "toggle",
-			"uiQuickAction": true
-		},
-		"button_lights": {
-			"type": "enum",
-			"title": {
-				"en": "Button lights"
-			},
-			"getable": true,
-			"setable": true,
-			"uiComponent": "picker",
-			"uiQuickAction": false,
-			"values": [
-				{
-					"id": "0",
-					"title": {
-						"en": "Off"
-					}
-				},
-				{
-					"id": "1",
-					"title": {
-						"en": "On"
-					}
-				},
-				{
-					"id": "2",
-					"title": {
-						"en": "Fixed"
-					}
-				}
-			]
-		},
-		"child_lock": {
-			"type": "boolean",
-			"title": {
-				"en": "Childlock"
-			},
-			"getable": true,
-			"setable": true,
-			"uiComponent": "toggle",
-			"uiQuickAction": false
-		},
-		"purifier_mode": {
-			"type": "enum",
-			"title": {
-				"en": "Purifier mode"
-			},
-			"getable": true,
-			"setable": true,
-			"uiComponent": "picker",
-			"uiQuickAction": true,
-			"values": [
-				{
-					"id": "P",
-					"title": {
-						"en": "General / Auto mode"
-					}
-				},
-				{
-					"id": "AG",
-					"title": {
-						"en": "Auto mode, some devices"
-					}
-				},
-				{
-					"id": "GT",
-					"title": {
-						"en": "Gentle, some devices"
-					}
-				},				
-				{
-					"id": "S",
-					"title": {
-						"en": "Sleep, some devices"
-					}
-				},
-				{
-					"id": "N",
-					"title": {
-						"en": "Night, some devices"
-					}
-				},				
-				{
-					"id": "T",
-					"title": {
-						"en": "Turbo, some devices"
-					}
-				},									
-				{
-					"id": "A",
-					"title": {
-						"en": "Allergen mode"
-					}
-				},
-				{
-					"id": "M",
-					"title": {
-						"en": "Manual mode"
-					}
-				},
-				{
-					"id": "B",
-					"title": {
-						"en": "Bacteria & Virus mode"
-					}
-				}
-			]
-		},
-		"func_mode": {
-			"type": "boolean",
-			"title": {
-				"en": "Humidification"
-			},
-			"getable": true,
-			"setable": true,
-			"uiComponent": "toggle",
-			"uiQuickAction": true
-		},
-		"fan_speed": {
-			"type": "enum",
-			"title": {
-				"en": "Fan speed"
-			},
-			"getable": true,
-			"setable": true,
-			"uiComponent": "picker",
-			"uiQuickAction": true,
-			"values": [
-				{
-					"id": "1",
-					"title": {
-						"en": "Speed 1"
-					}
-				},
-				{
-					"id": "2",
-					"title": {
-						"en": "Speed 2"
-					}
-				},
-				{
-					"id": "3",
-					"title": {
-						"en": "Speed 3, some devices"
-					}
-				},
-				{
-					"id": "AUTO",
-					"title": {
-						"en": "Auto"
-					}
-				},
-				{
-					"id": "s",
-					"title": {
-						"en": "Silent, some devices"
-					}
-				},
-				{
-					"id": "t",
-					"title": {
-						"en": "Turbo, some devices"
-					}
-				}
-			]
-		},
-		"display_mode": {
-			"type": "enum",
-			"title": {
-				"en": "Display mode"
-			},
-			"getable": true,
-			"setable": true,
-			"uiComponent": "picker",
-			"uiQuickAction": true,
-			"values": [
-				{
-					"id": "1",
-					"title": {
-						"en": "PM2.5"
-					}
-				},
-				{
-					"id": "0",
-					"title": {
-						"en": "IAI"
-					}
-				}
-			]
-		},
-		"display_mode_ph": {
-			"type": "enum",
-			"title": {
-				"en": "Display mode"
-			},
-			"getable": true,
-			"setable": true,
-			"uiComponent": "picker",
-			"uiQuickAction": true,
-			"values": [
-				{
-					"id": "1",
-					"title": {
-						"en": "PM2.5"
-					}
-				},
-				{
-					"id": "0",
-					"title": {
-						"en": "IAI"
-					}
-				},
-				{
-					"id": "3",
-					"title": {
-						"en": "Humidity"
-					}
-				}
-			]
-		},
-		"timer_remaining": {
-			"type": "number",
-			"title": {
-				"en": "Remaining timer minutes"
-			},
-			"getable": true,
-			"setable": false,
-			"units": {
-				"en": "Min"
-			},
-			"min": 0,
-			"max": 720,
-			"decimals": 0,
-			"insights": false,
-			"uiComponent": "sensor",
-			"icon": "/assets/images/clock.svg"
-		},
-		"timer": {
-			"type": "enum",
-			"title": {
-				"en": "Timer in hours"
-			},
-			"getable": true,
-			"setable": true,
-			"uiComponent": "picker",
-			"uiQuickAction": true,
-			"values": [
-				{
-					"id": "0",
-					"title": {
-						"en": "Off"
-					}
-				},
-				{
-					"id": "1",
-					"title": {
-						"en": "1"
-					}
-				},
-				{
-					"id": "2",
-					"title": {
-						"en": "2"
-					}
-				},
-				{
-					"id": "3",
-					"title": {
-						"en": "3"
-					}
-				},
-				{
-					"id": "4",
-					"title": {
-						"en": "4"
-					}
-				},
-				{
-					"id": "5",
-					"title": {
-						"en": "5"
-					}
-				},
-				{
-					"id": "6",
-					"title": {
-						"en": "6"
-					}
-				},
-				{
-					"id": "7",
-					"title": {
-						"en": "7"
-					}
-				},
-				{
-					"id": "8",
-					"title": {
-						"en": "8"
-					}
-				},
-				{
-					"id": "9",
-					"title": {
-						"en": "9"
-					}
-				},
-				{
-					"id": "10",
-					"title": {
-						"en": "10"
-					}
-				},
-				{
-					"id": "11",
-					"title": {
-						"en": "11"
-					}
-				},
-				{
-					"id": "12",
-					"title": {
-						"en": "12"
-					}
-				}
-			],
-			"insights": true,
-			"icon": "/assets/images/clock.svg"
-		}
-	},
-	"flow": {
-		"triggers": [
-			{
-				"id": "measure_pm25_changed",
-				"title": {
-					"en": "PM2.5 changed"
-				},
-				"tokens": [
-					{
-						"name": "measure_pm25",
-						"type": "number",
-						"title": {
-							"en": "value"
-						},
-						"example": {
-							"en": "50"
-						}
-					}
-				],
-				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
-					}
-				]
-			},
-			{
-				"id": "filter_replace_clean",
-				"title": {
-					"en": "Replace or clean filter"
-				},
-				"titleFormatted": {
-					"en": "Replace or clean filter [[which]]"
-				},
-				"tokens": [
-					{
-						"name": "hours",
-						"type": "number",
-						"title": {
-							"en": "hours"
-						},
-						"example": {
-							"en": "50"
-						}
-					},
-					{
-						"name": "filter",
-						"type": "string",
-						"title": {
-							"en": "filter"
-						},
-						"example": {
-							"en": "carbon"
-						}
-					},
-					{
-						"name": "device",
-						"type": "string",
-						"title": {
-							"en": "device"
-						},
-						"example": {
-							"en": "air_v4wok"
-						}
-					}
-				],
-				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
-					},
-					{
-						"name": "which",
-						"type": "dropdown",
-						"values": [
-							{
-								"id": "pre_filter",
-								"label": {
-									"en": "pre filter"
-								}
-							},
-							{
-								"id": "carbon_filter",
-								"label": {
-									"en": "carbon filter"
-								}
-							},
-							{
-								"id": "hepa_filter",
-								"label": {
-									"en": "hepa filter"
-								}
-							}
-						]
-					}
-				]
-			},
-			{
-				"id": "measure_iaql_changed",
-				"title": {
-					"en": "IAQL changed"
-				},
-				"tokens": [
-					{
-						"name": "measure_iaql",
-						"type": "number",
-						"title": {
-							"en": "value"
-						},
-						"example": {
-							"en": "1"
-						}
-					}
-				],
-				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
-					}
-				]
-			},
-			{
-				"id": "measure_tvoc_changed",
-				"title": {
-					"en": "TVOC changed"
-				},
-				"tokens": [
-					{
-						"name": "measure_tvoc",
-						"type": "number",
-						"title": {
-							"en": "value"
-						},
-						"example": {
-							"en": "1"
-						}
-					}
-				],
-				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
-					}
-				]
-			},
-			{
-				"id": "measure_humidity_changed",
-				"title": {
-					"en": "Humidity changed"
-				},
-				"tokens": [
-					{
-						"name": "measure_humidity",
-						"type": "number",
-						"title": {
-							"en": "value"
-						},
-						"example": {
-							"en": "1"
-						}
-					}
-				],
-				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device2|deviceCoap2"
-					}
-				]
-			}
-		],
-		"conditions": [
-			{
-				"id": "score_iaql",
-				"title": {
-					"en": "Allergen level:"
-				},
-				"titleFormatted": {
-					"en": "Allergen level [[argument_main]]"
-				},
-				"hint": {
-					"en": "Allergen level"
-				},
-				"args": [
-					{
-						"name": "argument_main",
-						"type": "dropdown",
-						"values": [
-							{
-								"id": "good",
-								"label": {
-									"en": "good, score below 4"
-								}
-							},
-							{
-								"id": "fair",
-								"label": {
-									"en": "average, between 4 and 6"
-								}
-							},
-							{
-								"id": "poor",
-								"label": {
-									"en": "poor, between 7 and 9"
-								}
-							},
-							{
-								"id": "verypoor",
-								"label": {
-									"en": "very poor, above 9"
-								}
-							}
-						]
-					}
-				]
-			},
-			{
-				"id": "score_pm25",
-				"title": {
-					"en": "pm2.5 measurement"
-				},
-				"titleFormatted": {
-					"en": "pm2.5 level [[argument_main]]"
-				},
-				"hint": {
-					"en": "pm2.5 measurement"
-				},
-				"args": [
-					{
-						"name": "argument_main",
-						"type": "dropdown",
-						"values": [
-							{
-								"id": "good",
-								"label": {
-									"en": "good, score below 13"
-								}
-							},
-							{
-								"id": "fair",
-								"label": {
-									"en": "average, between 13 and 35"
-								}
-							},
-							{
-								"id": "poor",
-								"label": {
-									"en": "poor, between 36 and 55"
-								}
-							},
-							{
-								"id": "verypoor",
-								"label": {
-									"en": "very poor, above 55"
-								}
-							}
-						]
-					}
-				]
-			}
-		],
-		"actions": [
-			{
-				"id": "on",
-				"title": {
-					"en": "Startup purifier"
-				},
-				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
-					}
-				]
-			},
-			{
-				"id": "off",
-				"title": {
-					"en": "Shutoff purifier"
-				},
-				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
-					}
-				]
-			},
-			{
-				"id": "light_intensity",
-				"title": {
-					"en": "Light level ring"
-				},
-				"titleFormatted": {
-					"en": "Light level ring [[mode]]"
-				},
-				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
-					},
-					{
-						"name": "mode",
-						"type": "dropdown",
-						"values": [
-							{
-								"id": "0",
-								"title": {
-									"en": "0"
-								}
-							},
-							{
-								"id": "25",
-								"title": {
-									"en": "25"
-								}
-							},
-							{
-								"id": "50",
-								"title": {
-									"en": "50"
-								}
-							},
-							{
-								"id": "75",
-								"title": {
-									"en": "75"
-								}
-							},
-							{
-								"id": "100",
-								"title": {
-									"en": "100"
-								}
-							}
-						]
-					}
-				]
-			},
-			{
-				"id": "fan_speed",
-				"title": {
-					"en": "Fan speed"
-				},
-				"titleFormatted": {
-					"en": "Fan [[mode]]"
-				},
-				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
-					},
-					{
-						"name": "mode",
-						"type": "dropdown",
-						"values": [
-							{
-								"id": "1",
-								"title": {
-									"en": "Speed 1"
-								}
-							},
-							{
-								"id": "2",
-								"title": {
-									"en": "Speed 2"
-								}
-							},
-							{
-								"id": "3",
-								"title": {
-									"en": "Speed 3, some devices"
-								}
-							},
-							{
-								"id": "AUTO",
-								"title": {
-									"en": "Auto"
-								}
-							},
-							{
-								"id": "s",
-								"title": {
-									"en": "Silent, some devices"
-								}
-							},
-							{
-								"id": "t",
-								"title": {
-									"en": "Turbo, some devices"
-								}
-							}
-						]
-					}
-				]
-			},
-			{
-				"id": "purifier_mode",
-				"title": {
-					"en": "purifier mode"
-				},
-				"titleFormatted": {
-					"en": "purifier [[mode]]"
-				},
-				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
-					},
-					{
-						"name": "mode",
-						"type": "dropdown",
-						"values": [
-							{
-								"id": "P",
-								"title": {
-									"en": "General mode"
-								}
-							},
-							{
-								"id": "A",
-								"title": {
-									"en": "Allergen mode"
-								}
-							},
-							{
-								"id": "M",
-								"title": {
-									"en": "Manual mode"
-								}
-							},
-							{
-								"id": "B",
-								"title": {
-									"en": "Bacteria & Virus mode"
-								}
-							},
-							{
-								"id": "AG",
-								"title": {
-									"en": "Auto mode, some devices"
-								}
-							},
-							{
-								"id": "GT",
-								"title": {
-									"en": "Gentle, some devices"
-								}
-							},				
-							{
-								"id": "S",
-								"title": {
-									"en": "Sleep, some devices"
-								}
-							},
-							{
-								"id": "N",
-								"title": {
-									"en": "Night, some devices"
-								}
-							},				
-							{
-								"id": "T",
-								"title": {
-									"en": "Turbo, some devices"
-								}
-							}									
-						]
-					}
-				]
-			},
-			{
-				"id": "func_mode_on",
-				"title": {
-					"en": "Enable Humidification"
-				},
-				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device2|deviceCoap2"
-					}
-				]
-			},
-			{
-				"id": "func_mode_off",
-				"title": {
-					"en": "Disable Humidification"
-				},
-				"args": [
-					{
-						"name": "device",
-						"type": "device",
-						"filter": "driver_id=device2|deviceCoap2"
-					}
-				]
-			}
-		]
-	},
-	"drivers": [
-		{
-			"id": "device",
-			"pair": [
-				{
-					"id": "pair"
-				}
-			],
-			"settings": [
-				{
-					"type": "group",
-					"label": {
-						"en": "General settings"
-					},
-					"children": [
-						{
-							"id": "ipkey",
-							"type": "text",
-							"label": {
-								"en": "Philips Air device IP address"
-							},
-							"value": "",
-							"hint": {
-								"en": "Enter the IP address key of your Philips Air purifier"
-							}
-						}
-					]
-				}
-			],
-			"name": {
-				"en": "Purifier <= 2019"
-			},
-			"class": "other",
-			"energy": {
-				"approximation": {
-					"usageOn": 19,
-					"usageOff": 1
-				}
-			},
-			"capabilities": [
-				"latest_retrieval_date",
-				"measure_pm25",
-				"measure_iaql",
-				"measure_tvoc",
-				"pre_filter_clean",
-				"carbon_filter_replace",
-				"hepa_filter_replace",
-				"product",
-				"light_intensity",
-				"onoff",
-				"button_lights",
-				"purifier_mode",
-				"display_mode",
-				"child_lock",
-				"fan_speed",
-				"timer_remaining",
-				"timer"
-			],
-			"images": {
-				"large": "/drivers/device/assets/images/large.png",
-				"small": "/drivers/device/assets/images/small.png"
-			}
-		},
-		{
-			"id": "device2",
-			"pair": [
-				{
-					"id": "pair"
-				}
-			],
-			"settings": [
-				{
-					"type": "group",
-					"label": {
-						"en": "General settings"
-					},
-					"children": [
-						{
-							"id": "ipkey",
-							"type": "text",
-							"label": {
-								"en": "Philips Air device IP address"
-							},
-							"value": "",
-							"hint": {
-								"en": "Enter the IP address key of your Philips Air purifier"
-							}
-						}
-					]
-				}
-			],
-			"name": {
-				"en": "Purifier + Hum <= 2019"
-			},
-			"class": "other",
-			"energy": {
-				"approximation": {
-					"usageOn": 19,
-					"usageOff": 1
-				}
-			},
-			"capabilities": [
-				"latest_retrieval_date",
-				"measure_pm25",
-				"measure_iaql",
-				"measure_tvoc",
-				"measure_humidity",
-				"target_humidity",
-				"measure_temperature",
-				"pre_filter_clean",
-				"carbon_filter_replace",
-				"hepa_filter_replace",
-				"product",
-				"light_intensity",
-				"onoff",
-				"button_lights",
-				"purifier_mode",
-				"display_mode_ph",
-				"child_lock",
-				"fan_speed",
-				"func_mode",
-				"water_level",
-				"timer_remaining",
-				"timer"
-			],
-			"images": {
-				"large": "/drivers/device2/assets/images/large.png",
-				"small": "/drivers/device2/assets/images/small.png"
-			}
-		},
-		{
-			"id": "deviceCoap",
-			"pair": [
-				{
-					"id": "pair"
-				}
-			],
-			"settings": [
-				{
-					"type": "group",
-					"label": {
-						"en": "General settings"
-					},
-					"children": [
-						{
-							"id": "ipkey",
-							"type": "text",
-							"label": {
-								"en": "Philips Air device IP address"
-							},
-							"value": "",
-							"hint": {
-								"en": "Enter the IP address key of your Philips Air purifier"
-							}
-						}
-					]
-				}
-			],
-			"name": {
-				"en": "Purifier >= 2020"
-			},
-			"class": "other",
-			"energy": {
-				"approximation": {
-					"usageOn": 19,
-					"usageOff": 1
-				}
-			},
-			"capabilities": [
-				"latest_retrieval_date",
-				"measure_pm25",
-				"measure_iaql",
-				"measure_tvoc",
-				"pre_filter_clean",
-				"carbon_filter_replace",
-				"hepa_filter_replace",
-				"product",
-				"light_intensity",
-				"onoff",
-				"button_lights",
-				"purifier_mode",
-				"display_mode",
-				"child_lock",
-				"fan_speed",
-				"timer_remaining",
-				"timer"
-			],
-			"images": {
-				"large": "/drivers/deviceCoap/assets/images/large.png",
-				"small": "/drivers/deviceCoap/assets/images/small.png"
-			}
-		},
-		{
-			"id": "deviceCoap2",
-			"pair": [
-				{
-					"id": "pair"
-				}
-			],
-			"settings": [
-				{
-					"type": "group",
-					"label": {
-						"en": "General settings"
-					},
-					"children": [
-						{
-							"id": "ipkey",
-							"type": "text",
-							"label": {
-								"en": "Philips Air device IP address"
-							},
-							"value": "",
-							"hint": {
-								"en": "Enter the IP address key of your Philips Air purifier"
-							}
-						}
-					]
-				}
-			],
-			"name": {
-				"en": "Purifier + Hum >= 2020"
-			},
-			"class": "other",
-			"energy": {
-				"approximation": {
-					"usageOn": 19,
-					"usageOff": 1
-				}
-			},
-			"capabilities": [
-				"latest_retrieval_date",
-				"measure_pm25",
-				"measure_iaql",
-				"measure_tvoc",
-				"measure_humidity",
-				"target_humidity",
-				"measure_temperature",
-				"pre_filter_clean",
-				"carbon_filter_replace",
-				"hepa_filter_replace",
-				"product",
-				"light_intensity",
-				"onoff",
-				"button_lights",
-				"purifier_mode",
-				"display_mode_ph",
-				"child_lock",
-				"fan_speed",
-				"func_mode",
-				"water_level",
-				"timer_remaining",
-				"timer"
-			],
-			"images": {
-				"large": "/drivers/deviceCoap2/assets/images/large.png",
-				"small": "/drivers/deviceCoap2/assets/images/small.png"
-			}
-		}
-	]
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.athom.philipsair",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "brandColor": "#002aff",
+  "name": {
+    "en": "Philips Air"
+  },
+  "description": {
+    "en": "Healthy air, always"
+  },
+  "tags": {
+    "en": [
+      "air",
+      "philips",
+      "purifier"
+    ]
+  },
+  "category": [
+    "climate"
+  ],
+  "permissions": [],
+  "bugs": {
+    "url": "https://github.com/biemond/com.athom.philipsair/issues"
+  },
+  "source": "https://github.com/biemond/com.athom.philipsair",
+  "support": "mailto:biemond@gmail.com",
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "homeyCommunityTopicId": 32151,
+  "author": {
+    "name": "Edwin Biemond",
+    "email": "biemond@gmail.com"
+  },
+  "flow": {
+    "triggers": [
+      {
+        "title": {
+          "en": "Replace or clean filter"
+        },
+        "titleFormatted": {
+          "en": "Replace or clean filter [[which]]"
+        },
+        "tokens": [
+          {
+            "name": "hours",
+            "type": "number",
+            "title": {
+              "en": "hours"
+            },
+            "example": {
+              "en": "50"
+            }
+          },
+          {
+            "name": "filter",
+            "type": "string",
+            "title": {
+              "en": "filter"
+            },
+            "example": {
+              "en": "carbon"
+            }
+          },
+          {
+            "name": "device",
+            "type": "string",
+            "title": {
+              "en": "device"
+            },
+            "example": {
+              "en": "air_v4wok"
+            }
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+          },
+          {
+            "name": "which",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "pre_filter",
+                "label": {
+                  "en": "pre filter"
+                }
+              },
+              {
+                "id": "carbon_filter",
+                "label": {
+                  "en": "carbon filter"
+                }
+              },
+              {
+                "id": "hepa_filter",
+                "label": {
+                  "en": "hepa filter"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "filter_replace_clean"
+      },
+      {
+        "title": {
+          "en": "Humidity changed"
+        },
+        "tokens": [
+          {
+            "name": "measure_humidity",
+            "type": "number",
+            "title": {
+              "en": "value"
+            },
+            "example": {
+              "en": "1"
+            }
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device2|deviceCoap2"
+          }
+        ],
+        "id": "measure_humidity_changed"
+      },
+      {
+        "title": {
+          "en": "IAQL changed"
+        },
+        "tokens": [
+          {
+            "name": "measure_iaql",
+            "type": "number",
+            "title": {
+              "en": "value"
+            },
+            "example": {
+              "en": "1"
+            }
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+          }
+        ],
+        "id": "measure_iaql_changed"
+      },
+      {
+        "title": {
+          "en": "PM2.5 changed"
+        },
+        "tokens": [
+          {
+            "name": "measure_pm25",
+            "type": "number",
+            "title": {
+              "en": "value"
+            },
+            "example": {
+              "en": "50"
+            }
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+          }
+        ],
+        "id": "measure_pm25_changed"
+      },
+      {
+        "title": {
+          "en": "TVOC changed"
+        },
+        "tokens": [
+          {
+            "name": "measure_tvoc",
+            "type": "number",
+            "title": {
+              "en": "value"
+            },
+            "example": {
+              "en": "1"
+            }
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+          }
+        ],
+        "id": "measure_tvoc_changed"
+      }
+    ],
+    "conditions": [
+      {
+        "title": {
+          "en": "Allergen level:"
+        },
+        "titleFormatted": {
+          "en": "Allergen level [[argument_main]]"
+        },
+        "hint": {
+          "en": "Allergen level"
+        },
+        "args": [
+          {
+            "name": "argument_main",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "good",
+                "label": {
+                  "en": "good, score below 4"
+                }
+              },
+              {
+                "id": "fair",
+                "label": {
+                  "en": "average, between 4 and 6"
+                }
+              },
+              {
+                "id": "poor",
+                "label": {
+                  "en": "poor, between 7 and 9"
+                }
+              },
+              {
+                "id": "verypoor",
+                "label": {
+                  "en": "very poor, above 9"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "score_iaql"
+      },
+      {
+        "title": {
+          "en": "pm2.5 measurement"
+        },
+        "titleFormatted": {
+          "en": "pm2.5 level [[argument_main]]"
+        },
+        "hint": {
+          "en": "pm2.5 measurement"
+        },
+        "args": [
+          {
+            "name": "argument_main",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "good",
+                "label": {
+                  "en": "good, score below 13"
+                }
+              },
+              {
+                "id": "fair",
+                "label": {
+                  "en": "average, between 13 and 35"
+                }
+              },
+              {
+                "id": "poor",
+                "label": {
+                  "en": "poor, between 36 and 55"
+                }
+              },
+              {
+                "id": "verypoor",
+                "label": {
+                  "en": "very poor, above 55"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "score_pm25"
+      }
+    ],
+    "actions": [
+      {
+        "title": {
+          "en": "Fan speed"
+        },
+        "titleFormatted": {
+          "en": "Fan [[mode]]"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+          },
+          {
+            "name": "mode",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "1",
+                "title": {
+                  "en": "Speed 1"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Speed 2"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "Speed 3, some devices"
+                }
+              },
+              {
+                "id": "AUTO",
+                "title": {
+                  "en": "Auto"
+                }
+              },
+              {
+                "id": "s",
+                "title": {
+                  "en": "Silent, some devices"
+                }
+              },
+              {
+                "id": "t",
+                "title": {
+                  "en": "Turbo, some devices"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "fan_speed"
+      },
+      {
+        "title": {
+          "en": "Disable Humidification"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device2|deviceCoap2"
+          }
+        ],
+        "id": "func_mode_off"
+      },
+      {
+        "title": {
+          "en": "Enable Humidification"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device2|deviceCoap2"
+          }
+        ],
+        "id": "func_mode_on"
+      },
+      {
+        "title": {
+          "en": "Light level ring"
+        },
+        "titleFormatted": {
+          "en": "Light level ring [[mode]]"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+          },
+          {
+            "name": "mode",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "0",
+                "title": {
+                  "en": "0"
+                }
+              },
+              {
+                "id": "25",
+                "title": {
+                  "en": "25"
+                }
+              },
+              {
+                "id": "50",
+                "title": {
+                  "en": "50"
+                }
+              },
+              {
+                "id": "75",
+                "title": {
+                  "en": "75"
+                }
+              },
+              {
+                "id": "100",
+                "title": {
+                  "en": "100"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "light_intensity"
+      },
+      {
+        "title": {
+          "en": "Shutoff purifier"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+          }
+        ],
+        "id": "off"
+      },
+      {
+        "title": {
+          "en": "Startup purifier"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+          }
+        ],
+        "id": "on"
+      },
+      {
+        "title": {
+          "en": "purifier mode"
+        },
+        "titleFormatted": {
+          "en": "purifier [[mode]]"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+          },
+          {
+            "name": "mode",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "P",
+                "title": {
+                  "en": "General mode"
+                }
+              },
+              {
+                "id": "A",
+                "title": {
+                  "en": "Allergen mode"
+                }
+              },
+              {
+                "id": "M",
+                "title": {
+                  "en": "Manual mode"
+                }
+              },
+              {
+                "id": "B",
+                "title": {
+                  "en": "Bacteria & Virus mode"
+                }
+              },
+              {
+                "id": "AG",
+                "title": {
+                  "en": "Auto mode, some devices"
+                }
+              },
+              {
+                "id": "GT",
+                "title": {
+                  "en": "Gentle, some devices"
+                }
+              },
+              {
+                "id": "S",
+                "title": {
+                  "en": "Sleep, some devices"
+                }
+              },
+              {
+                "id": "N",
+                "title": {
+                  "en": "Night, some devices"
+                }
+              },
+              {
+                "id": "T",
+                "title": {
+                  "en": "Turbo, some devices"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "purifier_mode"
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Purifier <= 2019"
+      },
+      "class": "fan",
+      "capabilities": [
+        "latest_retrieval_date",
+        "measure_pm25",
+        "measure_iaql",
+        "measure_tvoc",
+        "pre_filter_clean",
+        "carbon_filter_replace",
+        "hepa_filter_replace",
+        "product",
+        "light_intensity",
+        "onoff",
+        "button_lights",
+        "purifier_mode",
+        "display_mode",
+        "child_lock",
+        "fan_speed",
+        "timer_remaining",
+        "timer"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/device/assets/images/small.png",
+        "large": "/drivers/device/assets/images/large.png",
+        "xlarge": "/drivers/device/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "pair"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings"
+          },
+          "children": [
+            {
+              "id": "ipkey",
+              "type": "text",
+              "label": {
+                "en": "Philips Air device IP address"
+              },
+              "value": "",
+              "hint": {
+                "en": "Enter the IP address key of your Philips Air purifier"
+              }
+            }
+          ]
+        }
+      ],
+      "energy": {
+        "approximation": {
+          "usageOn": 19,
+          "usageOff": 1
+        }
+      },
+      "id": "device"
+    },
+    {
+      "name": {
+        "en": "Purifier + Hum <= 2019"
+      },
+      "class": "fan",
+      "capabilities": [
+        "latest_retrieval_date",
+        "measure_pm25",
+        "measure_iaql",
+        "measure_tvoc",
+        "measure_humidity",
+        "target_humidity",
+        "measure_temperature",
+        "pre_filter_clean",
+        "carbon_filter_replace",
+        "hepa_filter_replace",
+        "product",
+        "light_intensity",
+        "onoff",
+        "button_lights",
+        "purifier_mode",
+        "display_mode_ph",
+        "child_lock",
+        "fan_speed",
+        "func_mode",
+        "water_level",
+        "timer_remaining",
+        "timer"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/device2/assets/images/small.png",
+        "large": "/drivers/device2/assets/images/large.png",
+        "xlarge": "/drivers/device2/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "pair"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings"
+          },
+          "children": [
+            {
+              "id": "ipkey",
+              "type": "text",
+              "label": {
+                "en": "Philips Air device IP address"
+              },
+              "value": "",
+              "hint": {
+                "en": "Enter the IP address key of your Philips Air purifier"
+              }
+            }
+          ]
+        }
+      ],
+      "energy": {
+        "approximation": {
+          "usageOn": 19,
+          "usageOff": 1
+        }
+      },
+      "id": "device2"
+    },
+    {
+      "name": {
+        "en": "Purifier >= 2020"
+      },
+      "class": "fan",
+      "capabilities": [
+        "latest_retrieval_date",
+        "measure_pm25",
+        "measure_iaql",
+        "measure_tvoc",
+        "pre_filter_clean",
+        "carbon_filter_replace",
+        "hepa_filter_replace",
+        "product",
+        "light_intensity",
+        "onoff",
+        "button_lights",
+        "purifier_mode",
+        "display_mode",
+        "child_lock",
+        "fan_speed",
+        "timer_remaining",
+        "timer"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/deviceCoap/assets/images/small.png",
+        "large": "/drivers/deviceCoap/assets/images/large.png",
+        "xlarge": "/drivers/deviceCoap/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "pair"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings"
+          },
+          "children": [
+            {
+              "id": "ipkey",
+              "type": "text",
+              "label": {
+                "en": "Philips Air device IP address"
+              },
+              "value": "",
+              "hint": {
+                "en": "Enter the IP address key of your Philips Air purifier"
+              }
+            }
+          ]
+        }
+      ],
+      "energy": {
+        "approximation": {
+          "usageOn": 19,
+          "usageOff": 1
+        }
+      },
+      "id": "deviceCoap"
+    },
+    {
+      "name": {
+        "en": "Purifier + Hum >= 2020"
+      },
+      "class": "fan",
+      "capabilities": [
+        "latest_retrieval_date",
+        "measure_pm25",
+        "measure_iaql",
+        "measure_tvoc",
+        "measure_humidity",
+        "target_humidity",
+        "measure_temperature",
+        "pre_filter_clean",
+        "carbon_filter_replace",
+        "hepa_filter_replace",
+        "product",
+        "light_intensity",
+        "onoff",
+        "button_lights",
+        "purifier_mode",
+        "display_mode_ph",
+        "child_lock",
+        "fan_speed",
+        "func_mode",
+        "water_level",
+        "timer_remaining",
+        "timer"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/deviceCoap2/assets/images/small.png",
+        "large": "/drivers/deviceCoap2/assets/images/large.png",
+        "xlarge": "/drivers/deviceCoap2/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "pair"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings"
+          },
+          "children": [
+            {
+              "id": "ipkey",
+              "type": "text",
+              "label": {
+                "en": "Philips Air device IP address"
+              },
+              "value": "",
+              "hint": {
+                "en": "Enter the IP address key of your Philips Air purifier"
+              }
+            }
+          ]
+        }
+      ],
+      "energy": {
+        "approximation": {
+          "usageOn": 19,
+          "usageOff": 1
+        }
+      },
+      "id": "deviceCoap2"
+    }
+  ],
+  "capabilities": {
+    "button_lights": {
+      "type": "enum",
+      "title": {
+        "en": "Button lights"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": false,
+      "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "1",
+          "title": {
+            "en": "On"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Fixed"
+          }
+        }
+      ]
+    },
+    "carbon_filter_replace": {
+      "type": "number",
+      "title": {
+        "en": "Active Carbon replace in"
+      },
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": "hours"
+      },
+      "icon": "/assets/images/clock.svg"
+    },
+    "child_lock": {
+      "type": "boolean",
+      "title": {
+        "en": "Childlock"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "uiQuickAction": false
+    },
+    "display_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Display mode"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "values": [
+        {
+          "id": "1",
+          "title": {
+            "en": "PM2.5"
+          }
+        },
+        {
+          "id": "0",
+          "title": {
+            "en": "IAI"
+          }
+        }
+      ]
+    },
+    "display_mode_ph": {
+      "type": "enum",
+      "title": {
+        "en": "Display mode"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "values": [
+        {
+          "id": "1",
+          "title": {
+            "en": "PM2.5"
+          }
+        },
+        {
+          "id": "0",
+          "title": {
+            "en": "IAI"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "Humidity"
+          }
+        }
+      ]
+    },
+    "fan_speed": {
+      "type": "enum",
+      "title": {
+        "en": "Fan speed"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "values": [
+        {
+          "id": "1",
+          "title": {
+            "en": "Speed 1"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Speed 2"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "Speed 3, some devices"
+          }
+        },
+        {
+          "id": "AUTO",
+          "title": {
+            "en": "Auto"
+          }
+        },
+        {
+          "id": "s",
+          "title": {
+            "en": "Silent, some devices"
+          }
+        },
+        {
+          "id": "t",
+          "title": {
+            "en": "Turbo, some devices"
+          }
+        }
+      ]
+    },
+    "func_mode": {
+      "type": "boolean",
+      "title": {
+        "en": "Humidification"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "uiQuickAction": true
+    },
+    "hepa_filter_replace": {
+      "type": "number",
+      "title": {
+        "en": "HEPA filter replace in"
+      },
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": "hours"
+      },
+      "icon": "/assets/images/clock.svg"
+    },
+    "latest_retrieval_date": {
+      "type": "string",
+      "title": {
+        "en": "Latest update date"
+      },
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/images/clock.svg"
+    },
+    "light_intensity": {
+      "type": "number",
+      "title": {
+        "en": "Light level ring"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "slider",
+      "uiQuickAction": true,
+      "min": 0,
+      "max": 100,
+      "step": 25
+    },
+    "measure_humidity": {
+      "type": "number",
+      "title": {
+        "en": "Humidity"
+      },
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": "%"
+      },
+      "min": 1,
+      "max": 99,
+      "decimals": 0,
+      "insights": true,
+      "icon": "/assets/images/humidity.svg"
+    },
+    "measure_iaql": {
+      "type": "number",
+      "title": {
+        "en": "Current Allergen index"
+      },
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": ""
+      },
+      "min": 1,
+      "max": 12,
+      "decimals": 0,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/images/flower.svg"
+    },
+    "measure_pm25": {
+      "type": "number",
+      "title": {
+        "en": "Current PM2.5 value"
+      },
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": "ug/m"
+      },
+      "min": 0,
+      "max": 999,
+      "decimals": 0,
+      "insights": true,
+      "uiComponent": "sensor"
+    },
+    "measure_temperature": {
+      "type": "number",
+      "title": {
+        "en": "Temperature"
+      },
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": "C"
+      },
+      "min": -10,
+      "max": 50,
+      "decimals": 0,
+      "insights": true,
+      "icon": "/assets/images/temp.svg"
+    },
+    "measure_tvoc": {
+      "type": "number",
+      "title": {
+        "en": "Current GAS (TVOC)"
+      },
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": ""
+      },
+      "min": 1,
+      "max": 20,
+      "decimals": 0,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/images/co2.svg"
+    },
+    "onoff": {
+      "type": "boolean",
+      "title": {
+        "en": "Power"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "uiQuickAction": true
+    },
+    "pre_filter_clean": {
+      "type": "number",
+      "title": {
+        "en": "Pre-filter clean in"
+      },
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": "hours"
+      },
+      "icon": "/assets/images/clock.svg"
+    },
+    "product": {
+      "type": "string",
+      "title": {
+        "en": "product"
+      },
+      "getable": true,
+      "setable": false
+    },
+    "purifier_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Purifier mode"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "values": [
+        {
+          "id": "P",
+          "title": {
+            "en": "General / Auto mode"
+          }
+        },
+        {
+          "id": "AG",
+          "title": {
+            "en": "Auto mode, some devices"
+          }
+        },
+        {
+          "id": "GT",
+          "title": {
+            "en": "Gentle, some devices"
+          }
+        },
+        {
+          "id": "S",
+          "title": {
+            "en": "Sleep, some devices"
+          }
+        },
+        {
+          "id": "N",
+          "title": {
+            "en": "Night, some devices"
+          }
+        },
+        {
+          "id": "T",
+          "title": {
+            "en": "Turbo, some devices"
+          }
+        },
+        {
+          "id": "A",
+          "title": {
+            "en": "Allergen mode"
+          }
+        },
+        {
+          "id": "M",
+          "title": {
+            "en": "Manual mode"
+          }
+        },
+        {
+          "id": "B",
+          "title": {
+            "en": "Bacteria & Virus mode"
+          }
+        }
+      ]
+    },
+    "target_humidity": {
+      "type": "enum",
+      "title": {
+        "en": "Target humidity"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "values": [
+        {
+          "id": "40",
+          "title": {
+            "en": "40%"
+          }
+        },
+        {
+          "id": "50",
+          "title": {
+            "en": "50%"
+          }
+        },
+        {
+          "id": "60",
+          "title": {
+            "en": "60%"
+          }
+        },
+        {
+          "id": "70",
+          "title": {
+            "en": "Maximum"
+          }
+        }
+      ],
+      "insights": true,
+      "icon": "/assets/images/humidity.svg"
+    },
+    "timer": {
+      "type": "enum",
+      "title": {
+        "en": "Timer in hours"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "1",
+          "title": {
+            "en": "1"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "2"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "3"
+          }
+        },
+        {
+          "id": "4",
+          "title": {
+            "en": "4"
+          }
+        },
+        {
+          "id": "5",
+          "title": {
+            "en": "5"
+          }
+        },
+        {
+          "id": "6",
+          "title": {
+            "en": "6"
+          }
+        },
+        {
+          "id": "7",
+          "title": {
+            "en": "7"
+          }
+        },
+        {
+          "id": "8",
+          "title": {
+            "en": "8"
+          }
+        },
+        {
+          "id": "9",
+          "title": {
+            "en": "9"
+          }
+        },
+        {
+          "id": "10",
+          "title": {
+            "en": "10"
+          }
+        },
+        {
+          "id": "11",
+          "title": {
+            "en": "11"
+          }
+        },
+        {
+          "id": "12",
+          "title": {
+            "en": "12"
+          }
+        }
+      ],
+      "insights": true,
+      "icon": "/assets/images/clock.svg"
+    },
+    "timer_remaining": {
+      "type": "number",
+      "title": {
+        "en": "Remaining timer minutes"
+      },
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": "Min"
+      },
+      "min": 0,
+      "max": 720,
+      "decimals": 0,
+      "insights": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/images/clock.svg"
+    },
+    "water_level": {
+      "type": "string",
+      "title": {
+        "en": "Water level"
+      },
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/images/water-tank.svg"
+    }
+  }
 }

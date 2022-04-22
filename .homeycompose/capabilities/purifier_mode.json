@@ -1,0 +1,66 @@
+{
+    "type": "enum",
+    "title": {
+        "en": "Purifier mode"
+    },
+    "getable": true,
+    "setable": true,
+    "uiComponent": "picker",
+    "uiQuickAction": true,
+    "values": [
+        {
+            "id": "P",
+            "title": {
+                "en": "General / Auto mode"
+            }
+        },
+        {
+            "id": "AG",
+            "title": {
+                "en": "Auto mode, some devices"
+            }
+        },
+        {
+            "id": "GT",
+            "title": {
+                "en": "Gentle, some devices"
+            }
+        },				
+        {
+            "id": "S",
+            "title": {
+                "en": "Sleep, some devices"
+            }
+        },
+        {
+            "id": "N",
+            "title": {
+                "en": "Night, some devices"
+            }
+        },				
+        {
+            "id": "T",
+            "title": {
+                "en": "Turbo, some devices"
+            }
+        },									
+        {
+            "id": "A",
+            "title": {
+                "en": "Allergen mode"
+            }
+        },
+        {
+            "id": "M",
+            "title": {
+                "en": "Manual mode"
+            }
+        },
+        {
+            "id": "B",
+            "title": {
+                "en": "Bacteria & Virus mode"
+            }
+        }
+    ]
+}

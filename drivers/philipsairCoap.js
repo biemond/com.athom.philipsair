@@ -4,21 +4,21 @@ const { resolve } = require("path");
 
     var philipsairCoap = exports;
 
-    const coap   = require("node-coap-client").CoapClient;
+    const coap = require("node-coap-client").CoapClient;
     const origin = require('node-coap-client/build/lib/Origin');
     const crypto = require('crypto');
     var aesjs = require('aes-js');
     var pkcs7 = require('pkcs7');
- 
+
     var sharedKey = 'JiangPan';
-    
+
     var statusCounter = 0;
-    var controlCounter= 0;
-    
+    var controlCounter = 0;
+
     function decodeCounter(encodedCounter) {
         let counterUpperCase = encodedCounter.toUpperCase();
         let length = counterUpperCase.length;
-    
+
         let counter = 0;
         for (let i = length; i > 0; i--) {
             let charAt = counterUpperCase.charAt(i - 1);
@@ -26,7 +26,7 @@ const { resolve } = require("path");
         }
         return counter;
     }
-    
+
     function encodeCounter(counter, length) {
         let hex = counter.toString(16);
         if (hex.length % 2 === 1) {
@@ -34,7 +34,7 @@ const { resolve } = require("path");
         }
         return prependZero(hex.toUpperCase(), length);
     }
-    
+
     function prependZero(value, length) {
         let result = '';
         for (let i = 0; i < length - value.length; i++) {
@@ -45,58 +45,59 @@ const { resolve } = require("path");
     function toMD5(value) {
         return crypto.createHash('md5').update(value).digest();
     }
-    
+
     function toSha256(value) {
         return crypto.createHash('sha256').update(value).digest();
     }
-    
+
     function aes_decrypt2(data, key, iv) {
         var aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
         var decryptedBytes = aesCbc.decrypt(data);
         return decryptedBytes;
     }
-    
+
     function aes_encrypt2(data, key, iv) {
         var segmentSize = 16;
         var aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
         var encryptedBytes = aesCbc.encrypt(data);
         return encryptedBytes;
     }
-    
+
     function clean(data) {
-        data = data.trimRight().replace(/\\n/g, "\\n")  
-        .replace(/\\'/g, "\\'")
-        .replace(/\\"/g, '\\"')
-        .replace(/\\&/g, "\\&")
-        .replace(/\\r/g, "\\r")
-        .replace(/\\t/g, "\\t")
-        .replace(/\\b/g, "\\b")
-        .replace(/\\f/g, "\\f");
+        data = data.trimRight().replace(/\\n/g, "\\n")
+            .replace(/\\'/g, "\\'")
+            .replace(/\\"/g, '\\"')
+            .replace(/\\&/g, "\\&")
+            .replace(/\\r/g, "\\r")
+            .replace(/\\t/g, "\\t")
+            .replace(/\\b/g, "\\b")
+            .replace(/\\f/g, "\\f");
         // remove non-printable and other non-valid JSON chars
-        data = data.replace(/[\u0000-\u0019]+/g,""); 
+        data = data.replace(/[\u0000-\u0019]+/g, "");
         return JSON.parse(data);
-    } 
- 
+    }
+
     // active functions()  -------------------------------------  active functions()  --------------------------------------------
 
     philipsairCoap.getCurrentStatusDataCoap = function getCurrentStatusDataCoap(settings) {
-        console.log("settings " +  JSON.stringify(settings));
+        console.log("settings " + JSON.stringify(settings));
         return new Promise(async (resolve, reject) => {
-          await  getCurrentDataCoap(settings, (error, jsonobj) => {
+            await getCurrentDataCoap(settings, (error, jsonobj) => {
                 if (jsonobj) {
-                    console.log('getCurrentDataCoap res ',jsonobj)
+                    console.log('getCurrentDataCoap res ', jsonobj)
                     resolve(jsonobj);
                 } else {
+                    console.log('2: ' + error);
                     reject(error);
                 }
             });
-        });
+        }).catch(reason => console.log('1: ' + reason));
     }
 
     philipsairCoap.setValueAirDataCoap = function setValueAirDataCoap(key, value, settings) {
-        console.log("key "+ key)
-        console.log("value "+ value)
-        console.log("settings " +  JSON.stringify(settings));
+        console.log("key " + key)
+        console.log("value " + value)
+        console.log("settings " + JSON.stringify(settings));
         return new Promise((resolve, reject) => {
             setValueDataCoap(key, value, settings, (error, jsonobj) => {
                 if (jsonobj) {
@@ -105,46 +106,48 @@ const { resolve } = require("path");
                     reject(error);
                 }
             });
-        });
+        }).catch(reason => console.log('1: ' + reason));
     }
 
     // sleep time expects milliseconds
-    function sleep (time) {
+    function sleep(time) {
         return new Promise((resolve) => setTimeout(resolve, time));
     }
 
     async function getCurrentDataCoap(settings, callback) {
-        console.log("getCurrentDataCoap " + settings.ipkey );
+        console.log("getCurrentDataCoap " + settings.ipkey);
         var target = new origin.Origin('coap:', settings.ipkey, 5683);
-        var targetString = 'coap://'+settings.ipkey+':5683';
-            
+        var targetString = 'coap://' + settings.ipkey + ':5683';
+
         let jsonStatus = null;
 
-        console.log('-------------------')
-        coap.request(targetString+'/sys/dev/sync', 'post',
-            Buffer.from(encodeCounter(statusCounter, 8 )), {keepAlive: false}) 
-        .then( response => {
-            if (response.payload) {
-                const payload = response.payload.toString('utf-8');
-                controlCounter = decodeCounter(payload);
-                console.log(controlCounter);
-            } else {
-                throw new Error('No response received for sync call. Cannot proceed');
-            }            
-        }).catch( err => {
-            console.log(err);
-        });
+        coap.request(targetString + '/sys/dev/sync', 'post',
+            Buffer.from(encodeCounter(statusCounter, 8)), { keepAlive: false })
+            .then(response => {
+                if (response.payload) {
+                    const payload = response.payload.toString('utf-8');
+                    controlCounter = decodeCounter(payload);
+                    console.log(controlCounter);
+                } else {
+                    let error = new Error('No response received for sync call. Cannot proceed, is coap://' + settings.ipkey + ':5683 up');
+                    return callback(error, null);
+                    // throw new Error('No response received for sync call. Cannot proceed, is coap://'+settings.ipkey+':5683 up');
+                }
+            }).catch(err => {
+                console.log(err);
+                let error = new Error('catch: No response received for sync call. Cannot proceed, is coap://' + settings.ipkey + ':5683 up');
+                return callback(error, null);
+                // throw new Error('No response received for sync call. Cannot proceed, is coap://'+settings.ipkey+':5683 up');
+            });
 
         const connectResult = await coap.tryToConnect(target);
-        console.log('tryToConnect ' + connectResult);
 
-        console.log('-------status------------')
-        await coap.observe(targetString+'/sys/dev/status', 'get', resp => {
+        await coap.observe(targetString + '/sys/dev/status', 'get', resp => {
             if (resp.payload) {
                 const response = resp.payload.toString('utf-8');
                 const encodedCounter = response.substring(0, 8);
                 let counter = decodeCounter(encodedCounter);
-                console.log("counter " +counter);
+                console.log("counter " + counter);
                 const hash = response.substring(response.length - 64);
                 const encodedMessageAndCounter = response.substring(0, response.length - 64);
                 // console.log(encodedMessageAndCounter);
@@ -167,42 +170,46 @@ const { resolve } = require("path");
                 statusCounter = counter;
 
                 let keyAndIv = toMD5(sharedKey + encodedCounter).toString('hex').toUpperCase();
-                console.log("keyAndIv "+keyAndIv);
+                console.log("keyAndIv " + keyAndIv);
                 const secretKey = keyAndIv.substring(0, keyAndIv.length / 2);
-                console.log("secret "+secretKey);
+                console.log("secret " + secretKey);
                 const iv = keyAndIv.substring(keyAndIv.length / 2, keyAndIv.length);
-                console.log("iv "+iv);
+                console.log("iv " + iv);
 
                 const encodedMessage = response.substring(8, response.length - 64);
 
                 let payload = new Buffer.from(encodedMessage, 'hex');
-                let data = aes_decrypt2(payload, Buffer.from(secretKey,'utf-8') , Buffer.from(iv,'utf-8'));
+                let data = aes_decrypt2(payload, Buffer.from(secretKey, 'utf-8'), Buffer.from(iv, 'utf-8'));
                 let dataText = aesjs.utils.utf8.fromBytes(data);
                 jsonStatus = clean(dataText).state.reported;
                 console.log(jsonStatus);
                 console.log('-------stopObserving------------')
-                coap.stopObserving('coap://'+settings.ipkey+':5683/sys/dev/status')        
+                coap.stopObserving('coap://' + settings.ipkey + ':5683/sys/dev/status')
                 console.log('---------end----------');
             }
 
         }, undefined, {
-                    confirmable: false, // we expect no answer here in the typical coap way.
-                    retransmit: true
+            confirmable: false, // we expect no answer here in the typical coap way.
+            retransmit: true
         }).then(() => {
-                // TODO: nothing?
+            // TODO: nothing?
         }).catch(reason => console.log(reason));
 
         sleep(30000).then(() => {
-            console.log('--------reset-----------');    
+            console.log('--------reset-----------');
             coap.reset(target);
             console.log('---------end----------');
         });
 
-        setTimeout(function(){ 
+        setTimeout(function () {
             var response = {
                 status: jsonStatus
             };
-            return callback(null, response); 
+            if (jsonStatus != null) {
+                return callback(null, response);
+            } else {
+                return callback(new Error('No response received'), null);
+            }
         }, 32000)
     }
 
@@ -223,9 +230,12 @@ const { resolve } = require("path");
                     controlCounter = decodeCounter(payload);
                     console.log(controlCounter);
                 } else {
-                    throw new Error('No response received for sync call. Cannot proceed');
+                    let error = new Error('No response received for call. Cannot proceed, is coap://' + settings.ipkey + ':5683 up');
+                    return callback(error, null);
                 }
             }).catch(err => {
+                let error = new Error('No response received for call. Cannot proceed, is coap://' + settings.ipkey + ':5683 up');
+                return callback(error, null);
                 console.log(err);
             });
 
@@ -279,7 +289,9 @@ const { resolve } = require("path");
                         console.log(payload);
                         jsonStatus = payload
                     } else {
-                        throw new Error('No response received for call. Cannot proceed');
+                        // throw new Error('No response received for call. Cannot proceed');
+                        let error = new Error('No response received for call. Cannot proceed');
+                        return callback(error, null);
                     }
                 }).catch(err => {
                     console.log(err);
@@ -293,7 +305,11 @@ const { resolve } = require("path");
             var response = {
                 status: jsonStatus
             };
-            return callback(null, response);
+            if (jsonStatus != null) {
+                return callback(null, response);
+            } else {
+                return callback(new Error('No response received'), null);
+            }
             console.log('-------------------');
         });
     }

@@ -1,0 +1,30 @@
+{
+    "type": "enum",
+    "title": {
+        "en": "Button lights"
+    },
+    "getable": true,
+    "setable": true,
+    "uiComponent": "picker",
+    "uiQuickAction": false,
+    "values": [
+        {
+            "id": "0",
+            "title": {
+                "en": "Off"
+            }
+        },
+        {
+            "id": "1",
+            "title": {
+                "en": "On"
+            }
+        },
+        {
+            "id": "2",
+            "title": {
+                "en": "Fixed"
+            }
+        }
+    ]
+}

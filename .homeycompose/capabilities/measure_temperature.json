@@ -1,0 +1,16 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Temperature"
+    },
+    "getable": true,
+    "setable": false,
+    "units": {
+        "en": "C"
+    },
+    "min": -10,
+    "max": 50,
+    "decimals": 0,
+    "insights": true,
+    "icon": "/assets/images/temp.svg"
+}

@@ -1,0 +1,68 @@
+{
+  "name": {
+    "en": "Purifier <= 2019"
+  },
+  "class": "fan",
+  "capabilities": [
+    "latest_retrieval_date",
+    "measure_pm25",
+    "measure_iaql",
+    "measure_tvoc",
+    "pre_filter_clean",
+    "carbon_filter_replace",
+    "hepa_filter_replace",
+    "product",
+    "light_intensity",
+    "onoff",
+    "button_lights",
+    "purifier_mode",
+    "display_mode",
+    "child_lock",
+    "fan_speed",
+    "timer_remaining",
+    "timer"
+  ],
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "pair"
+    }
+  ],  
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "General settings"
+      },
+      "children": [
+        {
+          "id": "ipkey",
+          "type": "text",
+          "label": {
+            "en": "Philips Air device IP address"
+          },
+          "value": "",
+          "hint": {
+            "en": "Enter the IP address key of your Philips Air purifier"
+          }
+        }
+      ]
+    }
+  ],
+  "energy": {
+    "approximation": {
+      "usageOn": 19,
+      "usageOff": 1
+    }
+  }    
+}

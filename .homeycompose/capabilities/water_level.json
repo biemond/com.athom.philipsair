@@ -1,0 +1,9 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Water level"
+    },
+    "getable": true,
+    "setable": false,
+    "icon": "/assets/images/water-tank.svg"
+}

@@ -1,0 +1,13 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Light level ring"
+    },
+    "getable": true,
+    "setable": true,
+    "uiComponent": "slider",
+    "uiQuickAction": true,
+    "min": 0,
+    "max": 100,
+    "step": 25
+}

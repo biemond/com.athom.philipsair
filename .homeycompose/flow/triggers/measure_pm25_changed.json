@@ -1,0 +1,24 @@
+{
+    "title": {
+        "en": "PM2.5 changed"
+    },
+    "tokens": [
+        {
+            "name": "measure_pm25",
+            "type": "number",
+            "title": {
+                "en": "value"
+            },
+            "example": {
+                "en": "50"
+            }
+        }
+    ],
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+        }
+    ]
+}

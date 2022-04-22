@@ -1,26 +1,23 @@
 {
   "name": "com.athom.philipsair",
   "version": "1.0.0",
-  "description": "Added support for Philip AIR purifiers, it should work for all the philips air devices but we tested it on  - AC5659/10 air purifier  - AC3259/10 air purifier  - AC3829/10 Humidifier and air purifier",
-  "main": "app.js",
+  "main": "app.ts",
   "dependencies": {
     "aes-js": "^3.1.2",
     "big-integer": "^1.6.51",
     "node-coap-client": "^2.0.2",
     "pkcs7": "^1.0.4"
   },
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "lint": "eslint --ext .js,.ts --ignore-path .gitignore ."
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/biemond/com.athom.philipsair.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/biemond/com.athom.philipsair/issues"
-  },
-  "homepage": "https://github.com/biemond/com.athom.philipsair#readme"
+  "devDependencies": {
+    "@tsconfig/node12": "^1.0.9",
+    "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.1",
+    "@types/node": "^17.0.25",
+    "eslint": "^7.32.0",
+    "eslint-config-athom": "^3.0.1",
+    "typescript": "^4.6.3"
+  }
 }

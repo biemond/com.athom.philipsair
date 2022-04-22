@@ -1,0 +1,9 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Latest update date"
+    },
+    "getable": true,
+    "setable": false,
+    "icon": "/assets/images/clock.svg"
+}

@@ -1,0 +1,43 @@
+{
+    "title": {
+        "en": "pm2.5 measurement"
+    },
+    "titleFormatted": {
+        "en": "pm2.5 level [[argument_main]]"
+    },
+    "hint": {
+        "en": "pm2.5 measurement"
+    },
+    "args": [
+        {
+            "name": "argument_main",
+            "type": "dropdown",
+            "values": [
+                {
+                    "id": "good",
+                    "label": {
+                        "en": "good, score below 13"
+                    }
+                },
+                {
+                    "id": "fair",
+                    "label": {
+                        "en": "average, between 13 and 35"
+                    }
+                },
+                {
+                    "id": "poor",
+                    "label": {
+                        "en": "poor, between 36 and 55"
+                    }
+                },
+                {
+                    "id": "verypoor",
+                    "label": {
+                        "en": "very poor, above 55"
+                    }
+                }
+            ]
+        }
+    ]
+}

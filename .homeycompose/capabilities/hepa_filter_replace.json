@@ -1,0 +1,12 @@
+{
+    "type": "number",
+    "title": {
+        "en": "HEPA filter replace in"
+    },
+    "getable": true,
+    "setable": false,
+    "units": {
+        "en": "hours"
+    },
+    "icon": "/assets/images/clock.svg"
+}

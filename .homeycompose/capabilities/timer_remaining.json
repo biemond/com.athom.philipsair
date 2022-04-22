@@ -1,0 +1,17 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Remaining timer minutes"
+    },
+    "getable": true,
+    "setable": false,
+    "units": {
+        "en": "Min"
+    },
+    "min": 0,
+    "max": 720,
+    "decimals": 0,
+    "insights": false,
+    "uiComponent": "sensor",
+    "icon": "/assets/images/clock.svg"
+}

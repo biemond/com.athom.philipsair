@@ -1,0 +1,24 @@
+{
+    "type": "enum",
+    "title": {
+        "en": "Display mode"
+    },
+    "getable": true,
+    "setable": true,
+    "uiComponent": "picker",
+    "uiQuickAction": true,
+    "values": [
+        {
+            "id": "1",
+            "title": {
+                "en": "PM2.5"
+            }
+        },
+        {
+            "id": "0",
+            "title": {
+                "en": "IAI"
+            }
+        }
+    ]
+}

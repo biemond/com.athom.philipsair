@@ -1,0 +1,16 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Current PM2.5 value"
+    },
+    "getable": true,
+    "setable": false,
+    "units": {
+        "en": "ug/m"
+    },
+    "min": 0,
+    "max": 999,
+    "decimals": 0,
+    "insights": true,
+    "uiComponent": "sensor"
+}

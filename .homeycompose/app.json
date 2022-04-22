@@ -1,0 +1,42 @@
+{
+  "id": "com.athom.philipsair",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+	"brandColor": "#002aff",
+	"name": {
+		"en": "Philips Air"
+	},
+	"description": {
+		"en": "Healthy air, always"
+	},
+	"tags": {
+		"en": [
+			"air",
+			"philips",
+			"purifier"
+		]
+  },  
+  "category": [
+    "climate"
+  ],
+  "permissions": [],
+	"bugs": {
+		"url": "https://github.com/biemond/com.athom.philipsair/issues"
+	},
+	"source": "https://github.com/biemond/com.athom.philipsair",
+	"support": "mailto:biemond@gmail.com",
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+	"homeyCommunityTopicId": 32151,  
+  "author": {
+    "name": "Edwin Biemond",
+    "email": "biemond@gmail.com"
+  }
+}
