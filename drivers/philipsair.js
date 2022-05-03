@@ -110,18 +110,20 @@
             console.log(`statusCode: ${res.statusCode}`)
 
             let body = "";
+            let sharedSecretText = "";
             res.on("data", data => {
                 body += data;
             });
             res.on("end", () => {
                 if (res.statusCode == 200) {
                     try {
-                        respJson = JSON.parse(body.toString());
-                        let key = respJson.key
-                        console.log("key: " + key)
-                        console.log("hellman: " + respJson.hellman)
-                        let hellman = bigInt(respJson.hellman, 16)
-                        let secret = hellman.modPow(a, P)
+                        console.log("resp: " + body.toString());
+                        let respJson = JSON.parse(body.toString());
+                        let key = respJson.key;
+                        console.log("key: " + key);
+                        console.log("hellman: " + respJson.hellman);
+                        let hellman = bigInt(respJson.hellman, 16);
+                        let secret = hellman.modPow(a, P);
                         let sharedSecret = aes_decrypt2(Buffer.from(key, 'hex'), Buffer.from(secret.toString(16), 'hex').slice(0, 16));
                         sharedSecret = sharedSecret.slice(0, 16);
                         sharedSecretText = aesjs.utils.hex.fromBytes(sharedSecret);
@@ -153,7 +155,7 @@
         req.end()
     }
 
-    function sendRequest(url, hostname, callback) {
+    function sendRequest(url, hostname, sharedSecretText, callback) {
 
         const options = {
             protocol: 'http:',
@@ -204,7 +206,7 @@
         let jsonError = null;
 
         await new Promise((resolve, reject) => {
-            sendRequest('/di/v1/products/1/air', settings.ipkey, (error, jsonobj) => {
+            sendRequest('/di/v1/products/1/air', settings.ipkey, settings.secretkey, (error, jsonobj) => {
                 if (jsonobj) {
                     resolve(jsonobj);
                     jsonStatus = jsonobj;
@@ -216,7 +218,7 @@
         });
 
         await new Promise((resolve, reject) => {
-            sendRequest('/di/v1/products/0/firmware', settings.ipkey, (error, jsonobj) => {
+            sendRequest('/di/v1/products/0/firmware', settings.ipkey, settings.secretkey, (error, jsonobj) => {
                 if (jsonobj) {
                     resolve(jsonobj);
                     jsonFirmware = jsonobj;
@@ -227,9 +229,8 @@
             });
         });
 
-
         await new Promise((resolve, reject) => {
-            sendRequest('/di/v1/products/1/fltsts', settings.ipkey, (error, jsonobj) => {
+            sendRequest('/di/v1/products/1/fltsts', settings.ipkey, settings.secretkey, (error, jsonobj) => {
                 if (jsonobj) {
                     resolve(jsonobj);
                     jsonFilter = jsonobj;

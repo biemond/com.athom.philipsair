@@ -20,7 +20,7 @@ class device extends AirDevice {
     this.preFilterTriggered = false;
     this.carbonFilterTriggered = false;
     this.hepaFilterTriggered = false;
-    this.log('MyPhilipsAirDevice has been inited');
+    this.log('MyPhilipsAirDevice has been inited ' + this.getName());
     let settings = this.getSettings();
 
     let secretKey = "-";

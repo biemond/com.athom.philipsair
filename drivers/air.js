@@ -14,8 +14,7 @@ export class AirDevice extends Homey.Device {
     // flow triggers
     flowTriggerFilterReplaceClean(tokens, state) {
         this.log("trigger fired");
-        this._flowTriggerFilterReplaceClean
-            .trigger(this, tokens, state)
+        this.homey.flow.getDeviceTriggerCard('filter_replace_clean').trigger(this, tokens, state)
             .then(this.log("flowTriggerFilterReplaceClean"))
             .catch(this.error)
         return this;
@@ -205,7 +204,7 @@ export class AirDevice extends Homey.Device {
                 let tokens = {
                     "hours": json.fltsts0,
                     "filter": "pre_filter",
-                    "device": "air_" + settings.id.toLowerCase()
+                    "device": this.getName()
                 };
                 let state = {
                     "which": "pre_filter"
@@ -228,7 +227,7 @@ export class AirDevice extends Homey.Device {
                 let tokens = {
                     "hours": json.fltsts2,
                     "filter": "carbon_filter",
-                    "device": "air_" + settings.id.toLowerCase()
+                    "device": this.getName()
                 };
                 let state = {
                     "which": "carbon_filter"
@@ -249,7 +248,7 @@ export class AirDevice extends Homey.Device {
                 let tokens = {
                     "hours": json.fltsts1,
                     "filter": "hepa_filter",
-                    "device": "air_" + settings.id.toLowerCase()
+                    "device": this.getName()
                 };
                 let state = {
                     "which": "hepa_filter"
@@ -323,7 +322,7 @@ export class AirDevice extends Homey.Device {
                     let tokens = {
                         "hours": data.filter.fltsts0,
                         "filter": "pre_filter",
-                        "device": "air_" + settings.id.toLowerCase()
+                        "device": this.getName()
                     };
                     let state = {
                         "which": "pre_filter"
@@ -344,7 +343,7 @@ export class AirDevice extends Homey.Device {
                     let tokens = {
                         "hours": data.filter.fltsts2,
                         "filter": "carbon_filter",
-                        "device": "air_" + settings.id.toLowerCase()
+                        "device": this.getName()
                     };
                     let state = {
                         "which": "carbon_filter"
@@ -363,7 +362,7 @@ export class AirDevice extends Homey.Device {
                     let tokens = {
                         "hours": data.filter.fltsts1,
                         "filter": "hepa_filter",
-                        "device": "air_" + settings.id.toLowerCase()
+                        "device": this.getName()
                     };
                     let state = {
                         "which": "hepa_filter"
