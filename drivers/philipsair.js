@@ -257,7 +257,7 @@
         console.log(jsonValues);
         let dataBytes = pkcs7.pad(aesjs.utils.utf8.toBytes(jsonValues));
         console.log(dataBytes);
-        dataBytesEncrypted = aes_encrypt2(dataBytes, Buffer.from(settings.secretkey, 'hex'));
+        let dataBytesEncrypted = aes_encrypt2(dataBytes, Buffer.from(settings.secretkey, 'hex'));
         console.log(dataBytesEncrypted);
 
         const optionsPut2 = {
