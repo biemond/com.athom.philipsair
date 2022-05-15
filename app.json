@@ -213,6 +213,31 @@
           }
         ],
         "id": "measure_tvoc_changed"
+      },
+      {
+        "title": {
+          "en": "Water level changed"
+        },
+        "tokens": [
+          {
+            "name": "water_level",
+            "type": "string",
+            "title": {
+              "en": "water level"
+            },
+            "example": {
+              "en": "Empty"
+            }
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device2|deviceCoap2"
+          }
+        ],
+        "id": "water_level_changed"
       }
     ],
     "conditions": [
