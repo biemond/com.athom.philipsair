@@ -87,7 +87,7 @@
     }
 
     function getSecretData(settings, callback) {
-        console.log("getData " + settings.ipkey + " secret " + settings.secretkey);
+        console.log("getSecretData " + settings.ipkey);
         let A = G.modPow(a, P)
         let objA = { "diffie": A.toString(16) }
         let json = JSON.stringify(objA);
@@ -140,9 +140,13 @@
         })
 
         req.on('error', error => {
-            console.log('error' + error);
-            req.abort();
-            return callback(null, "ERROR");
+            console.log('error ' + error.code + ' - ' + error);
+            if ( error.code == "ECONNRESET") {
+                getSecretData(settings, callback);
+            } else {
+                req.abort();
+                return callback(null, "ERROR");
+            }
         })
         req.on('timeout', function () {
             console.log('timeout');
@@ -150,13 +154,13 @@
             return callback(null, "ERROR");
         }
         );
-        req.setTimeout(3000);
+        req.setTimeout(6000);
         req.write(json)
         req.end()
     }
 
     function sendRequest(url, hostname, sharedSecretText, callback) {
-
+        console.log(url);
         const options = {
             protocol: 'http:',
             method: 'GET',
@@ -191,10 +195,14 @@
             });
         })
 
+        reqX.setTimeout(6000);
         reqX.on('error', error => {
-            console.error(error)
+            console.log('error ' + error.code + ' ' + error);
+            if ( error.code == "ECONNRESET") {
+                sendRequest(url, hostname, sharedSecretText, callback);
+            }
         })
-        reqX.end()
+        reqX.end();
     }
 
     async function getCurrentData(settings, callback) {
