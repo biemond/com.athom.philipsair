@@ -8,7 +8,7 @@
     "units": {
         "en": ""
     },
-    "min": 1,
+    "min": 0,
     "max": 12,
     "decimals": 0,
     "insights": true,

@@ -103,11 +103,15 @@ export class AirDevice extends Homey.Device {
             }
             if (json.hasOwnProperty('rh')) {
                 this.log(`Humidity: ${json.rh}`);
-                this.setCapabilityValue('measure_humidity', json.rh);
+                if (this.hasCapability('measure_humidity')) {
+                    this.setCapabilityValue('measure_humidity', json.rh);
+                }
             }
             if (json.hasOwnProperty('rhset')) {
                 this.log(`Target humidity: ${json.rhset}`);
-                this.setCapabilityValue('target_humidity', json.rhset.toString());
+                if (this.hasCapability('target_humidity')) {
+                    this.setCapabilityValue('target_humidity', json.rhset.toString());
+                }
             }
             if (json.hasOwnProperty('iaql')) {
                 this.log(`Allergen index: ${json.iaql}`);
@@ -146,7 +150,7 @@ export class AirDevice extends Homey.Device {
 
             if (json.hasOwnProperty('aqil')) {
                 this.log(`Light brightness: ${json.aqil}`);
-                this.setCapabilityValue('light_intensity', json.aqil);
+                this.setCapabilityValue('light_intensity', parseInt(json.aqil));
             }
             if (json.hasOwnProperty('uil')) {
                 let uil_str = { '1': 'ON', '0': 'OFF', '2': 'FIXED' };
@@ -169,10 +173,12 @@ export class AirDevice extends Homey.Device {
             }
             if (json.hasOwnProperty('wl')) {
                 this.log(`Water level: ${json.wl}`);
-                if (json.wl == 100) {
-                    this.setCapabilityValue('water_level', "Ok");
-                } else {
-                    this.setCapabilityValue('water_level', "Empty");
+                if (this.hasCapability('water_level')) {
+                    if (json.wl == 100) {
+                        this.setCapabilityValue('water_level', "Ok");
+                    } else {
+                        this.setCapabilityValue('water_level', "Empty");
+                    }
                 }
             }
             if (json.hasOwnProperty('dt')) {

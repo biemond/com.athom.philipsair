@@ -19,6 +19,12 @@
             "title": {
                 "en": "IAI"
             }
-        }
+        },
+        {
+            "id": "2",
+            "title": {
+                "en": "GAS, some devices"
+            }
+        }        
     ]
 }

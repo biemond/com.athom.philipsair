@@ -9,6 +9,12 @@
     "uiQuickAction": true,
     "values": [
         {
+            "id": "0",
+            "title": {
+                "en": "Speed 0, some devices"
+            }
+        },        
+        {
             "id": "1",
             "title": {
                 "en": "Speed 1"
@@ -43,6 +49,12 @@
             "title": {
                 "en": "Turbo, some devices"
             }
-        }
+        },
+        {
+            "id": "as",
+            "title": {
+                "en": "Unknow"
+            }
+        }        
     ]
 }

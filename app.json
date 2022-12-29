@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.athom.philipsair",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -933,6 +933,12 @@
           "title": {
             "en": "IAI"
           }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "GAS, some devices"
+          }
         }
       ]
     },
@@ -959,6 +965,12 @@
           }
         },
         {
+          "id": "2",
+          "title": {
+            "en": "GAS, some devices"
+          }
+        },
+        {
           "id": "3",
           "title": {
             "en": "Humidity"
@@ -976,6 +988,12 @@
       "uiComponent": "picker",
       "uiQuickAction": true,
       "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Speed 0, some devices"
+          }
+        },
         {
           "id": "1",
           "title": {
@@ -1010,6 +1028,12 @@
           "id": "t",
           "title": {
             "en": "Turbo, some devices"
+          }
+        },
+        {
+          "id": "as",
+          "title": {
+            "en": "Unknow"
           }
         }
       ]
@@ -1084,7 +1108,7 @@
       "units": {
         "en": ""
       },
-      "min": 1,
+      "min": 0,
       "max": 12,
       "decimals": 0,
       "insights": true,
