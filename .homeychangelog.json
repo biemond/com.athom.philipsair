@@ -1,4 +1,7 @@
 {
+  "1.0.4":{
+    "en": "fix stacktraces"
+  },  
   "1.0.3":{
     "en": "allow more device values, fix stacktraces"
   },

@@ -119,15 +119,19 @@ export class AirDevice extends Homey.Device {
             }
             if (json.hasOwnProperty('temp')) {
                 this.log(`Temperature: ${json.temp}`);
-                this.setCapabilityValue('measure_temperature', json.temp);
+                if (this.hasCapability('measure_temperature')) {
+                    this.setCapabilityValue('measure_temperature', json.temp);
+                }
             }
             if (json.hasOwnProperty('func')) {
                 // P or PH
                 this.log(`Function: ${json.func == 'P' ? 'Purification' : "Purification & Humidification"}`)
-                if (json.func == 'P') {
-                    this.setCapabilityValue('func_mode', false);
-                } else {
-                    this.setCapabilityValue('func_mode', true);
+                if (this.hasCapability('func_mode')) {
+                    if (json.func == 'P') {
+                        this.setCapabilityValue('func_mode', false);
+                    } else {
+                        this.setCapabilityValue('func_mode', true);
+                    }
                 }
             }
             if (json.hasOwnProperty('mode')) {
@@ -183,11 +187,15 @@ export class AirDevice extends Homey.Device {
             }
             if (json.hasOwnProperty('dt')) {
                 this.log(`Timer hours: ${json.dt}`);
-                this.setCapabilityValue('timer', json.dt.toString());
+                if (this.hasCapability('timer')) {
+                    this.setCapabilityValue('timer', json.dt.toString());
+                }
             }
             if (json.hasOwnProperty('dtrs')) {
                 this.log(`Timer total minutes left: ${json.dtrs}`);
-                this.setCapabilityValue('timer_remaining', json.dtrs);
+                if (this.hasCapability('timer_remaining')) {
+                    this.setCapabilityValue('timer_remaining', json.dtrs);
+                }
             }
             if (json.hasOwnProperty('err')) {
                 if (json.err != 0) {
