@@ -124,19 +124,13 @@ class deviceCoap extends AirDevice {
       const newCoapDevices2 = ['AC0850/11', 'AC1715/11']
 
       if (newCoapDevices2.includes(model)) {
-        if (value == "P") {
+        if (value == "AUTO") {
           this.setStateCoap("D03-12", 'Auto General', this.getSettings());
         }
-        if (value == "1") {
-          this.setStateCoap("D03-12", 'Gentle/Speed 1', this.getSettings());
-        }  
-        if (value == "2") {
-          this.setStateCoap("D03-12", 'Speed 2', this.getSettings());
-        }  
-        if (value == "T") {
+        if (value == "t") {
           this.setStateCoap("D03-12", 'Turbo', this.getSettings());
         }  
-        if (value == "S") {
+        if (value == "s") {
           this.setStateCoap("D03-12", 'Sleep', this.getSettings());
         }          
         return value;
