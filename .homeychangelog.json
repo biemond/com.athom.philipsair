@@ -1,4 +1,7 @@
 {
+  "1.0.5":{
+    "en": "Supporting AC0850, AC1715"
+  },    
   "1.0.4":{
     "en": "fix stacktraces"
   },  

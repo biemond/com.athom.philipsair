@@ -93,10 +93,24 @@ export class AirDevice extends Homey.Device {
                 }
                 this.log(`Power: ${json.pwr == '1' ? 'ON' : "OFF"}`)
             }
+            if (json.hasOwnProperty('D03-02')) {
+                if (json["D03-02"] == 'ON') { 
+                    this.setCapabilityValue('onoff', true);
+                } else {
+                    this.setCapabilityValue('onoff', false);
+                }
+                this.log(`Power: ${json["D03-02"]== 'ON' ? 'ON' : "OFF"}`)
+            }
+
             if (json.hasOwnProperty('pm25')) {
                 this.log(`PM25: ${json.pm25}`);
                 this.setCapabilityValue('measure_pm25', json.pm25);
             }
+            if (json.hasOwnProperty('D03-33')) {
+                this.log(`PM25: ${json["D03-33"]}`);
+                this.setCapabilityValue('measure_pm25', json["D03-33"]);
+            }
+
             if (json.hasOwnProperty('tvoc')) {
                 this.log(`GAS (TVOC): ${json.tvoc}`);
                 this.setCapabilityValue('measure_tvoc', json.tvoc);
@@ -117,6 +131,11 @@ export class AirDevice extends Homey.Device {
                 this.log(`Allergen index: ${json.iaql}`);
                 this.setCapabilityValue('measure_iaql', json.iaql);
             }
+            if (json.hasOwnProperty('D03-32')) {
+                this.log(`Allergen index: ${json["D03-32"]}`);
+                this.setCapabilityValue('measure_iaql', json["D03-32"]);
+            }
+
             if (json.hasOwnProperty('temp')) {
                 this.log(`Temperature: ${json.temp}`);
                 if (this.hasCapability('measure_temperature')) {
@@ -151,16 +170,28 @@ export class AirDevice extends Homey.Device {
                 }
 
             }
+            if (json.hasOwnProperty('D03-12')) {
+                let mode_str = { 'Auto General': 'P', 'Gentle/Speed 1': '1','Speed 2': '2', 'Turbo': 'T','Sleep': 'S' }
+                this.setCapabilityValue('purifier_mode', mode_str[json["D03-12"]]);
+            }            
 
             if (json.hasOwnProperty('aqil')) {
                 this.log(`Light brightness: ${json.aqil}`);
                 this.setCapabilityValue('light_intensity', parseInt(json.aqil));
             }
+
             if (json.hasOwnProperty('uil')) {
                 let uil_str = { '1': 'ON', '0': 'OFF', '2': 'FIXED' };
                 this.setCapabilityValue('button_lights', json.uil.toString());
                 this.log(`Buttons light: ${uil_str[json.uil]}`)
             }
+            if (json.hasOwnProperty('D03-05')) {
+                let uil_str = { '100': 'ON', '0': 'OFF' };
+                this.setCapabilityValue('button_lights', json["D03-05"].toString());
+                this.log(`Buttons light: ${uil_str[json["D03-05"]]}`)
+            }
+
+
             if (json.hasOwnProperty('ddp')) {
                 let ddp_str = { '1': 'PM2.5', '0': 'IAI', '3': 'Humidity' };
                 this.log(`Used index: ${ddp_str[json.ddp]}`);
@@ -171,6 +202,14 @@ export class AirDevice extends Homey.Device {
                     this.setCapabilityValue('display_mode_ph', json.ddp);
                 }
             }
+            if (json.hasOwnProperty('D03-42')) {
+                let ddp_str = { 'PM2.5': '1', 'IAI': '0' };
+                this.log(`Used index: ${ddp_str[json["D03-42"]]}`);
+                if (this.hasCapability('display_mode')) {
+                    this.setCapabilityValue('display_mode', ddp_str[json["D03-42"]]);
+                }
+            }
+
             if (json.hasOwnProperty('cl')) {
                 this.log(`Child lock: ${json.cl}`);
                 this.setCapabilityValue('child_lock', json.cl);
@@ -209,6 +248,10 @@ export class AirDevice extends Homey.Device {
                 this.log(`Location: ${json.name} modelid ${json.modelid} `);
                 this.setCapabilityValue('product', `${json.modelid}`);
             }
+            if (json.hasOwnProperty('D01-05')) {
+                this.log(`Location: ${json["D01-03"]} modelid ${json["D01-05"]} `);
+                this.setCapabilityValue('product', `${json["D01-05"]}`);
+            }            
 
             // if 'wicksts' in filters:
             // print('Wick filter: replace in {} hours'.format(filters['wicksts']))
@@ -235,6 +278,30 @@ export class AirDevice extends Homey.Device {
                 }
 
             }
+            if (json.hasOwnProperty('D05-13')) {
+                this.log(`Pre-filter: clean in ${json["D05-13"]} hours`);
+                this.setCapabilityValue('pre_filter_clean', json["D05-13"]);
+                let tokens = {
+                    "hours": json["D05-13"],
+                    "filter": "pre_filter",
+                    "device": this.getName()
+                };
+                let state = {
+                    "which": "pre_filter"
+                };
+
+                this.log("preFilterTriggered: " + this.preFilterTriggered)
+                if (this.preFilterTriggered == false) {
+                    this.log("is preFilterTriggered ");
+                    this.flowTriggerFilterReplaceClean(tokens, state);
+                    this.preFilterTriggered = true;
+                    setTimeout(() => {
+                        this.preFilterTriggered = false;
+                    }, 60 * MINUTE);
+                }
+
+            }
+
             if (json.hasOwnProperty('fltsts2')) {
                 this.log(`Active Carbon ${json.fltt2} filter: replace in ${json.fltsts2} hours`)
                 this.setCapabilityValue('carbon_filter_replace', json.fltsts2);
@@ -276,6 +343,26 @@ export class AirDevice extends Homey.Device {
                     }, 60 * MINUTE);
                 }
             }
+            if (json.hasOwnProperty('D05-14')) {
+                this.log(`HEPA ${json['D05-14']} filter: replace in ${json['D05-14']} hours`);
+                this.setCapabilityValue('hepa_filter_replace', json['D05-14']);
+                let tokens = {
+                    "hours": json['D05-14'],
+                    "filter": "hepa_filter",
+                    "device": this.getName()
+                };
+                let state = {
+                    "which": "hepa_filter"
+                };
+
+                if (this.hepaFilterTriggered == false) {
+                    this.flowTriggerFilterReplaceClean(tokens, state);
+                    this.hepaFilterTriggered = true;
+                    setTimeout(() => {
+                        this.hepaFilterTriggered = false;
+                    }, 60 * MINUTE);
+                }
+            }            
         }
     }
 
