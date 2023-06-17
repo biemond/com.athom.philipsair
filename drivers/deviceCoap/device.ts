@@ -49,7 +49,20 @@ class deviceCoap extends AirDevice {
     });
 
     this.registerCapabilityListener('button_lights', async (value) => {
-      this.setStateCoap("uil", value, this.getSettings());
+      let model = this.getCapabilityValue('product')
+      const newCoapDevices = ['AC0850/11', 'AC1715/11']
+      if (newCoapDevices.includes(model)) {
+        let values2
+        if (value == "0") {
+          values2 = "0";   // off
+        } else {
+          values2 = "100"; // on
+        }
+        this.setStateCoap("D03-05", values2, this.getSettings());
+      }  
+      else {  
+        this.setStateCoap("uil", value, this.getSettings());
+      }
       return value;
     });
 
@@ -59,18 +72,44 @@ class deviceCoap extends AirDevice {
     });
 
     this.registerCapabilityListener('display_mode', async (value) => {
-      this.setStateCoap("ddp", value, this.getSettings());
+      let model = this.getCapabilityValue('product')
+      const newCoapDevices = ['AC0850/11', 'AC1715/11']
+      if (newCoapDevices.includes(model)) {
+        let values2
+        if (value == '1' ) {
+          values2 = "PM2.5";
+        } else {
+          values2 = "IAI";
+        }
+        this.setStateCoap("D03-02", values2, this.getSettings());
+      }  
+      else {        
+        this.setStateCoap("ddp", value, this.getSettings());
+      }  
       return value;
     });
 
     this.registerCapabilityListener('onoff', async (value) => {
-      let values;
-      if (value == true) {
-        values = "1";
-      } else {
-        values = "0";
+      let model = this.getCapabilityValue('product')
+      const newCoapDevices = ['AC0850/11', 'AC1715/11']
+      if (newCoapDevices.includes(model)) {
+        let values2
+        if (value == true ) {
+          values2 = "ON";
+        } else {
+          values2 = "OFF";
+        }
+        this.setStateCoap("D03-02", values2, this.getSettings());
+      }  
+      else {  
+        let values;
+        if (value == true) {
+          values = "1";
+        } else {
+          values = "0";
+        }
+        this.setStateCoap("pwr", values, this.getSettings());
       }
-      this.setStateCoap("pwr", values, this.getSettings());
       return value;
     });
 
@@ -82,6 +121,26 @@ class deviceCoap extends AirDevice {
     this.registerCapabilityListener('fan_speed', async (value) => {
       let model = this.getCapabilityValue('product')
       const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10', 'AC3059/10']
+      const newCoapDevices2 = ['AC0850/11', 'AC1715/11']
+
+      if (newCoapDevices2.includes(model)) {
+        if (value == "P") {
+          this.setStateCoap("D03-12", 'Auto General', this.getSettings());
+        }
+        if (value == "1") {
+          this.setStateCoap("D03-12", 'Gentle/Speed 1', this.getSettings());
+        }  
+        if (value == "2") {
+          this.setStateCoap("D03-12", 'Speed 2', this.getSettings());
+        }  
+        if (value == "T") {
+          this.setStateCoap("D03-12", 'Turbo', this.getSettings());
+        }  
+        if (value == "S") {
+          this.setStateCoap("D03-12", 'Sleep', this.getSettings());
+        }          
+        return value;
+      }  
 
       if (value == "AUTO") {
         // auto
