@@ -7,6 +7,7 @@ Verified on
 - AC3829/10 Humidifier and air purifier 2019 model
 - AC2889/10 Air purifier 2020 model
 - AC4236/10 purifier model
+- AC0850/11 Air purifier
 
 Purifier ( + Humidifier ) Device
 For adding the device you need to provide Philips device ip address plus Homey has to be on the same network as your purifier. 

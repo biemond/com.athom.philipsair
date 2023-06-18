@@ -4,7 +4,7 @@ const philipsair = require('./drivers/philipsair');
 const AirDevice = require('./drivers/air');
 
 // sleep time expects milliseconds
-function sleep (time: number) {
+function sleep(time: number) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
@@ -15,6 +15,7 @@ class MyApp extends Homey.App {
     this.log('philipsair is running...');
     const coapDevices = ['deviceCoap', 'deviceCoap2']
     const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10', 'AC3059/10']
+    const newCoapDevices2 = ['AC0850/11', 'AC1715/11']
 
     let purifierModeAction = this.homey.flow.getActionCard('purifier_mode');
     purifierModeAction.registerRunListener((args, state) => {
@@ -35,8 +36,18 @@ class MyApp extends Homey.App {
       this.log('---');
       let model = args.device.getCapabilityValue('product')
 
-      if (coapDevices.includes(args.device.constructor.name)) {
 
+      if (newCoapDevices2.includes(model)) {
+        if (args.mode == "AUTO") {
+          args.device.setStateCoap("D03-12", 'Auto General', args.device.getSettings());
+        }
+        if (args.mode == "t") {
+          args.device.setStateCoap("D03-12", 'Turbo', args.device.getSettings());
+        }
+        if (args.mode == "s") {
+          args.device.setStateCoap("D03-12", 'Sleep', args.device.getSettings());
+        }
+      } else if (coapDevices.includes(args.device.constructor.name)) {
         if (args.mode == "AUTO") {
           // auto
           if (newCoapDevices.includes(model)) {
@@ -96,7 +107,10 @@ class MyApp extends Homey.App {
 
     let onAction = this.homey.flow.getActionCard('on');
     onAction.registerRunListener((args, state) => {
-      if (coapDevices.includes(args.device.constructor.name)) {
+      let model = args.device.getCapabilityValue('product')
+      if (newCoapDevices2.includes(model)) {
+        args.device.setStateCoap("D03-02", "ON", args.device.getSettings());
+      } else if (coapDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("pwr", "1", args.device.getSettings());
       } else {
         let values = { "pwr": "1" }
@@ -107,7 +121,10 @@ class MyApp extends Homey.App {
 
     let offAction = this.homey.flow.getActionCard('off');
     offAction.registerRunListener((args, state) => {
-      if (coapDevices.includes(args.device.constructor.name)) {
+      let model = args.device.getCapabilityValue('product')
+      if (newCoapDevices2.includes(model)) {
+        args.device.setStateCoap("D03-02", "OFF", args.device.getSettings());
+      } else if (coapDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("pwr", "0", args.device.getSettings());
       } else {
         let values = { "pwr": "0" }

@@ -2,10 +2,11 @@
 
 Added support for Philip AIR purifiers, it should work for all the philips air devices (also the new 2020 devices with COAP protocol) 
 Verified on 
-- AC5659/10 Air purifier 2019 model
 - AC3259/10 Air purifier 2019 model
 - AC3829/10 Humidifier and air purifier 2019 model
 - AC2889/10 Air purifier 2020 model
+- AC4236/10 purifier model
+- AC0850/11 Air purifier
 
 ## Purifier ( + Humidifier) Device
 For adding the device you need to provide Philips device ip address plus Homey has to be on the same network as your purifier. 

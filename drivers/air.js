@@ -163,14 +163,14 @@ export class AirDevice extends Homey.Device {
                     this.log(`Fan speed: auto`);
                 } else {
                     if (json.hasOwnProperty('om')) {
-                        let om_str = { '1': 'speed 1', '2': 'speed 2', '3': 'speed 3', 'P': 'auto', 'AG': 'auto', 's': 'silent', 't': 'turbo' }
+                        let om_str = { '1': 'speed 1', '2': 'speed 2', '3': 'speed 3', 'P': 'AUTO', 'AG': 'AUTO', 's': 'silent', 't': 'turbo' }
                         this.setCapabilityValue('fan_speed', json.om);
                         this.log(`Fan speed: ${om_str[json.om]}`)
                     }
                 }
             }
             if (json.hasOwnProperty('D03-12')) {
-                let mode_str = { 'Auto General': 'auto', 'Gentle/Speed 1': '1','Speed 2': '2', 'Turbo': 't','Sleep': 's' }
+                let mode_str = { 'Auto General': 'AUTO', 'Gentle/Speed 1': '1','Speed 2': '2', 'Turbo': 't','Sleep': 's' }
                 this.setCapabilityValue('fan_speed', mode_str[json["D03-12"]]);
             }            
 
