@@ -54,9 +54,9 @@ class deviceCoap extends AirDevice {
       if (newCoapDevices.includes(model)) {
         let values2
         if (value == "0") {
-          values2 = "0";   // off
+          values2 = 0;   // off
         } else {
-          values2 = "100"; // on
+          values2 = 100; // on
         }
         this.setStateCoap("D03-05", values2, this.getSettings());
       }  

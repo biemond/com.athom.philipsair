@@ -15,6 +15,12 @@
             }
         },
         {
+            "id": "AS",
+            "title": {
+                "en": "Allergy Sleep, some devices"
+            }
+        },
+        {
             "id": "AG",
             "title": {
                 "en": "Auto mode, some devices"

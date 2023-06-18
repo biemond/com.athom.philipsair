@@ -185,7 +185,7 @@ export class AirDevice extends Homey.Device {
                 this.log(`Buttons light: ${uil_str[json.uil]}`)
             }
             if (json.hasOwnProperty('D03-05')) {
-                let uil_str = { '100': '1', '0': '0' };
+                let uil_str = { 100: '1', 0: '0' };
                 this.setCapabilityValue('button_lights', uil_str[json["D03-05"]]);
                 this.log(`Buttons light: ${uil_str[json["D03-05"]]}`)
             }
