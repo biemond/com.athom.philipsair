@@ -237,7 +237,7 @@ export class AirDevice extends Homey.Device {
             }
             if (json.hasOwnProperty('err')) {
                 if (json.err != 0) {
-                    let err_str = { 49408: 'no water', 32768: 'water tank open' };
+                    let err_str = { 49408: 'no water', 32768: 'water tank open', 49153: "pre-filter must be cleaned", 49155: "pre-filter must be cleaned" };
                     this.log(`Error: ${err_str[json.err]}`);
                 } {
                     this.log(`Error: -`);
