@@ -16,6 +16,7 @@ class MyApp extends Homey.App {
     const coapDevices = ['deviceCoap', 'deviceCoap2']
     const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10', 'AC3059/10']
     const newCoapDevices2 = ['AC0850/11', 'AC1715/11']
+    const newCoapDevices3 = ['AC3737/10']
 
     let purifierModeAction = this.homey.flow.getActionCard('purifier_mode');
     purifierModeAction.registerRunListener((args, state) => {
@@ -110,6 +111,8 @@ class MyApp extends Homey.App {
       let model = args.device.getCapabilityValue('product')
       if (newCoapDevices2.includes(model)) {
         args.device.setStateCoap("D03-02", "ON", args.device.getSettings());
+      } else if (newCoapDevices3.includes(args.device.constructor.name)) {
+        args.device.setStateCoap("D03102", "1", args.device.getSettings());
       } else if (coapDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("pwr", "1", args.device.getSettings());
       } else {
@@ -124,6 +127,8 @@ class MyApp extends Homey.App {
       let model = args.device.getCapabilityValue('product')
       if (newCoapDevices2.includes(model)) {
         args.device.setStateCoap("D03-02", "OFF", args.device.getSettings());
+      } else if (newCoapDevices3.includes(args.device.constructor.name)) {
+        args.device.setStateCoap("D03102", "0", args.device.getSettings());        
       } else if (coapDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("pwr", "0", args.device.getSettings());
       } else {

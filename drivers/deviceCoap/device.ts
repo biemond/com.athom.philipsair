@@ -92,6 +92,7 @@ class deviceCoap extends AirDevice {
     this.registerCapabilityListener('onoff', async (value) => {
       let model = this.getCapabilityValue('product')
       const newCoapDevices = ['AC0850/11', 'AC1715/11']
+      const newCoapDevices2 = ['AC3737/10']      
       if (newCoapDevices.includes(model)) {
         let values2
         if (value == true ) {
@@ -108,7 +109,11 @@ class deviceCoap extends AirDevice {
         } else {
           values = "0";
         }
-        this.setStateCoap("pwr", values, this.getSettings());
+        if (newCoapDevices2.includes(model)) {
+          this.setStateCoap("D03102", values, this.getSettings());
+        } else {
+          this.setStateCoap("pwr", values, this.getSettings());
+        }
       }
       return value;
     });

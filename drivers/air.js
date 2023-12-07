@@ -101,15 +101,31 @@ export class AirDevice extends Homey.Device {
                 }
                 this.log(`Power: ${json["D03-02"]== 'ON' ? 'ON' : "OFF"}`)
             }
+            if (json.hasOwnProperty("D03102")) {
+                if (json["D03102"] == 1) { 
+                    this.setCapabilityValue('onoff', true);
+                } else {
+                    this.setCapabilityValue('onoff', false);
+                }
+                this.log(`Power: ${json["D03102"]== 1 ? 'ON' : "OFF"}`)
+            }
+            
 
             if (json.hasOwnProperty('pm25')) {
                 this.log(`PM25: ${json.pm25}`);
                 this.setCapabilityValue('measure_pm25', json.pm25);
             }
+            
             if (json.hasOwnProperty('D03-33')) {
                 this.log(`PM25: ${json["D03-33"]}`);
                 this.setCapabilityValue('measure_pm25', json["D03-33"]);
             }
+
+            if (json.hasOwnProperty('D03221')) {
+                this.log(`PM25: ${json["D03221"]}`);
+                this.setCapabilityValue('measure_pm25', json["D03221"]);
+            }
+
 
             if (json.hasOwnProperty('tvoc')) {
                 this.log(`GAS (TVOC): ${json.tvoc}`);
@@ -121,6 +137,15 @@ export class AirDevice extends Homey.Device {
                     this.setCapabilityValue('measure_humidity', json.rh);
                 }
             }
+            if (json.hasOwnProperty('D03125')) {
+                this.log(`Humidity: ${json["D03125"]}`);
+                if (this.hasCapability('measure_humidity')) {
+                    this.setCapabilityValue('measure_humidity', json["D03125"]);
+                }
+            }
+            
+
+
             if (json.hasOwnProperty('rhset')) {
                 this.log(`Target humidity: ${json.rhset}`);
                 if (this.hasCapability('target_humidity')) {
@@ -142,6 +167,14 @@ export class AirDevice extends Homey.Device {
                     this.setCapabilityValue('measure_temperature', json.temp);
                 }
             }
+            if (json.hasOwnProperty('D03224')) {
+                this.log(`Temperature: ${json["D03224"]}`);
+                if (this.hasCapability('measure_temperature')) {
+                    this.setCapabilityValue('measure_temperature', json["D03224"]/10);
+                }
+            }
+            
+
             if (json.hasOwnProperty('func')) {
                 // P or PH
                 this.log(`Function: ${json.func == 'P' ? 'Purification' : "Purification & Humidification"}`)
@@ -178,6 +211,12 @@ export class AirDevice extends Homey.Device {
                 this.log(`Light brightness: ${json.aqil}`);
                 this.setCapabilityValue('light_intensity', parseInt(json.aqil));
             }
+            if (json.hasOwnProperty('D0312D')) {
+                this.log(`Light brightness: ${json["D0312D"]}`);
+                this.setCapabilityValue('light_intensity', parseInt(json["D0312D"]));
+            }
+            
+
 
             if (json.hasOwnProperty('uil')) {
                 let uil_str = { '1': 'ON', '0': 'OFF', '2': 'FIXED' };
@@ -213,6 +252,17 @@ export class AirDevice extends Homey.Device {
                 this.log(`Child lock: ${json.cl}`);
                 this.setCapabilityValue('child_lock', json.cl);
             }
+
+            if (json.hasOwnProperty('D03103')) {
+                this.log(`Child lock: ${json["D03103"]}`);
+                if (json["D03103"] == 1) { 
+                    this.setCapabilityValue('child_lock', true);
+                } else {
+                    this.setCapabilityValue('child_lock', false);
+                }
+            }
+            
+
             if (json.hasOwnProperty('wl')) {
                 this.log(`Water level: ${json.wl}`);
                 if (this.hasCapability('water_level')) {
@@ -229,6 +279,14 @@ export class AirDevice extends Homey.Device {
                     this.setCapabilityValue('timer', json.dt.toString());
                 }
             }
+
+            
+            if (json.hasOwnProperty('D03110')) {
+                this.log(`Timer hours: ${json["D03110"]}`);
+                if (this.hasCapability('timer')) {
+                    this.setCapabilityValue('timer', json["D03110"].toString());
+                }
+            }
             if (json.hasOwnProperty('dtrs')) {
                 this.log(`Timer total minutes left: ${json.dtrs}`);
                 if (this.hasCapability('timer_remaining')) {
@@ -243,6 +301,16 @@ export class AirDevice extends Homey.Device {
                     this.log(`Error: -`);
                 }
             }
+
+            if (json.hasOwnProperty('D03240')) {
+                if (json["D03240"] != 0) {
+                    let err_str = { 49408: 'no water', 32768: 'water tank open', 49153: "pre-filter must be cleaned", 49155: "pre-filter must be cleaned" };
+                    this.log(`Error: ${err_str[json["D03240"]]}`);
+                } {
+                    this.log(`Error: -`);
+                }
+            }
+
             if (json.hasOwnProperty('modelid')) {
                 this.log(`Location: ${json.name} modelid ${json.modelid} `);
                 this.setCapabilityValue('product', `${json.modelid}`);
@@ -250,7 +318,12 @@ export class AirDevice extends Homey.Device {
             if (json.hasOwnProperty('D01-05')) {
                 this.log(`Location: ${json["D01-03"]} modelid ${json["D01-05"]} `);
                 this.setCapabilityValue('product', `${json["D01-05"]}`);
-            }            
+            }
+            if (json.hasOwnProperty("D01S05")) {
+                this.log(`Location: ${json["D01S03"]} modelid ${json["D01S05"]} `);
+                this.setCapabilityValue('product', `${json["D01S05"]}`);
+            }
+
 
             // if 'wicksts' in filters:
             // print('Wick filter: replace in {} hours'.format(filters['wicksts']))
@@ -299,6 +372,29 @@ export class AirDevice extends Homey.Device {
                     }, 60 * MINUTE);
                 }
 
+            }
+
+            if (json.hasOwnProperty('D0520D')) {
+                this.log(`Pre-filter: clean in ${json["D0520D"]} hours`);
+                this.setCapabilityValue('pre_filter_clean', json["D0520D"]);
+                let tokens = {
+                    "hours": json["D0520D"],
+                    "filter": "pre_filter",
+                    "device": this.getName()
+                };
+                let state = {
+                    "which": "pre_filter"
+                };
+
+                this.log("preFilterTriggered: " + this.preFilterTriggered)
+                if (this.preFilterTriggered == false) {
+                    this.log("is preFilterTriggered ");
+                    this.flowTriggerFilterReplaceClean(tokens, state);
+                    this.preFilterTriggered = true;
+                    setTimeout(() => {
+                        this.preFilterTriggered = false;
+                    }, 60 * MINUTE);
+                }
             }
 
             if (json.hasOwnProperty('fltsts2')) {
@@ -361,7 +457,29 @@ export class AirDevice extends Homey.Device {
                         this.hepaFilterTriggered = false;
                     }, 60 * MINUTE);
                 }
-            }            
+            }
+
+            if (json.hasOwnProperty('D05213')) {
+                this.log(`HEPA ${json['D05213']} filter: replace in ${json['D05213']} hours`);
+                this.setCapabilityValue('hepa_filter_replace', json['D05213']);
+                let tokens = {
+                    "hours": json['D05213'],
+                    "filter": "hepa_filter",
+                    "device": this.getName()
+                };
+                let state = {
+                    "which": "hepa_filter"
+                };
+
+                if (this.hepaFilterTriggered == false) {
+                    this.flowTriggerFilterReplaceClean(tokens, state);
+                    this.hepaFilterTriggered = true;
+                    setTimeout(() => {
+                        this.hepaFilterTriggered = false;
+                    }, 60 * MINUTE);
+                }
+            }                        
+            
         }
     }
 
