@@ -229,7 +229,6 @@ export class AirDevice extends Homey.Device {
                 this.log(`Buttons light: ${uil_str[json["D03-05"]]}`)
             }
 
-
             if (json.hasOwnProperty('ddp')) {
                 let ddp_str = { '1': 'PM2.5', '0': 'IAI', '3': 'Humidity' };
                 this.log(`Used index: ${ddp_str[json.ddp]}`);

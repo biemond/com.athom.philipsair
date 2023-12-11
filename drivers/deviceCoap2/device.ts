@@ -42,8 +42,15 @@ class deviceCoap2 extends AirDevice {
       let result = (this.conditionScorePm25lToString(this.getCapabilityValue('measure_pm25')) == args.argument_main)
       return Promise.resolve(result);
     });
+    
     this.registerCapabilityListener('light_intensity', async (value) => {
-      this.setStateCoap("aqil", value, this.getSettings());
+      let model = this.getCapabilityValue('product')      
+      const newCoapDevices2 = ['AC3737/10','AMF765/10']       
+      if (newCoapDevices2.includes(model)) {
+        this.setStateCoap("D0312D", value, this.getSettings());
+      } else {        
+        this.setStateCoap("aqil", value, this.getSettings());
+      }
       return value;
     });
 
@@ -97,9 +104,20 @@ class deviceCoap2 extends AirDevice {
       return value;
     });
 
-
     this.registerCapabilityListener('child_lock', async (value) => {
-      this.setStateCoap("cl", value, this.getSettings());
+      let model = this.getCapabilityValue('product')      
+      const newCoapDevices2 = ['AC3737/10','AMF765/10']       
+      if (newCoapDevices2.includes(model)) {
+        let values;
+        if (value == true) {
+          values = "1";
+        } else {
+          values = "0";
+        }
+        this.setStateCoap("D03103", values, this.getSettings());
+      }  else {  
+        this.setStateCoap("cl", value, this.getSettings());
+      }
       return value;
     });
 
@@ -141,7 +159,13 @@ class deviceCoap2 extends AirDevice {
 
 
     this.registerCapabilityListener('timer', async (value) => {
-      this.setStateCoap("dt", value, this.getSettings());
+      let model = this.getCapabilityValue('product')      
+      const newCoapDevices2 = ['AC3737/10','AMF765/10']       
+      if (newCoapDevices2.includes(model)) {
+        this.setStateCoap("D03110", value, this.getSettings());
+      } else {  
+        this.setStateCoap("dt", value, this.getSettings());
+      }  
       return value;
     });
   }
