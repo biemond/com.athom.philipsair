@@ -1,4 +1,3 @@
-const philipsair = require('../philipsair.js');
 
 import { AirDevice } from '../air';
 // sleep time expects milliseconds
@@ -47,7 +46,13 @@ class deviceCoap2 extends AirDevice {
       let model = this.getCapabilityValue('product')      
       const newCoapDevices2 = ['AC3737/10','AMF765/10']       
       if (newCoapDevices2.includes(model)) {
-        this.setStateCoap("D0312D", value, this.getSettings());
+        let values2
+        if (value == "0") {
+          values2 = 0;   // off
+        } else {
+          values2 = 100; // on
+        }
+        this.setStateCoap("D03105", values2, this.getSettings());
       } else {        
         this.setStateCoap("aqil", value, this.getSettings());
       }
@@ -67,7 +72,14 @@ class deviceCoap2 extends AirDevice {
     });
 
     this.registerCapabilityListener('target_humidity', async (value) => {
-      this.setStateCoap("rhset", Number(value), this.getSettings());
+      let model = this.getCapabilityValue('product')
+      const newCoapDevices2 = ['AC3737/10']
+      if (newCoapDevices2.includes(model)) {
+        this.setStateCoap("D03128",  Number(value), this.getSettings());
+      } else {
+        this.setStateCoap("rhset", Number(value), this.getSettings());
+      }        
+
       return value;
     });
 
@@ -91,9 +103,9 @@ class deviceCoap2 extends AirDevice {
       let model = this.getCapabilityValue('product')
       const newCoapDevices2 = ['AC3737/10']
       if (value == true) {
-        values = "1";
+        values = 1;
       } else {
-        values = "0";
+        values = 0;
       }
 
       if (newCoapDevices2.includes(model)) {
@@ -110,9 +122,9 @@ class deviceCoap2 extends AirDevice {
       if (newCoapDevices2.includes(model)) {
         let values;
         if (value == true) {
-          values = "1";
+          values = 1;
         } else {
-          values = "0";
+          values = 0;
         }
         this.setStateCoap("D03103", values, this.getSettings());
       }  else {  
@@ -162,7 +174,7 @@ class deviceCoap2 extends AirDevice {
       let model = this.getCapabilityValue('product')      
       const newCoapDevices2 = ['AC3737/10','AMF765/10']       
       if (newCoapDevices2.includes(model)) {
-        this.setStateCoap("D03110", value, this.getSettings());
+        this.setStateCoap("D03110", Number(value), this.getSettings());
       } else {  
         this.setStateCoap("dt", value, this.getSettings());
       }  

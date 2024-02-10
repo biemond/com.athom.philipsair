@@ -131,6 +131,13 @@ export class AirDevice extends Homey.Device {
                 this.log(`GAS (TVOC): ${json.tvoc}`);
                 this.setCapabilityValue('measure_tvoc', json.tvoc);
             }
+
+            if (json.hasOwnProperty('D03122')) {
+                this.log(`GAS (TVOC): ${json["D03122"]}`);
+                this.setCapabilityValue('measure_tvoc', json["D03122"]);
+            }
+
+
             if (json.hasOwnProperty('rh')) {
                 this.log(`Humidity: ${json.rh}`);
                 if (this.hasCapability('measure_humidity')) {
@@ -152,6 +159,15 @@ export class AirDevice extends Homey.Device {
                     this.setCapabilityValue('target_humidity', json.rhset.toString());
                 }
             }
+            
+            if (json.hasOwnProperty('D03128')) {
+                this.log(`Target humidity: ${json["D03128"]}`);
+                if (this.hasCapability('target_humidity')) {
+                    this.setCapabilityValue('target_humidity', json["D03128"]);
+                }
+            }
+            
+
             if (json.hasOwnProperty('iaql')) {
                 this.log(`Allergen index: ${json.iaql}`);
                 this.setCapabilityValue('measure_iaql', json.iaql);
@@ -160,6 +176,11 @@ export class AirDevice extends Homey.Device {
                 this.log(`Allergen index: ${json["D03-32"]}`);
                 this.setCapabilityValue('measure_iaql', json["D03-32"]);
             }
+            if (json.hasOwnProperty('D03120')) {
+                this.log(`Allergen index: ${json["D03120"]}`);
+                this.setCapabilityValue('measure_iaql', json["D03120"]);
+            }
+
 
             if (json.hasOwnProperty('temp')) {
                 this.log(`Temperature: ${json.temp}`);

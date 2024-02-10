@@ -93,7 +93,17 @@ class MyApp extends Homey.App {
       this.log('---');
       this.log(args.device.constructor.name);
       this.log('---');
-      if (coapDevices.includes(args.device.constructor.name)) {
+
+      let model = args.device.getCapabilityValue('product') 
+      if (newCoapDevices3.includes(model)) {  
+        let values2
+        if (args.mode == "0") {
+          values2 = 0;   // off
+        } else {
+          values2 = 100; // on
+        }
+        args.device.setStateCoap("D03105", values2, args.device.getSettings());
+      } else if (coapDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("aqil", parseInt(args.mode), args.device.getSettings());
       } else {
         let values = { "aqil": 50 };
@@ -111,8 +121,8 @@ class MyApp extends Homey.App {
       let model = args.device.getCapabilityValue('product')
       if (newCoapDevices2.includes(model)) {
         args.device.setStateCoap("D03-02", "ON", args.device.getSettings());
-      } else if (newCoapDevices3.includes(args.device.constructor.name)) {
-        args.device.setStateCoap("D03102", "1", args.device.getSettings());
+      } else if (newCoapDevices3.includes(model)) {
+        args.device.setStateCoap("D03102", 1, args.device.getSettings());
       } else if (coapDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("pwr", "1", args.device.getSettings());
       } else {
@@ -127,8 +137,8 @@ class MyApp extends Homey.App {
       let model = args.device.getCapabilityValue('product')
       if (newCoapDevices2.includes(model)) {
         args.device.setStateCoap("D03-02", "OFF", args.device.getSettings());
-      } else if (newCoapDevices3.includes(args.device.constructor.name)) {
-        args.device.setStateCoap("D03102", "0", args.device.getSettings());        
+      } else if (newCoapDevices3.includes(model)) {
+        args.device.setStateCoap("D03102", 0, args.device.getSettings());        
       } else if (coapDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("pwr", "0", args.device.getSettings());
       } else {
