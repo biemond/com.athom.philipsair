@@ -163,7 +163,7 @@ export class AirDevice extends Homey.Device {
             if (json.hasOwnProperty('D03128')) {
                 this.log(`Target humidity: ${json["D03128"]}`);
                 if (this.hasCapability('target_humidity')) {
-                    this.setCapabilityValue('target_humidity', json["D03128"]);
+                    this.setCapabilityValue('target_humidity', json["D03128"].toString());
                 }
             }
             
