@@ -48,6 +48,22 @@ class MyApp extends Homey.App {
         if (args.mode == "s") {
           args.device.setStateCoap("D03-12", 'Sleep', args.device.getSettings());
         }
+      } else  if (newCoapDevices3.includes(model)) {
+        if (args.mode == "1") {
+          args.device.setStateCoap("D0310C", 1, args.device.getSettings());
+        }
+        if (args.mode == "2") {
+          args.device.setStateCoap("D0310C", 2, args.device.getSettings());
+        }
+        if (args.mode == "s") {
+          args.device.setStateCoap("D0310C", 17, args.device.getSettings());
+        }
+        if (args.mode == "AUTO") {
+          args.device.setStateCoap("D0310C", 0, args.device.getSettings());
+        }
+        if (args.mode == "t") {
+          args.device.setStateCoap("D0310C", 18, args.device.getSettings());
+        }       
       } else if (coapDevices.includes(args.device.constructor.name)) {
         if (args.mode == "AUTO") {
           // auto

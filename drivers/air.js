@@ -228,13 +228,18 @@ export class AirDevice extends Homey.Device {
                 this.setCapabilityValue('fan_speed', mode_str[json["D03-12"]]);
             }            
 
+            if (json.hasOwnProperty('D0310C')) {
+                let mode_str = { '0': 'AUTO', '1': '1','2': '2', '18': 't','17': 's' }
+                this.setCapabilityValue('fan_speed', mode_str[json["D0310C"]]);
+            }       
+
             if (json.hasOwnProperty('aqil')) {
                 this.log(`Light brightness: ${json.aqil}`);
                 this.setCapabilityValue('light_intensity', parseInt(json.aqil));
             }
-            if (json.hasOwnProperty('D0312D')) {
-                this.log(`Light brightness: ${json["D0312D"]}`);
-                this.setCapabilityValue('light_intensity', parseInt(json["D0312D"]));
+            if (json.hasOwnProperty('D03105')) {
+                this.log(`Light brightness: ${json["D03105"]}`);
+                this.setCapabilityValue('light_intensity', parseInt(json["D03105"]));
             }
             
 

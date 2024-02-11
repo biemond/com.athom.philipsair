@@ -149,8 +149,25 @@ class deviceCoap extends AirDevice {
       let model = this.getCapabilityValue('product')
       const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10', 'AC3059/10']
       const newCoapDevices2 = ['AC0850/11', 'AC1715/11']
+      const newCoapDevices3 = ['AC3737/10','AMF765/10']     
 
-      if (newCoapDevices2.includes(model)) {
+      if (newCoapDevices3.includes(model)) {
+        if (value == "1") {
+          this.setStateCoap("D0310C", 1, this.getSettings());
+        }
+        if (value == "2") {
+          this.setStateCoap("D0310C", 2, this.getSettings());
+        }
+        if (value == "s") {
+          this.setStateCoap("D0310C", 17, this.getSettings());
+        }
+        if (value == "AUTO") {
+          this.setStateCoap("D0310C", 0, this.getSettings());
+        }
+        if (value == "t") {
+          this.setStateCoap("D0310C", 18, this.getSettings());
+        }           
+      } else if (newCoapDevices2.includes(model)) {
         if (value == "AUTO") {
           this.setStateCoap("D03-12", 'Auto General', this.getSettings());
         }
@@ -160,37 +177,38 @@ class deviceCoap extends AirDevice {
         if (value == "s") {
           this.setStateCoap("D03-12", 'Sleep', this.getSettings());
         }          
-        return value;
-      }  
-
-      if (value == "AUTO") {
-        // auto
-        if (newCoapDevices.includes(model)) {
-          this.setStateCoap("mode", "AG", this.getSettings());
-        } else {
-          this.setStateCoap("mode", "P", this.getSettings());
-        }
       } else {
-        if (value == "s" || value == "t") {
-          // turbo / sleep
+
+        if (value == "AUTO") {
+          // auto
           if (newCoapDevices.includes(model)) {
-            this.setStateCoap("mode", value.toUpperCase(), this.getSettings());
-            sleep(2000).then(() => {
-              this.setStateCoap("om", value, this.getSettings());
-            });
+            this.setStateCoap("mode", "AG", this.getSettings());
+          } else {
+            this.setStateCoap("mode", "P", this.getSettings());
+          }
+        } else {
+          if (value == "s" || value == "t") {
+            // turbo / sleep
+            if (newCoapDevices.includes(model)) {
+              this.setStateCoap("mode", value.toUpperCase(), this.getSettings());
+              sleep(2000).then(() => {
+                this.setStateCoap("om", value, this.getSettings());
+              });
+            } else {
+              this.setStateCoap("mode", "M", this.getSettings());
+              sleep(2000).then(() => {
+                this.setStateCoap("om", value, this.getSettings());
+              });
+            }
           } else {
             this.setStateCoap("mode", "M", this.getSettings());
             sleep(2000).then(() => {
               this.setStateCoap("om", value, this.getSettings());
             });
           }
-        } else {
-          this.setStateCoap("mode", "M", this.getSettings());
-          sleep(2000).then(() => {
-            this.setStateCoap("om", value, this.getSettings());
-          });
         }
       }
+
       return value;
     });
 
