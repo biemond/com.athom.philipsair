@@ -272,6 +272,17 @@ export class AirDevice extends Homey.Device {
                     this.setCapabilityValue('display_mode', ddp_str[json["D03-42"]]);
                 }
             }
+            if (json.hasOwnProperty('D0312A')) {
+                this.log(`Display: json["D0312A"] `);
+                if (this.hasCapability('display_mode')) {
+                    this.setCapabilityValue('display_mode', json["D0312A"]);
+                }
+                if (this.hasCapability('display_mode_ph')) {
+                    this.setCapabilityValue('display_mode_ph', json["D0312A"]);
+                }
+            }
+            
+
 
             if (json.hasOwnProperty('cl')) {
                 this.log(`Child lock: ${json.cl}`);

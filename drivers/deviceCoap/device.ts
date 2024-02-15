@@ -84,6 +84,7 @@ class deviceCoap extends AirDevice {
     this.registerCapabilityListener('display_mode', async (value) => {
       let model = this.getCapabilityValue('product')
       const newCoapDevices = ['AC0850/11', 'AC1715/11']
+      const newCoapDevices2 =  ['AC3737/10','AMF765/10']
       if (newCoapDevices.includes(model)) {
         let values2
         if (value == '1' ) {
@@ -92,8 +93,9 @@ class deviceCoap extends AirDevice {
           values2 = "IAI";
         }
         this.setStateCoap("D03-02", values2, this.getSettings());
-      }  
-      else {        
+      }  else if (newCoapDevices2.includes(model)) {
+        this.setStateCoap("D0312A", Number(value), this.getSettings());
+      } else {        
         this.setStateCoap("ddp", value, this.getSettings());
       }  
       return value;

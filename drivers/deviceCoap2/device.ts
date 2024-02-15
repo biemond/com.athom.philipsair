@@ -94,7 +94,13 @@ class deviceCoap2 extends AirDevice {
     });
 
     this.registerCapabilityListener('display_mode_ph', async (value) => {
-      this.setStateCoap("ddp", value, this.getSettings());
+      let model = this.getCapabilityValue('product')
+      const newCoapDevices2 =  ['AC3737/10','AMF765/10']
+      if (newCoapDevices2.includes(model)) {
+        this.setStateCoap("D0312A", Number(value), this.getSettings());   
+      } else {     
+         this.setStateCoap("ddp", value, this.getSettings());
+      }
       return value;
     });
 
