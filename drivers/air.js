@@ -275,10 +275,14 @@ export class AirDevice extends Homey.Device {
             if (json.hasOwnProperty('D0312A')) {
                 this.log(`Display: ${json["D0312A"]}`);
                 if (this.hasCapability('display_mode')) {
-                    this.setCapabilityValue('display_mode', json["D0312A"].toString() );
+                    if ( json["D0312A"] == 0 || json["D0312A"] == 1 || json["D0312A"] == 2  || json["D0312A"] == 3  ) {
+                      this.setCapabilityValue('display_mode', json["D0312A"].toString() );
+                    }
                 }
                 if (this.hasCapability('display_mode_ph')) {
-                    this.setCapabilityValue('display_mode_ph', json["D0312A"].toString() );
+                    if ( json["D0312A"] == 0 || json["D0312A"] == 1 || json["D0312A"] == 2  || json["D0312A"] == 3 || json["D0312A"] == 6 ) {
+                      this.setCapabilityValue('display_mode_ph', json["D0312A"].toString() );
+                    }
                 }
             }
 

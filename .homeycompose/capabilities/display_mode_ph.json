@@ -31,6 +31,12 @@
             "title": {
                 "en": "Humidity"
             }
-        }
+        },
+        {
+            "id": "6",
+            "title": {
+                "en": "Moisture"
+            }
+        }        
     ]
 }
