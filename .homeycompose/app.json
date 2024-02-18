@@ -1,6 +1,6 @@
 {
   "id": "com.athom.philipsair",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [

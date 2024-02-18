@@ -1,0 +1,8 @@
+{
+    "type": "string",
+    "title": {
+        "en": "error"
+    },
+    "getable": true,
+    "setable": false
+}

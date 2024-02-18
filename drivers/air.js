@@ -342,8 +342,25 @@ export class AirDevice extends Homey.Device {
                 if (json["D03240"] != 0) {
                     let err_str = { 49408: 'no water', 32768: 'water tank open', 49153: "pre-filter must be cleaned", 49155: "pre-filter must be cleaned" };
                     this.log(`Error: ${err_str[json["D03240"]]}`);
+
+                    if (this.hasCapability('water_level')) {
+                        if (json["D03240"] == 49408) {
+                            this.setCapabilityValue('water_level', "Empty");
+                        }
+                    }
+                    if (this.hasCapability('error')) {
+                        this.setCapabilityValue('error', err_str[json["D03240"]] );
+                    }
                 } {
                     this.log(`Error: -`);
+                    if (this.hasCapability('water_level')) {
+                        if (json["D03240"] != 49408) {
+                            this.setCapabilityValue('water_level', "Ok");
+                        }
+                    }
+                    if (this.hasCapability('error')) {
+                        this.setCapabilityValue('error', "-" );
+                    }                    
                 }
             }
 

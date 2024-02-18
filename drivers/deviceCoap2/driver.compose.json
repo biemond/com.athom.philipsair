@@ -25,7 +25,8 @@
     "func_mode",
     "water_level",
     "timer_remaining",
-    "timer"
+    "timer",
+    "error"
   ],
   "platforms": [
     "local"

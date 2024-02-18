@@ -25,6 +25,10 @@ class deviceCoap extends AirDevice {
       this.pollAirCoapDevice();
     }, RETRY_INTERVAL);
 
+    if (this.hasCapability('error') === false) {
+      await this.addCapability('error');
+    }
+
     let flowTriggerFilterReplaceClean = this.homey.flow.getDeviceTriggerCard('filter_replace_clean');
     flowTriggerFilterReplaceClean.registerRunListener(async (args, state) => {
       // If true, this flow should run

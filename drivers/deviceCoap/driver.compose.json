@@ -20,7 +20,8 @@
     "child_lock",
     "fan_speed",
     "timer_remaining",
-    "timer"
+    "timer",
+    "error"
   ],
   "platforms": [
     "local"
