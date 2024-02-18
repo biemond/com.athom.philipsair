@@ -273,16 +273,14 @@ export class AirDevice extends Homey.Device {
                 }
             }
             if (json.hasOwnProperty('D0312A')) {
-                this.log(`Display: json["D0312A"] `);
+                this.log(`Display: ${json["D0312A"]}`);
                 if (this.hasCapability('display_mode')) {
-                    this.setCapabilityValue('display_mode', json["D0312A"]);
+                    this.setCapabilityValue('display_mode', json["D0312A"].toString() );
                 }
                 if (this.hasCapability('display_mode_ph')) {
-                    this.setCapabilityValue('display_mode_ph', json["D0312A"]);
+                    this.setCapabilityValue('display_mode_ph', json["D0312A"].toString() );
                 }
             }
-            
-
 
             if (json.hasOwnProperty('cl')) {
                 this.log(`Child lock: ${json.cl}`);
@@ -351,7 +349,7 @@ export class AirDevice extends Homey.Device {
                     if (this.hasCapability('error')) {
                         this.setCapabilityValue('error', err_str[json["D03240"]] );
                     }
-                } {
+                } else {
                     this.log(`Error: -`);
                     if (this.hasCapability('water_level')) {
                         if (json["D03240"] != 49408) {
