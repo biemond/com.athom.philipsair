@@ -15,7 +15,7 @@ class MyApp extends Homey.App {
     this.log('philipsair is running...');
     const coapDevices = ['deviceCoap', 'deviceCoap2']
     const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10', 'AC3059/10']
-    const newCoapDevices2 = ['AC0850/11', 'AC1715/11']
+    const newCoapDevices2 = ['AC0850/11', 'AC1715/11', 'AC1715/10']
     const newCoapDevices3 = ['AC3737/10', 'AMF765/10']
 
     let purifierModeAction = this.homey.flow.getActionCard('purifier_mode');
