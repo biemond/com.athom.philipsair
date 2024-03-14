@@ -1,61 +1,64 @@
 {
-  "1.0.26":{
+  "1.0.29": {
+    "en": "Supporting AC29xx family"
+  },
+  "1.0.26": {
     "en": "Supporting AC1715 with more"
-  },  
-  "1.0.25":{
+  },
+  "1.0.25": {
     "en": "Supporting AC3737 with more"
-  },   
-  "1.0.17":{
+  },
+  "1.0.17": {
     "en": "Supporting AC3737"
-  },   
-  "1.0.13":{
+  },
+  "1.0.13": {
     "en": "Adding more error codes"
-  },   
-  "1.0.11":{
+  },
+  "1.0.11": {
     "en": "Adding allergy sleeping purifier mode"
-  },     
-  "1.0.10":{
+  },
+  "1.0.10": {
     "en": "Supporting AC0850, AC1715"
-  },    
-  "1.0.4":{
+  },
+  "1.0.4": {
     "en": "fix stacktraces"
-  },  
-  "1.0.3":{
+  },
+  "1.0.3": {
     "en": "allow more device values, fix stacktraces"
   },
-  "1.0.2":{
+  "1.0.2": {
     "en": "purifier < 2019 added retry logic"
-  },   
-  "1.0.1":{
+  },
+  "1.0.1": {
     "en": "sdkv3 + water level trigger"
-  },    
-  "0.0.33":{
+  },
+  "0.0.33": {
     "en": "More purifier modes to support all devices"
-  },  
-  "0.0.31":{
+  },
+  "0.0.31": {
     "en": "better energy usage, on/off or change it yourself"
   },
-  "0.0.30":{
+  "0.0.30": {
     "en": "fixing AC4236 fan options"
   },
-  "0.0.29":{
+  "0.0.29": {
     "en": "flow action light_intensity"
   },
   "0.0.28": {
     "en": "flow actions func_mode_on and off for humidifier devices, flow titleFormatted updates"
-  },  
+  },
   "0.0.27": {
     "en": "fixed ddp_str issue on err on combi devices"
   },
   "0.0.26": {
     "en": "fixed action flows for 2020 coap combi devices, set manual 1st when changing speed on 2019 devices"
-  },  
+  },
   "0.0.25": {
     "en": "fixed flows + app actions when used with multiple air devices."
-  },  
+  },
   "0.0.24": {
     "en": "Added timer func. plus handle button lights when it is not supported, humidifier display mode"
-  },  
+  },
   "0.0.23": {
     "en": "Support the latest philips firmware (COAP) on late 2019 produced devices, multi device support"
   },
@@ -76,29 +79,32 @@
   },
   "0.0.16": {
     "en": "Purifier mode, Fan speed flow actions"
-  }, 
+  },
   "0.0.15": {
     "en": "On & Off flow actions"
-  }, 
+  },
   "0.0.14": {
     "en": "Better error handling when shared key exchange does not work"
-  }, 
+  },
   "0.0.13": {
     "en": "new device Purifier and Humidifier, restrict current Purifier device, new action Target humidity, mode, new sensor water_level, new icons, fixed advanced settings"
-  }, 
+  },
   "0.0.8": {
     "en": "new action onoff, refresh current state after a change, filter_replace_clean trigger"
-  }, 
+  },
   "0.0.7": {
     "en": "remove default ip address, new actions light_intensity, button_lights, purifier_mode, display_mode, child_lock, fan_speed"
-  },  
+  },
   "0.0.5": {
     "en": "fix measure_humidity and target_humidity, new trigger measure_humidity. to see target measure_humidity_changed reinstall device"
-  },  
+  },
   "0.0.4": {
     "en": "new trigger measure_pm25_changed, measure_iaql_changed, measure_tvoc_changed"
   },
   "0.0.3": {
     "en": "initial release"
+  },
+  "1.0.27": {
+    "en": "Supporting AC29xx family"
   }
 }
