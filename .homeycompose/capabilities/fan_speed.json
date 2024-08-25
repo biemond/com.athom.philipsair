@@ -41,7 +41,7 @@
         {
             "id": "s",
             "title": {
-                "en": "Silent, some devices"
+                "en": "Silent/Sleep, some devices"
             }
         },
         {
@@ -53,7 +53,7 @@
         {
             "id": "as",
             "title": {
-                "en": "Unknow"
+                "en": "Sleep allergy"
             }
         }        
     ]

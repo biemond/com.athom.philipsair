@@ -208,7 +208,7 @@ export class AirDevice extends Homey.Device {
                 }
             }
             if (json.hasOwnProperty('mode')) {
-                let mode_str = { 'P': 'auto', 'AG': 'auto', 'A': 'allergen', 'S': 'sleep', 'M': 'manual', 'B': 'bacteria', 'N': 'night' }
+                let mode_str = { 'P': 'auto', 'AG': 'auto', 'A': 'allergen', 'S': 'sleep', 'AS': 'sleep allergy', 'M': 'manual', 'B': 'bacteria', 'N': 'night' }
                 this.setCapabilityValue('purifier_mode', json.mode);
 
                 this.log(`Mode: ${mode_str[json.mode]}`)
@@ -217,7 +217,7 @@ export class AirDevice extends Homey.Device {
                     this.log(`Fan speed: auto`);
                 } else {
                     if (json.hasOwnProperty('om')) {
-                        let om_str = { '1': 'speed 1', '2': 'speed 2', '3': 'speed 3', 'P': 'AUTO', 'AG': 'AUTO', 's': 'silent', 't': 'turbo' }
+                        let om_str = { '1': 'speed 1', '2': 'speed 2', '3': 'speed 3', 'P': 'AUTO', 'AG': 'AUTO', 'as': 'sleep allergy', 's': 'silent/sleep', 't': 'turbo' }
                         this.setCapabilityValue('fan_speed', json.om);
                         this.log(`Fan speed: ${om_str[json.om]}`)
                     }
@@ -250,9 +250,13 @@ export class AirDevice extends Homey.Device {
                 this.log(`Buttons light: ${uil_str[json.uil]}`)
             }
             if (json.hasOwnProperty('D03-05')) {
-                let uil_str = { 100: '1', 0: '0' };
-                this.setCapabilityValue('button_lights', uil_str[json["D03-05"]]);
-                this.log(`Buttons light: ${uil_str[json["D03-05"]]}`)
+                if ( json["D03-05"] == 100 ) {
+                    this.setCapabilityValue('button_lights', '1');
+                    this.log(`Buttons light: 1`)
+                } else {
+                    this.setCapabilityValue('button_lights', '0');
+                    this.log(`Buttons light: 0`)                    
+                }
             }
 
             if (json.hasOwnProperty('ddp')) {

@@ -1,8 +1,11 @@
 {
+  "1.0.32": {
+    "en": "Supporting AC3033/14 with more"
+  },  
   "1.0.29": {
-    "en": "Supporting AC29xx family"
+    "en": "fixes"
   },
-  "1.0.26": {
+  "1.0.26": { 
     "en": "Supporting AC1715 with more"
   },
   "1.0.25": {

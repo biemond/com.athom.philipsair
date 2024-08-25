@@ -14,7 +14,7 @@ class MyApp extends Homey.App {
   async onInit() {
     this.log('philipsair is running...');
     const coapDevices = ['deviceCoap', 'deviceCoap2']
-    const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10', 'AC3059/10']
+    const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10','AC3033/14','AC3036/10','AC3039/10', 'AC3059/10']
     const newCoapDevices2 = ['AC0850/11', 'AC1715/11', 'AC1715/10']
     const newCoapDevices3 = ['AC3737/10', 'AMF765/10']
 
@@ -73,7 +73,7 @@ class MyApp extends Homey.App {
             args.device.setStateCoap("mode", "P", args.device.getSettings());
           }
         } else {
-          if (args.mode == "s" || args.mode == "t") {
+          if (args.mode == "s" || args.mode == "t" || args.mode == "as") {
             // turbo / sleep
             if (newCoapDevices.includes(model)) {
               args.device.setStateCoap("mode", args.mode.toUpperCase(), args.device.getSettings());

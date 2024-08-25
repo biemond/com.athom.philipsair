@@ -42,7 +42,7 @@
                 {
                     "id": "s",
                     "title": {
-                        "en": "Silent, some devices"
+                        "en": "Silent,sleep"
                     }
                 },
                 {
@@ -50,7 +50,13 @@
                     "title": {
                         "en": "Turbo, some devices"
                     }
-                }
+                },
+                {
+                    "id": "as",
+                    "title": {
+                        "en": "Sleep allergy"
+                    }
+                }                   
             ]
         }
     ]
