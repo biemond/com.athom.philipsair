@@ -56,7 +56,15 @@
           "hint": {
             "en": "Enter the IP address key of your Philips Air purifier"
           }
-        }
+        },
+        {
+          "id": "add_delay",
+          "type": "checkbox",
+          "value": false,
+          "label": {
+            "en": "Add 60 seconds delay"
+          }
+        }         
       ]
     }
   ],

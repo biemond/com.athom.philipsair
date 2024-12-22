@@ -150,8 +150,31 @@ export class AirDevice extends Homey.Device {
                     this.setCapabilityValue('measure_humidity', json["D03125"]);
                 }
             }
+
+            if (json.hasOwnProperty('D03130')) {
+                this.log(`beep: ${json["D03130"]}`);
+                // if (this.hasCapability('beep')) {
+                //     this.setCapabilityValue('beep', json["D03130"]);
+                // }
+            }            
             
 
+            if (json.hasOwnProperty('D0310A')) {
+                // 1: FanFunction.FAN,
+                // 1: FanFunction.CIRCULATION,
+                // 2: FanFunction.HEATING,
+                this.log(`heating: ${json["D0310A"]}`);
+                // if (this.hasCapability('beep')) {
+                //     this.setCapabilityValue('beep', json["D0310A"]);
+                // }
+            }               
+
+            if (json.hasOwnProperty('D0320F')) {
+                this.log(`swing: ${json["D0320F"]}`);
+                // if (this.hasCapability('swing')) {
+                //     this.setCapabilityValue('swing', json["D0320F"]);
+                // }
+            }  
 
             if (json.hasOwnProperty('rhset')) {
                 this.log(`Target humidity: ${json.rhset}`);
@@ -166,7 +189,22 @@ export class AirDevice extends Homey.Device {
                     this.setCapabilityValue('target_humidity', json["D03128"].toString());
                 }
             }
+
+
+            if (json.hasOwnProperty('D0310E')) {
+                this.log(`Target temperature: ${json["D0310E"]}`);
+                // if (this.hasCapability('target_temperature')) {
+                //     this.setCapabilityValue('target_temperature', json["D0310E"].toString());
+                // }
+            }       
+            if (json.hasOwnProperty('D0320F')) {
+                this.log(`Swing: ${json["D0320F"]}`);
+                // if (this.hasCapability('Swing')) {
+                //     this.setCapabilityValue('Swing', json["D0320F"].toString());
+                // }
+            }                    
             
+
 
             if (json.hasOwnProperty('iaql')) {
                 this.log(`Allergen index: ${json.iaql}`);
@@ -229,7 +267,7 @@ export class AirDevice extends Homey.Device {
             }            
 
             if (json.hasOwnProperty('D0310C')) {
-                let mode_str = { '0': 'AUTO', '1': '1','2': '2', '18': 't','17': 's' }
+                let mode_str = { '0': 'AUTO', '1': '1','2': '2', '18': 't','17': 's' , '3': '3','4': '4', '5': '5','6': '6', '7': '7','8': '8', '9': '9','10': '10'}
                 this.setCapabilityValue('fan_speed', mode_str[json["D0310C"]]);
             }       
 
@@ -542,11 +580,13 @@ export class AirDevice extends Homey.Device {
         }
     }
 
+
     pollAirCoapDevice() {
         this.log("pollAirCoapDevice");
         let settings  = this.getSettings();
         this.log(settings);
-        this.log(JSON.stringify(settings));
+
+        // this.log(JSON.stringify(settings));
         this.log("getCurrentStatusDataCoap");
         philipsairCoap.getCurrentStatusDataCoap(settings).then(data => {
             if (data != null) {
@@ -562,7 +602,7 @@ export class AirDevice extends Homey.Device {
         this.log("pollAirDevice");
         let settings  = this.getSettings();
         this.log(settings);
-        this.log(JSON.stringify(settings));
+        // this.log(JSON.stringify(settings));
         let deviceSecret = this.getStoreValue('secretKey' + settings.id);
         // this.log(this);
         this.log(deviceSecret);

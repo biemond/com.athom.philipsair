@@ -1,4 +1,13 @@
 {
+  "1.0.40": {
+    "en": "Supporting AC4221/11,AC4220/12"
+  },    
+  "1.0.38": {
+    "en": "Supporting AC4236/14,AMF870/15 and adding child lock flow action"
+  },  
+  "1.0.36": {
+    "en": "Supporting multiple coap devices"
+  },    
   "1.0.32": {
     "en": "Supporting AC3033/14 with more"
   },  

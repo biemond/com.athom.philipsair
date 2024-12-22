@@ -1,0 +1,16 @@
+{
+    "title": {
+        "en": "Child lock"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+        },
+        {
+            "name": "mode",
+            "type": "checkbox"          
+        }
+    ]
+}

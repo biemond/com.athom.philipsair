@@ -49,7 +49,7 @@ class deviceCoap2 extends AirDevice {
     
     this.registerCapabilityListener('light_intensity', async (value) => {
       let model = this.getCapabilityValue('product')      
-      const newCoapDevices2 = ['AC3737/10','AMF765/10']       
+      const newCoapDevices2 = ['AC3737/10','AMF765/10','AC3421/13','AC4236/14']       
       if (newCoapDevices2.includes(model)) {
         let values2
         if (value == "0") {
@@ -78,7 +78,7 @@ class deviceCoap2 extends AirDevice {
 
     this.registerCapabilityListener('target_humidity', async (value) => {
       let model = this.getCapabilityValue('product')
-      const newCoapDevices2 = ['AC3737/10']
+      const newCoapDevices2 = ['AC3737/10','AC3421/13']  
       if (newCoapDevices2.includes(model)) {
         this.setStateCoap("D03128",  Number(value), this.getSettings());
       } else {
@@ -100,7 +100,7 @@ class deviceCoap2 extends AirDevice {
 
     this.registerCapabilityListener('display_mode_ph', async (value) => {
       let model = this.getCapabilityValue('product')
-      const newCoapDevices2 =  ['AC3737/10','AMF765/10']
+      const newCoapDevices2 =  ['AC3737/10','AMF765/10','AC3421/13','AC4236/14','AMF870/15']  
       if (newCoapDevices2.includes(model)) {
         this.setStateCoap("D0312A", Number(value), this.getSettings());   
       } else {     
@@ -112,7 +112,7 @@ class deviceCoap2 extends AirDevice {
     this.registerCapabilityListener('onoff', async (value) => {
       let values;
       let model = this.getCapabilityValue('product')
-      const newCoapDevices2 = ['AC3737/10']
+      const newCoapDevices2 = ['AC3737/10','AC3421/13','AC4236/14','AMF870/15']  
       if (newCoapDevices2.includes(model)) {
         if (value == true) {
           values = 1;
@@ -133,7 +133,7 @@ class deviceCoap2 extends AirDevice {
 
     this.registerCapabilityListener('child_lock', async (value) => {
       let model = this.getCapabilityValue('product')      
-      const newCoapDevices2 = ['AC3737/10','AMF765/10']       
+      const newCoapDevices2 = ['AC3737/10','AMF765/10','AC3421/13','AC4236/14','AMF870/15']        
       if (newCoapDevices2.includes(model)) {
         let values;
         if (value == true) {
@@ -152,7 +152,7 @@ class deviceCoap2 extends AirDevice {
     this.registerCapabilityListener('fan_speed', async (value) => {
       let model = this.getCapabilityValue('product')
       const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10','AC3033/14','AC3036/10','AC3039/10', 'AC3059/10', 'AC2936/13']
-      const newCoapDevices2 = ['AC3737/10','AMF765/10']     
+      const newCoapDevices2 = ['AC3737/10','AMF765/10','AC3421/13','AC4236/14','AMF870/15']       
 
       if (newCoapDevices2.includes(model)) {
         if (value == "1") {
@@ -207,7 +207,7 @@ class deviceCoap2 extends AirDevice {
 
     this.registerCapabilityListener('timer', async (value) => {
       let model = this.getCapabilityValue('product')      
-      const newCoapDevices2 = ['AC3737/10','AMF765/10']       
+      const newCoapDevices2 = ['AC3737/10','AMF765/10','AC3421/13','AC4236/14','AMF870/15']        
       if (newCoapDevices2.includes(model)) {
         this.setStateCoap("D03110", Number(value), this.getSettings());
       } else {  

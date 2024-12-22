@@ -5,7 +5,7 @@
   "dependencies": {
     "aes-js": "^3.1.2",
     "big-integer": "^1.6.51",
-    "node-coap-client": "^2.0.2",
+    "node-coap-client": "^2.1.0",
     "pkcs7": "^1.0.4"
   },
   "scripts": {

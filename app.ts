@@ -14,9 +14,9 @@ class MyApp extends Homey.App {
   async onInit() {
     this.log('philipsair is running...');
     const coapDevices = ['deviceCoap', 'deviceCoap2']
-    const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10','AC3033/14','AC3036/10','AC3039/10', 'AC3059/10']
+    const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10','AC3033/14','AC3036/10','AC3039/10', 'AC3059/10','AC4236/14']
     const newCoapDevices2 = ['AC0850/11', 'AC1715/11', 'AC1715/10']
-    const newCoapDevices3 = ['AC3737/10', 'AMF765/10']
+    const newCoapDevices3 = ['AC3737/10', 'AMF765/10','AC3421/13','AMF870/15','AC4221/11','AC4220/12']  
 
     let purifierModeAction = this.homey.flow.getActionCard('purifier_mode');
     purifierModeAction.registerRunListener((args, state) => {
@@ -28,6 +28,45 @@ class MyApp extends Homey.App {
       }
       return Promise.resolve(true);
     })
+
+    let childlockAction = this.homey.flow.getActionCard('child_lock');
+    childlockAction.registerRunListener((args, state) => {
+      if (coapDevices.includes(args.device.constructor.name)) {
+        let model = args.device.getCapabilityValue('product')
+        if (newCoapDevices3.includes(model)) {
+          let values;
+          if (args.mode == true) {
+            values = 1;
+          } else {
+            values = 0;
+          }
+          args.device.setStateCoap("D03103", values, args.device.getSettings());
+        } else {
+          args.device.setStateCoap("cl", args.mode, args.device.getSettings());
+        }
+      } else {
+        let values = { "cl": args.mode }
+        args.device.setState(JSON.stringify(values), args.device.getSettings());
+      }
+      return Promise.resolve(true);
+    })
+
+    // this.registerCapabilityListener('child_lock', async (value) => {
+    //   let model = this.getCapabilityValue('product')      
+    //   const newCoapDevices2 = ['AC3737/10','AMF765/10','AC3421/13']       
+    //   if (newCoapDevices2.includes(model)) {
+    //     let values;
+    //     if (value == true) {
+    //       values = 1;
+    //     } else {
+    //       values = 0;
+    //     }
+    //     this.setStateCoap("D03103", values, this.getSettings());
+    //   }  else {  
+    //     this.setStateCoap("cl", value, this.getSettings());
+    //   }
+    //   return value;
+    // });
 
     let fanSpeedAction = this.homey.flow.getActionCard('fan_speed');
     fanSpeedAction.registerRunListener((args, state) => {
