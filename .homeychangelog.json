@@ -1,4 +1,7 @@
 {
+  "1.0.41": {
+    "en": ">2020 devices will do observe instead of polling, when there is an update you get it right away"
+  },     
   "1.0.40": {
     "en": "Supporting AC4221/11,AC4220/12"
   },    

@@ -4,12 +4,32 @@ const philipsair = require('./philipsair.js');
 const philipsairCoap = require('./philipsairCoap.js');
 
 const MINUTE = 60000;
+let coap;  
+let timeoutId;  
+
 
 Date.prototype.timeNow = function () {
     return ((this.getHours() < 10) ? "0" : "") + ((this.getHours() > 12) ? (this.getHours() - 12) : this.getHours()) + ":" + ((this.getMinutes() < 10) ? "0" : "") + this.getMinutes() + " " + ((this.getHours() > 12) ? ('PM') : 'AM');
 };
 
 export class AirDevice extends Homey.Device {
+
+    
+    setClient(client) {
+        this.coap = client;  
+    } 
+
+    getClient() {
+        return this.coap;  
+    } 
+
+    setTimeoutId(timeoutId){
+        this.timeoutId = timeoutId;  
+    }
+
+    getTimeoutId() {
+        return this.timeoutId;  
+    }
 
     // flow triggers
     flowTriggerFilterReplaceClean(tokens, state) {
@@ -42,15 +62,27 @@ export class AirDevice extends Homey.Device {
 
     setStateCoap(key, value, settings) {
         this.log('setStateCoap: ' + key + ":" + value);
-        // let settings = this.getSettings();
         this.log(settings);
-        philipsairCoap.setValueAirDataCoap(key, value, settings).then(data => {
+        philipsairCoap.setValueAirDataCoap(key, value, settings, this).then(data => {
             this.log("-setValueCoapAirData-begin-");
             this.log(data);
-            //   this.pollAirCoapDevice(settings);
             this.log("-setValueCoapAirData-end-");
             return value
         })
+    }
+
+    observerAirCoapDevice() {
+        this.log("observerAirCoapDevice");
+        let settings  = this.getSettings();
+        this.log(settings);
+        this.log("getCurrentStatusDataCoap");
+        philipsairCoap.getCurrentStatusDataCoap(settings, this).then(data => {
+            this.log("observerAirCoapDevice timeout");
+            this.observerAirCoapDevice();
+        }).catch(function (error) { 
+            console.log(error); 
+            this.observerAirCoapDevice();
+        });
     }
 
     conditionScoreIaqlToString(index) {
@@ -578,24 +610,6 @@ export class AirDevice extends Homey.Device {
             }                        
             
         }
-    }
-
-
-    pollAirCoapDevice() {
-        this.log("pollAirCoapDevice");
-        let settings  = this.getSettings();
-        this.log(settings);
-
-        // this.log(JSON.stringify(settings));
-        this.log("getCurrentStatusDataCoap");
-        philipsairCoap.getCurrentStatusDataCoap(settings).then(data => {
-            if (data != null) {
-                this.log("pollAirCoapDevice: " + JSON.stringify(data));
-                this.handleDeviceStatus(data.status, settings);
-            } else {
-                this.log("pollAirCoapDevice went wrong");
-            }
-        })
     }
 
     pollAirDevice() {

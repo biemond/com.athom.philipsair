@@ -14,8 +14,8 @@ For adding the device you need to provide Philips device ip address plus Homey h
 
 When there is a powerloss or the purifier was restarted then also the device need to be re-added in the homey app, this is because the shared key between the purifier and homey is added only once.
 
-## Refresh trigger
-Every 2 minutes this app will poll for the latest purifer status.
+## Refresh by observing
+For > 2020, It will observe or subscribe to all the purifer status. (no polling) 
 
 ### Actions
 - onoff, Power
@@ -68,7 +68,3 @@ For more info see the following links
 - https://github.com/rgerganov/py-air-control
 - https://github.com/betaboon/philips-airpurifier-coap
 
-
-## Testing
-node test6.js
-DEBUG=node-coap-client node testCoap.js

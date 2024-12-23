@@ -4,8 +4,8 @@ function sleep(time: number) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-const RETRY_INTERVAL = 120 * 1000;
-let timer: NodeJS.Timer;
+// const RETRY_INTERVAL = 120 * 1000;
+// let timer: NodeJS.Timer;
 
 class deviceCoap extends AirDevice {
 
@@ -18,12 +18,7 @@ class deviceCoap extends AirDevice {
     this.carbonFilterTriggered = false;
     this.hepaFilterTriggered = false;
 
-    this.pollAirCoapDevice();
-
-    timer = this.homey.setInterval(() => {
-      // poll device state from invertor
-      this.pollAirCoapDevice();
-    }, RETRY_INTERVAL);
+    this.observerAirCoapDevice();
 
     if (this.hasCapability('error') === false) {
       await this.addCapability('error');
@@ -270,7 +265,7 @@ class deviceCoap extends AirDevice {
    */
   async onDeleted() {
     this.log('deviceCoap has been deleted');
-    this.homey.clearInterval(timer);
+    // this.homey.clearInterval(timer);
   }
 
 }

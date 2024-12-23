@@ -79,10 +79,10 @@ const { resolve } = require("path");
 
     // active functions()  -------------------------------------  active functions()  --------------------------------------------
 
-    philipsairCoap.getCurrentStatusDataCoap = function getCurrentStatusDataCoap(settings) {
+    philipsairCoap.getCurrentStatusDataCoap = function getCurrentStatusDataCoap(settings, device) {
         console.log("settings " + JSON.stringify(settings));
         return new Promise(async (resolve, reject) => {
-            await getCurrentDataCoap(settings, (error, jsonobj) => {
+            await getCurrentDataCoap(settings, device, (error, jsonobj) => {
                 if (jsonobj) {
                     console.log('getCurrentDataCoap res ', jsonobj)
                     resolve(jsonobj);
@@ -94,12 +94,12 @@ const { resolve } = require("path");
         }).catch(reason => console.log('1: ' + reason));
     }
 
-    philipsairCoap.setValueAirDataCoap = function setValueAirDataCoap(key, value, settings) {
+    philipsairCoap.setValueAirDataCoap = function setValueAirDataCoap(key, value, settings, device) {
         console.log("key " + key)
         console.log("value " + value)
         console.log("settings " + JSON.stringify(settings));
         return new Promise((resolve, reject) => {
-            setValueDataCoap(key, value, settings, (error, jsonobj) => {
+            setValueDataCoap(key, value, settings, device, (error, jsonobj) => {
                 if (jsonobj) {
                     resolve(jsonobj);
                 } else {
@@ -114,8 +114,12 @@ const { resolve } = require("path");
         return new Promise((resolve) => setTimeout(resolve, time));
     }
 
-    
-    async function getCurrentDataCoap(settings, callback) {
+    let newTimeout = (handler, delay) => {
+        let id = setTimeout(handler, delay), clear = clearTimeout.bind(null, id);
+        return {id, clear, trigger: () => (clear(), handler())};
+    };
+
+    async function getCurrentDataCoap(settings, device, callback) {
 
         if (settings.add_delay == true){
             console.log("add 60 sec delay");
@@ -127,12 +131,19 @@ const { resolve } = require("path");
         console.log("getCurrentDataCoap " + settings.ipkey);
         let target = new origin.Origin('coap:', settings.ipkey, 5683);
         let targetString = 'coap://' + settings.ipkey + ':5683';
-        let coap = coapclass.CoapClient;
+
+        let coap;
+        if (device.getClient()) {
+            coap = device.getClient();
+            coap.reset(target);
+        } else {
+            coap = coapclass.CoapClient;
+        }
 
         let jsonStatus = null;
 
         coap.request(targetString + '/sys/dev/sync', 'post',
-            Buffer.from(encodeCounter(statusCounter, 8)), { keepAlive: false })
+            Buffer.from(encodeCounter(statusCounter, 8)), { keepAlive: true })
             .then(response => {
                 if (response.payload) {
                     const payload = response.payload.toString('utf-8');
@@ -140,18 +151,22 @@ const { resolve } = require("path");
                     // console.log(controlCounter);
                 } else {
                     let error = new Error('No response received for sync call. Cannot proceed, is coap://' + settings.ipkey + ':5683 up');
+                    // coap.reset(target);
                     return callback(error, null);
                     // throw new Error('No response received for sync call. Cannot proceed, is coap://'+settings.ipkey+':5683 up');
                 }
             }).catch(err => {
                 console.log(err);
                 let error = new Error('catch: No response received for sync call. Cannot proceed, is coap://' + settings.ipkey + ':5683 up');
+                coap.reset(target);
                 return callback(error, null);
                 // throw new Error('No response received for sync call. Cannot proceed, is coap://'+settings.ipkey+':5683 up');
             });
 
         const connectResult = await coap.tryToConnect(target);
+       
         console.log("tryToConnect " + connectResult);
+        device.setClient(coap);
 
         await coap.observe(targetString + '/sys/dev/status', 'get', resp => {
             if (resp.payload) {
@@ -194,45 +209,50 @@ const { resolve } = require("path");
                 let dataText = aesjs.utils.utf8.fromBytes(data);
                 jsonStatus = clean(dataText).state.reported;
                 console.log(jsonStatus);
-                console.log('-------stopObserving------------')
-                coap.stopObserving('coap://' + settings.ipkey + ':5683/sys/dev/status')
-                console.log('---------end----------');
+                device.handleDeviceStatus(jsonStatus, settings);
             }
 
         }, undefined, {
             confirmable: false, // we expect no answer here in the typical coap way.
-            retransmit: true
+            retransmit: false
         }).then(() => {
             // TODO: nothing?
-        }).catch(reason => console.log(reason));
+        }).catch(function (error) { 
+            console.log(error); 
+            console.log('observe stopped'); 
+            
+        });
 
-        // sleep(50000).then(() => {
-        //     console.log('--------reset-----------');
-        //     coap.stopObserving(targetString + '/sys/dev/status');
-        //     coap.reset(target);
-        //     console.log('---------end----------');
-        // });
-
-        setTimeout(function () {
+        let timeoutId = newTimeout(function () {
             let response = {
                 status: jsonStatus
             };
+            coap.stopObserving('coap://'  + settings.ipkey + ':5683/sys/dev/status');
+            
+            console.log('---------timeout----------');
             if (jsonStatus != null) {
-                // coap.reset(target);
                 return callback(null, response);
             } else {
-                coap.reset(target);
                 return callback(new Error('No response received'), null);
-            }
-        }, 53000)
-    }
+            }    
+        }, 600000);
 
-    async function setValueDataCoap(key, value, settings, callback) {
+
+        device.setTimeoutId(timeoutId);
+    }
+    
+    async function setValueDataCoap(key, value, settings, device, callback) {
         console.log("setValueDataCoap ");
         let target = new origin.Origin('coap:', settings.ipkey, 5683);
         let targetString = 'coap://' + settings.ipkey + ':5683';
         let jsonStatus = null;
-        let coap = coapclass.CoapClient;
+
+        let coap = device.getClient();
+
+        await coap.stopObserving('coap://'  + settings.ipkey + ':5683/sys/dev/status');
+        
+        // await coap.reset(target);
+        coap = coapclass.CoapClient;
 
         console.log('-------------------')
         coap.request(targetString + '/sys/dev/sync', 'post',
@@ -257,7 +277,7 @@ const { resolve } = require("path");
         await coap.tryToConnect(target);
         console.log('tryToConnect ');
 
-        sleep(1000).then(() => {
+        sleep(2000).then(() => {
             console.log('-------------------')
 
             let message = {
@@ -294,38 +314,36 @@ const { resolve } = require("path");
             const hash = Buffer.from(toSha256(result)).toString('hex').toUpperCase();
 
             result = encodedCounter + encodedMessage + hash;
-
+            console.log(targetString);
             coap.request(targetString + '/sys/dev/control', 'post',
                 Buffer.from(result), { keepAlive: false })
                 .then(response => {
-                    // console.log(response);
+                    console.log(response);
                     if (response.payload) {
                         const payload = response.payload.toString('utf-8');
                         console.log(payload);
                         jsonStatus = payload
-                    } else {
-                        // throw new Error('No response received for call. Cannot proceed');
-                        let error = new Error('No response received for call. Cannot proceed');
-                        return callback(error, null);
-                    }
+                    } 
                 }).catch(err => {
                     console.log(err);
                 });
             console.log('-------------------');
         });
 
-        sleep(2000).then(() => {
+        sleep(4000).then(() => {
             console.log('-------------------');
-            coap.reset(target);
             let response = {
                 status: jsonStatus
             };
+            // coap.reset(target);
+            console.log("intervalId: ", device.getTimeoutId());
+            device.getTimeoutId().trigger();
+            // clearTimeout(device.getTimeoutId());
             if (jsonStatus != null) {
                 return callback(null, response);
             } else {
                 return callback(new Error('No response received'), null);
             }
-            console.log('-------------------');
         });
     }
 })();
