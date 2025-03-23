@@ -1,4 +1,7 @@
 {
+  "1.0.43": {
+    "en": "more devices added for control"
+  },     
   "1.0.42": {
     "en": ">2020 devices will do observe instead of polling, when there is an update you get it right away"
   },     
