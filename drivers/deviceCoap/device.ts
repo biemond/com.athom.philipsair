@@ -160,52 +160,52 @@ class deviceCoap extends AirDevice {
 
       if (newCoapDevices3.includes(model)) {
         if (value == "1") {
-          this.setStateCoap("D0310C", 1, this.getSettings());
+          await this.setStateCoap("D0310C", 1, this.getSettings());
         }
         if (value == "2") {
-          this.setStateCoap("D0310C", 2, this.getSettings());
+          await this.setStateCoap("D0310C", 2, this.getSettings());
         }
         if (value == "s") {
-          this.setStateCoap("D0310C", 17, this.getSettings());
+          await this.setStateCoap("D0310C", 17, this.getSettings());
         }
         if (value == "AUTO") {
-          this.setStateCoap("D0310C", 0, this.getSettings());
+          await this.setStateCoap("D0310C", 0, this.getSettings());
         }
         if (value == "t") {
-          this.setStateCoap("D0310C", 18, this.getSettings());
+          await this.setStateCoap("D0310C", 18, this.getSettings());
         }           
       } else if (newCoapDevices2.includes(model)) {
         if (value == "AUTO") {
-          this.setStateCoap("D03-12", 'Auto General', this.getSettings());
+          await this.setStateCoap("D03-12", 'Auto General', this.getSettings());
         }
         if (value == "t") {
-          this.setStateCoap("D03-12", 'Turbo', this.getSettings());
+          await this.setStateCoap("D03-12", 'Turbo', this.getSettings());
         }  
         if (value == "s") {
-          this.setStateCoap("D03-12", 'Sleep', this.getSettings());
+          await this.setStateCoap("D03-12", 'Sleep', this.getSettings());
         }          
       } else {
 
         if (value == "AUTO") {
           // auto
           if (newCoapDevices.includes(model)) {
-            this.setStateCoap("mode", "AG", this.getSettings());
+            await this.setStateCoap("mode", "AG", this.getSettings());
           } else {
-            this.setStateCoap("mode", "P", this.getSettings());
+            await this.setStateCoap("mode", "P", this.getSettings());
           }
         } else {
           if (value == "s" || value == "t" || value == "as") {
             // turbo / sleep
             if (newCoapDevices.includes(model)) {
               await this.setStateCoap("mode", value.toUpperCase(), this.getSettings());
-              await   this.setStateCoap("om", value, this.getSettings());
+              await this.setStateCoap("om", value, this.getSettings());
             } else {
               await this.setStateCoap("mode", "M", this.getSettings());
-              await  this.setStateCoap("om", value, this.getSettings());
+              await this.setStateCoap("om", value, this.getSettings());
             }
           } else {
             await this.setStateCoap("mode", "M", this.getSettings());
-            await  this.setStateCoap("om", value, this.getSettings());
+            await this.setStateCoap("om", value, this.getSettings());
           }
         }
       }
