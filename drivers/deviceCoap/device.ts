@@ -197,21 +197,15 @@ class deviceCoap extends AirDevice {
           if (value == "s" || value == "t" || value == "as") {
             // turbo / sleep
             if (newCoapDevices.includes(model)) {
-              this.setStateCoap("mode", value.toUpperCase(), this.getSettings());
-              sleep(2000).then(() => {
-                this.setStateCoap("om", value, this.getSettings());
-              });
+              await this.setStateCoap("mode", value.toUpperCase(), this.getSettings());
+              await   this.setStateCoap("om", value, this.getSettings());
             } else {
-              this.setStateCoap("mode", "M", this.getSettings());
-              sleep(2000).then(() => {
-                this.setStateCoap("om", value, this.getSettings());
-              });
+              await this.setStateCoap("mode", "M", this.getSettings());
+              await  this.setStateCoap("om", value, this.getSettings());
             }
           } else {
-            this.setStateCoap("mode", "M", this.getSettings());
-            sleep(2000).then(() => {
-              this.setStateCoap("om", value, this.getSettings());
-            });
+            await this.setStateCoap("mode", "M", this.getSettings());
+            await  this.setStateCoap("om", value, this.getSettings());
           }
         }
       }

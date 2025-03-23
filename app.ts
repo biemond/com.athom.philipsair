@@ -69,7 +69,7 @@ class MyApp extends Homey.App {
     // });
 
     let fanSpeedAction = this.homey.flow.getActionCard('fan_speed');
-    fanSpeedAction.registerRunListener((args, state) => {
+    fanSpeedAction.registerRunListener(async (args, state) => {
       this.log('---');
       this.log(args.device.constructor.name);
       this.log(args.device.getCapabilityValue('product'));
@@ -115,21 +115,15 @@ class MyApp extends Homey.App {
           if (args.mode == "s" || args.mode == "t" || args.mode == "as") {
             // turbo / sleep
             if (newCoapDevices.includes(model)) {
-              args.device.setStateCoap("mode", args.mode.toUpperCase(), args.device.getSettings());
-              sleep(2000).then(() => {
-                args.device.setStateCoap("om", args.mode, args.device.getSettings());
-              });
+              await args.device.setStateCoap("mode", args.mode.toUpperCase(), args.device.getSettings());
+              await args.device.setStateCoap("om", args.mode, args.device.getSettings());
             } else {
-              args.device.setStateCoap("mode", "M", args.device.getSettings());
-              sleep(2000).then(() => {
-                args.device.setStateCoap("om", args.mode, args.device.getSettings());
-              });
+              await args.device.setStateCoap("mode", "M", args.device.getSettings());
+              await args.device.setStateCoap("om", args.mode, args.device.getSettings());
             }
           } else {
-            args.device.setStateCoap("mode", "M", args.device.getSettings());
-            sleep(2000).then(() => {
-              args.device.setStateCoap("om", args.mode, args.device.getSettings());
-            });
+            await args.device.setStateCoap("mode", "M", args.device.getSettings());
+            await args.device.setStateCoap("om", args.mode, args.device.getSettings());
           }
         }
       } else {

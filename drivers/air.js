@@ -60,7 +60,7 @@ export class AirDevice extends Homey.Device {
         })
     }
 
-    setStateCoap(key, value, settings) {
+    async setStateCoap(key, value, settings) {
         this.log('setStateCoap: ' + key + ":" + value);
         this.log(settings);
         philipsairCoap.setValueAirDataCoap(key, value, settings, this).then(data => {
