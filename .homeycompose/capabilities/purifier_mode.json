@@ -67,6 +67,12 @@
             "title": {
                 "en": "Bacteria & Virus mode"
             }
-        }
+        },
+        {
+            "id": "F",
+            "title": {
+                "en": "F, some devices"
+            }
+        }        
     ]
 }
