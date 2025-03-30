@@ -55,6 +55,48 @@
             "title": {
                 "en": "Sleep allergy"
             }
-        }        
+        },
+        {
+            "id": "4",
+            "title": {
+                "en": "Speed 4, some devices"
+            }
+        },                
+        {
+            "id": "5",
+            "title": {
+                "en": "Speed 5, some devices"
+            }
+        }, 
+        {
+            "id": "6",
+            "title": {
+                "en": "Speed 6, some devices"
+            }
+        },  
+        {
+            "id": "7",
+            "title": {
+                "en": "Speed 7, some devices"
+            }
+        },                
+        {
+            "id": "8",
+            "title": {
+                "en": "Speed 8, some devices"
+            }
+        }, 
+        {
+            "id": "9",
+            "title": {
+                "en": "Speed 9, some devices"
+            }
+        },
+        {
+            "id": "10",
+            "title": {
+                "en": "Speed 9, some devices"
+            }
+        }                                  
     ]
 }

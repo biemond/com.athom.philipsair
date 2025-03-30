@@ -4,8 +4,8 @@ const philipsair = require('./philipsair.js');
 const philipsairCoap = require('./philipsairCoap.js');
 
 const MINUTE = 60000;
-let coap;  
-let timeoutId;  
+let coap;
+let timeoutId;
 
 
 Date.prototype.timeNow = function () {
@@ -14,21 +14,21 @@ Date.prototype.timeNow = function () {
 
 export class AirDevice extends Homey.Device {
 
-    
+
     setClient(client) {
-        this.coap = client;  
-    } 
+        this.coap = client;
+    }
 
     getClient() {
-        return this.coap;  
-    } 
+        return this.coap;
+    }
 
-    setTimeoutId(timeoutId){
-        this.timeoutId = timeoutId;  
+    setTimeoutId(timeoutId) {
+        this.timeoutId = timeoutId;
     }
 
     getTimeoutId() {
-        return this.timeoutId;  
+        return this.timeoutId;
     }
 
     // flow triggers
@@ -73,14 +73,14 @@ export class AirDevice extends Homey.Device {
 
     observerAirCoapDevice() {
         this.log("observerAirCoapDevice");
-        let settings  = this.getSettings();
+        let settings = this.getSettings();
         this.log(settings);
         this.log("getCurrentStatusDataCoap");
         philipsairCoap.getCurrentStatusDataCoap(settings, this).then(data => {
             this.log("observerAirCoapDevice timeout");
             this.observerAirCoapDevice();
-        }).catch(function (error) { 
-            console.log(error); 
+        }).catch(function (error) {
+            console.log(error);
             this.observerAirCoapDevice();
         });
     }
@@ -126,28 +126,28 @@ export class AirDevice extends Homey.Device {
                 this.log(`Power: ${json.pwr == '1' ? 'ON' : "OFF"}`)
             }
             if (json.hasOwnProperty('D03-02')) {
-                if (json["D03-02"] == 'ON') { 
+                if (json["D03-02"] == 'ON') {
                     this.setCapabilityValue('onoff', true);
                 } else {
                     this.setCapabilityValue('onoff', false);
                 }
-                this.log(`Power: ${json["D03-02"]== 'ON' ? 'ON' : "OFF"}`)
+                this.log(`Power: ${json["D03-02"] == 'ON' ? 'ON' : "OFF"}`)
             }
             if (json.hasOwnProperty("D03102")) {
-                if (json["D03102"] == 1) { 
+                if (json["D03102"] == 1) {
                     this.setCapabilityValue('onoff', true);
                 } else {
                     this.setCapabilityValue('onoff', false);
                 }
-                this.log(`Power: ${json["D03102"]== 1 ? 'ON' : "OFF"}`)
+                this.log(`Power: ${json["D03102"] == 1 ? 'ON' : "OFF"}`)
             }
-            
+
 
             if (json.hasOwnProperty('pm25')) {
                 this.log(`PM25: ${json.pm25}`);
                 this.setCapabilityValue('measure_pm25', json.pm25);
             }
-            
+
             if (json.hasOwnProperty('D03-33')) {
                 this.log(`PM25: ${json["D03-33"]}`);
                 this.setCapabilityValue('measure_pm25', json["D03-33"]);
@@ -188,8 +188,8 @@ export class AirDevice extends Homey.Device {
                 // if (this.hasCapability('beep')) {
                 //     this.setCapabilityValue('beep', json["D03130"]);
                 // }
-            }            
-            
+            }
+
 
             if (json.hasOwnProperty('D0310A')) {
                 // 1: FanFunction.FAN,
@@ -199,14 +199,14 @@ export class AirDevice extends Homey.Device {
                 // if (this.hasCapability('beep')) {
                 //     this.setCapabilityValue('beep', json["D0310A"]);
                 // }
-            }               
+            }
 
             if (json.hasOwnProperty('D0320F')) {
                 this.log(`swing: ${json["D0320F"]}`);
                 // if (this.hasCapability('swing')) {
                 //     this.setCapabilityValue('swing', json["D0320F"]);
                 // }
-            }  
+            }
 
             if (json.hasOwnProperty('rhset')) {
                 this.log(`Target humidity: ${json.rhset}`);
@@ -214,7 +214,7 @@ export class AirDevice extends Homey.Device {
                     this.setCapabilityValue('target_humidity', json.rhset.toString());
                 }
             }
-            
+
             if (json.hasOwnProperty('D03128')) {
                 this.log(`Target humidity: ${json["D03128"]}`);
                 if (this.hasCapability('target_humidity')) {
@@ -228,14 +228,14 @@ export class AirDevice extends Homey.Device {
                 // if (this.hasCapability('target_temperature')) {
                 //     this.setCapabilityValue('target_temperature', json["D0310E"].toString());
                 // }
-            }       
+            }
             if (json.hasOwnProperty('D0320F')) {
                 this.log(`Swing: ${json["D0320F"]}`);
                 // if (this.hasCapability('Swing')) {
                 //     this.setCapabilityValue('Swing', json["D0320F"].toString());
                 // }
-            }                    
-            
+            }
+
 
 
             if (json.hasOwnProperty('iaql')) {
@@ -261,10 +261,10 @@ export class AirDevice extends Homey.Device {
             if (json.hasOwnProperty('D03224')) {
                 this.log(`Temperature: ${json["D03224"]}`);
                 if (this.hasCapability('measure_temperature')) {
-                    this.setCapabilityValue('measure_temperature', json["D03224"]/10);
+                    this.setCapabilityValue('measure_temperature', json["D03224"] / 10);
                 }
             }
-            
+
 
             if (json.hasOwnProperty('func')) {
                 // P or PH
@@ -277,31 +277,41 @@ export class AirDevice extends Homey.Device {
                     }
                 }
             }
-            if (json.hasOwnProperty('mode')) {
-                let mode_str = { 'P': 'auto', 'AG': 'auto', 'A': 'allergen', 'S': 'sleep', 'AS': 'sleep allergy', 'M': 'manual', 'B': 'bacteria', 'N': 'night' }
-                this.setCapabilityValue('purifier_mode', json.mode);
 
-                this.log(`Mode: ${mode_str[json.mode]}`)
-                if (json.mode == 'P' || json.mode == 'AG') {
-                    this.setCapabilityValue('fan_speed', 'AUTO');
-                    this.log(`Fan speed: auto`);
-                } else {
-                    if (json.hasOwnProperty('om')) {
-                        let om_str = { '1': 'speed 1', '2': 'speed 2', '3': 'speed 3', 'P': 'AUTO', 'AG': 'AUTO', 'as': 'sleep allergy', 's': 'silent/sleep', 't': 'turbo' }
-                        this.setCapabilityValue('fan_speed', json.om);
-                        this.log(`Fan speed: ${om_str[json.om]}`)
+            try {
+
+                if (json.hasOwnProperty('mode')) {
+                    let mode_str = { 'P': 'auto', 'AG': 'auto', 'A': 'allergen', 'S': 'sleep', 'AS': 'sleep allergy', 'M': 'manual', 'B': 'bacteria', 'N': 'night' }
+                    this.setCapabilityValue('purifier_mode', json.mode);
+
+                    this.log(`Mode: ${mode_str[json.mode]}`)
+                    if (json.mode == 'P' || json.mode == 'AG') {
+                        this.setCapabilityValue('fan_speed', 'AUTO');
+                        this.log(`Fan speed: auto`);
+                    } else {
+                        if (json.hasOwnProperty('om')) {
+                            let om_str = { '1': 'speed 1', '2': 'speed 2', '3': 'speed 3', 'P': 'AUTO', 'AG': 'AUTO', 'as': 'sleep allergy', 's': 'silent/sleep', 't': 'turbo' }
+                            this.setCapabilityValue('fan_speed', json.om);
+                            this.log(`Fan speed: ${om_str[json.om]}`)
+                        }
                     }
                 }
-            }
-            if (json.hasOwnProperty('D03-12')) {
-                let mode_str = { 'Auto General': 'AUTO', 'Gentle/Speed 1': '1','Speed 2': '2', 'Turbo': 't','Sleep': 's' }
-                this.setCapabilityValue('fan_speed', mode_str[json["D03-12"]]);
-            }            
+                if (json.hasOwnProperty('D03-12')) {
+                    let mode_str = { 'Auto General': 'AUTO', 'Gentle/Speed 1': '1', 'Speed 2': '2', 'Turbo': 't', 'Sleep': 's' }
+                    this.setCapabilityValue('fan_speed', mode_str[json["D03-12"]]);
+                }
 
-            if (json.hasOwnProperty('D0310C')) {
-                let mode_str = { '0': 'AUTO', '1': '1','2': '2', '18': 't','17': 's' , '3': '3','4': '4', '5': '5','6': '6', '7': '7','8': '8', '9': '9','10': '10'}
-                this.setCapabilityValue('fan_speed', mode_str[json["D0310C"]]);
-            }       
+
+                if (json.hasOwnProperty('D0310C')) {
+                    let mode_str = { '0': 'AUTO', '1': '1', '2': '2', '18': 't', '17': 's', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9', '10': '10' }
+                    this.setCapabilityValue('fan_speed', mode_str[json["D0310C"]]);
+                }
+            }
+            catch (error) {
+                this.log('fan_speed error');
+            }
+
+
 
             if (json.hasOwnProperty('aqil')) {
                 this.log(`Light brightness: ${json.aqil}`);
@@ -311,7 +321,7 @@ export class AirDevice extends Homey.Device {
                 this.log(`Light brightness: ${json["D03105"]}`);
                 this.setCapabilityValue('light_intensity', parseInt(json["D03105"]));
             }
-            
+
 
 
             if (json.hasOwnProperty('uil')) {
@@ -320,12 +330,12 @@ export class AirDevice extends Homey.Device {
                 this.log(`Buttons light: ${uil_str[json.uil]}`)
             }
             if (json.hasOwnProperty('D03-05')) {
-                if ( json["D03-05"] == 100 ) {
+                if (json["D03-05"] == 100) {
                     this.setCapabilityValue('button_lights', '1');
                     this.log(`Buttons light: 1`)
                 } else {
                     this.setCapabilityValue('button_lights', '0');
-                    this.log(`Buttons light: 0`)                    
+                    this.log(`Buttons light: 0`)
                 }
             }
 
@@ -349,13 +359,13 @@ export class AirDevice extends Homey.Device {
             if (json.hasOwnProperty('D0312A')) {
                 this.log(`Display: ${json["D0312A"]}`);
                 if (this.hasCapability('display_mode')) {
-                    if ( json["D0312A"] == 0 || json["D0312A"] == 1 || json["D0312A"] == 2  || json["D0312A"] == 3  ) {
-                      this.setCapabilityValue('display_mode', json["D0312A"].toString() );
+                    if (json["D0312A"] == 0 || json["D0312A"] == 1 || json["D0312A"] == 2 || json["D0312A"] == 3) {
+                        this.setCapabilityValue('display_mode', json["D0312A"].toString());
                     }
                 }
                 if (this.hasCapability('display_mode_ph')) {
-                    if ( json["D0312A"] == 0 || json["D0312A"] == 1 || json["D0312A"] == 2  || json["D0312A"] == 3 || json["D0312A"] == 6 ) {
-                      this.setCapabilityValue('display_mode_ph', json["D0312A"].toString() );
+                    if (json["D0312A"] == 0 || json["D0312A"] == 1 || json["D0312A"] == 2 || json["D0312A"] == 3 || json["D0312A"] == 6) {
+                        this.setCapabilityValue('display_mode_ph', json["D0312A"].toString());
                     }
                 }
             }
@@ -367,13 +377,13 @@ export class AirDevice extends Homey.Device {
 
             if (json.hasOwnProperty('D03103')) {
                 this.log(`Child lock: ${json["D03103"]}`);
-                if (json["D03103"] == 1) { 
+                if (json["D03103"] == 1) {
                     this.setCapabilityValue('child_lock', true);
                 } else {
                     this.setCapabilityValue('child_lock', false);
                 }
             }
-            
+
 
             if (json.hasOwnProperty('wl')) {
                 this.log(`Water level: ${json.wl}`);
@@ -392,7 +402,7 @@ export class AirDevice extends Homey.Device {
                 }
             }
 
-            
+
             if (json.hasOwnProperty('D03110')) {
                 this.log(`Timer hours: ${json["D03110"]}`);
                 if (this.hasCapability('timer')) {
@@ -405,41 +415,47 @@ export class AirDevice extends Homey.Device {
                     this.setCapabilityValue('timer_remaining', json.dtrs);
                 }
             }
-            if (json.hasOwnProperty('err')) {
-                if (json.err != 0) {
-                    let err_str = { 49408: 'no water', 32768: 'water tank open', 49153: "pre-filter must be cleaned", 49155: "pre-filter must be cleaned" };
-                    this.log(`Error: ${err_str[json.err]}`);
-                } {
-                    this.log(`Error: -`);
+
+            try {
+
+                if (json.hasOwnProperty('err')) {
+                    if (json.err != 0) {
+                        let err_str = { 49408: 'no water', 32768: 'water tank open', 49153: "pre-filter must be cleaned", 49155: "pre-filter must be cleaned" };
+                        this.log(`Error: ${err_str[json.err]}`);
+                    } {
+                        this.log(`Error: -`);
+                    }
                 }
-            }
 
-            if (json.hasOwnProperty('D03240')) {
-                if (json["D03240"] != 0) {
-                    let err_str = { 49408: 'no water', 32768: 'water tank open', 49153: "pre-filter must be cleaned", 49155: "pre-filter must be cleaned" };
-                    this.log(`Error: ${err_str[json["D03240"]]}`);
+                if (json.hasOwnProperty('D03240')) {
+                    if (json["D03240"] != 0) {
+                        let err_str = { 49408: 'no water', 32768: 'water tank open', 49153: "pre-filter must be cleaned", 49155: "pre-filter must be cleaned" };
+                        this.log(`Error: ${err_str[json["D03240"]]}`);
 
-                    if (this.hasCapability('water_level')) {
-                        if (json["D03240"] == 49408) {
-                            this.setCapabilityValue('water_level', "Empty");
+                        if (this.hasCapability('water_level')) {
+                            if (json["D03240"] == 49408) {
+                                this.setCapabilityValue('water_level', "Empty");
+                            }
+                        }
+                        if (this.hasCapability('error')) {
+                            this.setCapabilityValue('error', err_str[json["D03240"]]);
+                        }
+                    } else {
+                        this.log(`Error: -`);
+                        if (this.hasCapability('water_level')) {
+                            if (json["D03240"] != 49408) {
+                                this.setCapabilityValue('water_level', "Ok");
+                            }
+                        }
+                        if (this.hasCapability('error')) {
+                            this.setCapabilityValue('error', "-");
                         }
                     }
-                    if (this.hasCapability('error')) {
-                        this.setCapabilityValue('error', err_str[json["D03240"]] );
-                    }
-                } else {
-                    this.log(`Error: -`);
-                    if (this.hasCapability('water_level')) {
-                        if (json["D03240"] != 49408) {
-                            this.setCapabilityValue('water_level', "Ok");
-                        }
-                    }
-                    if (this.hasCapability('error')) {
-                        this.setCapabilityValue('error', "-" );
-                    }                    
                 }
             }
-
+            catch (error) {
+                this.log('error cap error');
+            }
             if (json.hasOwnProperty('modelid')) {
                 this.log(`Location: ${json.name} modelid ${json.modelid} `);
                 this.setCapabilityValue('product', `${json.modelid}`);
@@ -607,14 +623,14 @@ export class AirDevice extends Homey.Device {
                         this.hepaFilterTriggered = false;
                     }, 60 * MINUTE);
                 }
-            }                        
-            
+            }
+
         }
     }
 
     pollAirDevice() {
         this.log("pollAirDevice");
-        let settings  = this.getSettings();
+        let settings = this.getSettings();
         this.log(settings);
         // this.log(JSON.stringify(settings));
         let deviceSecret = this.getStoreValue('secretKey' + settings.id);
