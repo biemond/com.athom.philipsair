@@ -291,20 +291,28 @@ export class AirDevice extends Homey.Device {
                     } else {
                         if (json.hasOwnProperty('om')) {
                             let om_str = { '1': 'speed 1', '2': 'speed 2', '3': 'speed 3', 'P': 'AUTO', 'AG': 'AUTO', 'as': 'sleep allergy', 's': 'silent/sleep', 't': 'turbo' }
-                            this.setCapabilityValue('fan_speed', json.om);
                             this.log(`Fan speed: ${om_str[json.om]}`)
+                            this.setCapabilityValue('fan_speed', json.om);
                         }
                     }
                 }
                 if (json.hasOwnProperty('D03-12')) {
                     let mode_str = { 'Auto General': 'AUTO', 'Gentle/Speed 1': '1', 'Speed 2': '2', 'Turbo': 't', 'Sleep': 's' }
-                    this.setCapabilityValue('fan_speed', mode_str[json["D03-12"]]);
+                    let fan  = mode_str[json["D03-12"]];
+                    this.log(`Fan speed: ${fan} - ${json["D03-12"]}`)
+                    if ( fan ) {
+                        this.setCapabilityValue('fan_speed', fan);
+                    }
                 }
 
 
                 if (json.hasOwnProperty('D0310C')) {
                     let mode_str = { '0': 'AUTO', '1': '1', '2': '2', '18': 't', '17': 's', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9', '10': '10' }
-                    this.setCapabilityValue('fan_speed', mode_str[json["D0310C"]]);
+                    let fan  = mode_str[json["D0310C"]];
+                    this.log(`Fan speed: ${fan} - ${json["D0310C"]}`)
+                    if ( fan ) {
+                        this.setCapabilityValue('fan_speed', fan);
+                    }
                 }
             }
             catch (error) {
