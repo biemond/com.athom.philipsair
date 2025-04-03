@@ -298,9 +298,9 @@ export class AirDevice extends Homey.Device {
                 }
                 if (json.hasOwnProperty('D03-12')) {
                     let mode_str = { 'Auto General': 'AUTO', 'Gentle/Speed 1': '1', 'Speed 2': '2', 'Turbo': 't', 'Sleep': 's' }
-                    let fan  = mode_str[json["D03-12"]];
+                    let fan = mode_str[json["D03-12"]];
                     this.log(`Fan speed: ${fan} - ${json["D03-12"]}`)
-                    if ( fan ) {
+                    if (fan) {
                         this.setCapabilityValue('fan_speed', fan);
                     }
                 }
@@ -308,9 +308,9 @@ export class AirDevice extends Homey.Device {
 
                 if (json.hasOwnProperty('D0310C')) {
                     let mode_str = { '0': 'AUTO', '1': '1', '2': '2', '18': 't', '17': 's', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9', '10': '10' }
-                    let fan  = mode_str[json["D0310C"]];
+                    let fan = mode_str[json["D0310C"]];
                     this.log(`Fan speed: ${fan} - ${json["D0310C"]}`)
-                    if ( fan ) {
+                    if (fan) {
                         this.setCapabilityValue('fan_speed', fan);
                     }
                 }
@@ -445,8 +445,11 @@ export class AirDevice extends Homey.Device {
                                 this.setCapabilityValue('water_level', "Empty");
                             }
                         }
-                        if (this.hasCapability('error')) {
-                            this.setCapabilityValue('error', err_str[json["D03240"]]);
+                        let errorValue = err_str[json["D03240"]];
+                        if ( errorValue ) {
+                            if (this.hasCapability('error')) {
+                                this.setCapabilityValue('error', errorValue);
+                            }
                         }
                     } else {
                         this.log(`Error: -`);
