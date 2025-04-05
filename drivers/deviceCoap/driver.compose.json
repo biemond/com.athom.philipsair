@@ -21,7 +21,9 @@
     "fan_speed",
     "timer_remaining",
     "timer",
-    "error"
+    "error",
+    "measure_humidity",
+    "measure_temperature"    
   ],
   "platforms": [
     "local"

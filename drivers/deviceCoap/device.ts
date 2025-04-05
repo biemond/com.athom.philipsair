@@ -23,6 +23,12 @@ class deviceCoap extends AirDevice {
     if (this.hasCapability('error') === false) {
       await this.addCapability('error');
     }
+    if (this.hasCapability('measure_humidity') === false) {
+      await this.addCapability('measure_humidity');
+    }
+    if (this.hasCapability('measure_temperature') === false) {
+      await this.addCapability('measure_temperature');
+    }
 
     let flowTriggerFilterReplaceClean = this.homey.flow.getDeviceTriggerCard('filter_replace_clean');
     flowTriggerFilterReplaceClean.registerRunListener(async (args, state) => {

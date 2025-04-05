@@ -1,4 +1,7 @@
 {
+  "1.0.51": {
+    "en": "add measure_humidity, measure_temperature"
+  },   
   "1.0.50": {
     "en": "more devices added for control, fix fan speed on some devices"
   },     
