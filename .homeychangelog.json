@@ -1,4 +1,7 @@
 {
+  "1.0.52": {
+    "en": "add heater device"
+  },   
   "1.0.51": {
     "en": "add measure_humidity, measure_temperature"
   },   

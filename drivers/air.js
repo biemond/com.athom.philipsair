@@ -185,9 +185,13 @@ export class AirDevice extends Homey.Device {
 
             if (json.hasOwnProperty('D03130')) {
                 this.log(`beep: ${json["D03130"]}`);
-                // if (this.hasCapability('beep')) {
-                //     this.setCapabilityValue('beep', json["D03130"]);
-                // }
+                if (this.hasCapability('beep')) {
+                    if (json["D03130"] == 100) {
+                        this.setCapabilityValue('beep', true);
+                    } else {
+                        this.setCapabilityValue('beep', false);
+                    }
+                }
             }
 
 
@@ -203,9 +207,9 @@ export class AirDevice extends Homey.Device {
 
             if (json.hasOwnProperty('D0320F')) {
                 this.log(`swing: ${json["D0320F"]}`);
-                // if (this.hasCapability('swing')) {
-                //     this.setCapabilityValue('swing', json["D0320F"]);
-                // }
+                if (this.hasCapability('swing')) {
+                   this.setCapabilityValue('swing', json["D0320F"].toString());
+                }
             }
 
             if (json.hasOwnProperty('rhset')) {
@@ -446,7 +450,7 @@ export class AirDevice extends Homey.Device {
                             }
                         }
                         let errorValue = err_str[json["D03240"]];
-                        if ( errorValue ) {
+                        if (errorValue) {
                             if (this.hasCapability('error')) {
                                 this.setCapabilityValue('error', errorValue);
                             }

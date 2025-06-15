@@ -12,6 +12,9 @@ Verified on
 ## Purifier ( + Humidifier) Device
 For adding the device you need to provide Philips device ip address plus Homey has to be on the same network as your purifier. 
 
+## Heater Device
+- CX5120/11
+
 When there is a powerloss or the purifier was restarted then also the device need to be re-added in the homey app, this is because the shared key between the purifier and homey is added only once.
 
 ## Refresh by observing

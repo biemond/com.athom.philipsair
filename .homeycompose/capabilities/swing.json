@@ -1,0 +1,24 @@
+{
+    "type": "enum",
+    "title": {
+        "en": "Swing"
+    },
+    "getable": true,
+    "setable": true,
+    "uiComponent": "picker",
+    "uiQuickAction": true,
+    "values": [
+        {
+            "id": "17920",
+            "title": {
+                "en": "On"
+            }
+        },
+        {
+            "id": "0",
+            "title": {
+                "en": "Off"
+            }
+        }     
+    ]
+}

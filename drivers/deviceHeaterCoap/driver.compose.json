@@ -1,0 +1,68 @@
+{
+  "name": {
+    "en": "Heater"
+  },
+  "class": "fan",
+  "capabilities": [
+    "latest_retrieval_date",
+    "product",
+    "onoff",
+    "timer",
+    "error",
+    "measure_temperature",
+    "light_intensity",
+    "beep",
+    "swing"    
+  ],
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "pair"
+    }
+  ],
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "General settings"
+      },
+      "children": [
+        {
+          "id": "ipkey",
+          "type": "text",
+          "label": {
+            "en": "Philips Air device IP address"
+          },
+          "value": "",
+          "hint": {
+            "en": "Enter the IP address key of your Philips Air heater"
+          }
+        },
+        {
+          "id": "add_delay",
+          "type": "checkbox",
+          "value": false,
+          "label": {
+            "en": "Add 60 seconds delay"
+          }
+        }         
+      ]
+    }
+  ],
+  "energy": {
+    "approximation": {
+      "usageOn": 500,
+      "usageOff": 1
+    }
+  }    
+}
