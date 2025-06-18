@@ -1,0 +1,36 @@
+{
+    "type": "enum",
+    "title": {
+        "en": "Heater mode"
+    },
+    "getable": true,
+    "setable": true,
+    "uiComponent": "picker",
+    "uiQuickAction": true,
+    "values": [
+        {
+            "id": "AUTO",
+            "title": {
+                "en": "Auto mode"
+            }
+        },
+        {
+            "id": "HIGH",
+            "title": {
+                "en": "High"
+            }
+        },
+        {
+            "id": "LOW",
+            "title": {
+                "en": "Low"
+            }
+        },
+        {
+            "id": "VENTILATION",
+            "title": {
+                "en": "Ventilation"
+            }
+        }  
+    ]
+}

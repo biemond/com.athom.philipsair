@@ -195,20 +195,38 @@ export class AirDevice extends Homey.Device {
             }
 
 
-            if (json.hasOwnProperty('D0310A')) {
-                // 1: FanFunction.FAN,
-                // 1: FanFunction.CIRCULATION,
-                // 2: FanFunction.HEATING,
-                this.log(`heating: ${json["D0310A"]}`);
-                // if (this.hasCapability('beep')) {
-                //     this.setCapabilityValue('beep', json["D0310A"]);
-                // }
+            if (json.hasOwnProperty('D0310C')) {
+
+                this.log(`heating: ${json["D0310C"]}`);
+                let value = json["D0310C"];
+                if (this.hasCapability('heater_mode')) {
+                    if (value == 0) {
+                        this.setCapabilityValue('heater_mode', "AUTO");
+                    }
+                    if (value == 65) {
+                        this.setCapabilityValue('heater_mode', "HIGH");
+                    }
+                    if (value == 66) {
+                        this.setCapabilityValue('heater_mode', "LOW");
+                    }
+                    if (value == -127) {
+                        this.setCapabilityValue('heater_mode', "VENTILATION");
+                    }
+                }
+                if (this.hasCapability('heater_speed')) {
+                    if (value == 65) {
+                        this.setCapabilityValue('heater_speed', "HIGH");
+                    }
+                    if (value == 66) {
+                        this.setCapabilityValue('heater_speed', "LOW");
+                    }
+                }
             }
 
             if (json.hasOwnProperty('D0320F')) {
                 this.log(`swing: ${json["D0320F"]}`);
                 if (this.hasCapability('swing')) {
-                   this.setCapabilityValue('swing', json["D0320F"].toString());
+                    this.setCapabilityValue('swing', json["D0320F"].toString());
                 }
             }
 
@@ -229,18 +247,10 @@ export class AirDevice extends Homey.Device {
 
             if (json.hasOwnProperty('D0310E')) {
                 this.log(`Target temperature: ${json["D0310E"]}`);
-                // if (this.hasCapability('target_temperature')) {
-                //     this.setCapabilityValue('target_temperature', json["D0310E"].toString());
-                // }
+                if (this.hasCapability('target_temperature')) {
+                    this.setCapabilityValue('target_temperature', json["D0310E"]);
+                }
             }
-            if (json.hasOwnProperty('D0320F')) {
-                this.log(`Swing: ${json["D0320F"]}`);
-                // if (this.hasCapability('Swing')) {
-                //     this.setCapabilityValue('Swing', json["D0320F"].toString());
-                // }
-            }
-
-
 
             if (json.hasOwnProperty('iaql')) {
                 this.log(`Allergen index: ${json.iaql}`);
@@ -311,11 +321,13 @@ export class AirDevice extends Homey.Device {
 
 
                 if (json.hasOwnProperty('D0310C')) {
-                    let mode_str = { '0': 'AUTO', '1': '1', '2': '2', '18': 't', '17': 's', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9', '10': '10' }
-                    let fan = mode_str[json["D0310C"]];
-                    this.log(`Fan speed: ${fan} - ${json["D0310C"]}`)
-                    if (fan) {
-                        this.setCapabilityValue('fan_speed', fan);
+                    if (this.hasCapabilityValue('fan_speed')) {
+                        let mode_str = { '0': 'AUTO', '1': '1', '2': '2', '18': 't', '17': 's', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9', '10': '10' }
+                        let fan = mode_str[json["D0310C"]];
+                        this.log(`Fan speed: ${fan} - ${json["D0310C"]}`)
+                        if (fan) {
+                            this.setCapabilityValue('fan_speed', fan);
+                        }
                     }
                 }
             }

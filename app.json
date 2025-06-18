@@ -949,7 +949,10 @@
         "measure_temperature",
         "light_intensity",
         "beep",
-        "swing"
+        "swing",
+        "heater_speed",
+        "heater_mode",
+        "target_temperature"
       ],
       "platforms": [
         "local"
@@ -1266,6 +1269,66 @@
       "uiComponent": "toggle",
       "uiQuickAction": true
     },
+    "heater_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Heater mode"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "values": [
+        {
+          "id": "AUTO",
+          "title": {
+            "en": "Auto mode"
+          }
+        },
+        {
+          "id": "HIGH",
+          "title": {
+            "en": "High"
+          }
+        },
+        {
+          "id": "LOW",
+          "title": {
+            "en": "Low"
+          }
+        },
+        {
+          "id": "VENTILATION",
+          "title": {
+            "en": "Ventilation"
+          }
+        }
+      ]
+    },
+    "heater_speed": {
+      "type": "enum",
+      "title": {
+        "en": "Heater speed"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "values": [
+        {
+          "id": "HIGH",
+          "title": {
+            "en": "High"
+          }
+        },
+        {
+          "id": "LOW",
+          "title": {
+            "en": "Low"
+          }
+        }
+      ]
+    },
     "hepa_filter_replace": {
       "type": "number",
       "title": {
@@ -1496,8 +1559,8 @@
         "en": "Swing"
       },
       "getable": true,
-      "setable": true,
-      "uiComponent": "picker",
+      "setable": false,
+      "uiComponent": "sensor",
       "uiQuickAction": true,
       "values": [
         {
@@ -1569,6 +1632,23 @@
       ],
       "insights": true,
       "icon": "/assets/images/humidity.svg"
+    },
+    "target_temperature": {
+      "type": "number",
+      "title": {
+        "en": "Target temperature"
+      },
+      "getable": true,
+      "setable": true,
+      "units": {
+        "en": "C"
+      },
+      "min": 1,
+      "max": 37,
+      "decimals": 0,
+      "insights": false,
+      "uiComponent": "thermostat",
+      "icon": "/assets/images/temp.svg"
     },
     "timer": {
       "type": "enum",

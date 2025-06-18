@@ -33,6 +33,50 @@ class deviceHeaterCoap extends AirDevice {
       return value;
     });
 
+   this.registerCapabilityListener('heater_mode', async (value) => {
+      let model = this.getCapabilityValue('product')
+      if (value == "AUTO") {
+        await this.setStateCoap("D0310A", 3, this.getSettings());
+        await this.setStateCoap("D0310C", 0, this.getSettings());        
+      } 
+      if (value == "HIGH") {
+        await this.setStateCoap("D0310A", 3, this.getSettings());
+        await this.setStateCoap("D0310C", 65, this.getSettings());             
+      } 
+      if (value == "LOW") {
+        await this.setStateCoap("D0310A", 3, this.getSettings());
+        await this.setStateCoap("D0310C", 66, this.getSettings());             
+      } 
+      if (value == "VENTILATION") {
+        await this.setStateCoap("D0310A", 1, this.getSettings());
+        await this.setStateCoap("D0310C", -127, this.getSettings());             
+      }             
+
+      return value;
+    });
+
+   this.registerCapabilityListener('heater_speed', async (value) => {
+      let model = this.getCapabilityValue('product')
+      if (value == "HIGH") {
+        await this.setStateCoap("D0310A", 3, this.getSettings());
+        await this.setStateCoap("D0310C", 65, this.getSettings());             
+      } 
+      if (value == "LOW") {
+        await this.setStateCoap("D0310A", 3, this.getSettings());
+        await this.setStateCoap("D0310C", 66, this.getSettings());             
+      } 
+      return value;
+    });
+
+   this.registerCapabilityListener('target_temperature', async (value) => {
+      let model = this.getCapabilityValue('product')
+      this.log('target_temperature ' + value);
+      await this.setStateCoap("D0310A", 3, this.getSettings());
+      // await this.setStateCoap("D0310C", 0, this.getSettings());   
+      await this.setStateCoap("D0310E", value, this.getSettings());
+      return value;
+    });
+
 
     this.registerCapabilityListener('onoff', async (value) => {
       let model = this.getCapabilityValue('product')
@@ -61,6 +105,7 @@ class deviceHeaterCoap extends AirDevice {
     });
 
     this.registerCapabilityListener('swing', async (value) => {
+      this.log('swing ' + value);
       this.setStateCoap("D0320F", Number(value), this.getSettings());
       return value;
     });

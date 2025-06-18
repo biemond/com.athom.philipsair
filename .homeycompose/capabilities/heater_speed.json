@@ -1,0 +1,24 @@
+{
+    "type": "enum",
+    "title": {
+        "en": "Heater speed"
+    },
+    "getable": true,
+    "setable": true,
+    "uiComponent": "picker",
+    "uiQuickAction": true,
+    "values": [
+        {
+            "id": "HIGH",
+            "title": {
+                "en": "High"
+            }
+        },        
+        {
+            "id": "LOW",
+            "title": {
+                "en": "Low"
+            }
+        }                                
+    ]
+}

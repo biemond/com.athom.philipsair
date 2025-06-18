@@ -1,0 +1,17 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Target temperature"
+    },
+    "getable": true,
+    "setable": true,
+    "units": {
+        "en": "C"
+    },
+    "min": 1,
+    "max": 37,
+    "decimals": 0,
+    "insights": false,
+    "uiComponent": "thermostat",
+    "icon": "/assets/images/temp.svg"    
+}

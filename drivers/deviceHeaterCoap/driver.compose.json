@@ -12,7 +12,10 @@
     "measure_temperature",
     "light_intensity",
     "beep",
-    "swing"    
+    "swing" ,
+    "heater_speed",
+    "heater_mode",
+    "target_temperature"   
   ],
   "platforms": [
     "local"
