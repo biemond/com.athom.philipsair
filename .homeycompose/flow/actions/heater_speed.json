@@ -1,0 +1,33 @@
+{
+    "title": {
+        "en": "Heater speed"
+    },
+    "titleFormatted": {
+        "en": "Heater speed [[mode]]"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=deviceHeaterCoap"
+        },
+        {
+            "name": "mode",
+            "type": "dropdown",
+            "values": [
+                {
+                    "id": "HIGH",
+                    "title": {
+                        "en": "High"
+                    }
+                },
+                {
+                    "id": "LOW",
+                    "title": {
+                        "en": "Low"
+                    }
+                }
+            ]
+        }
+    ]
+}

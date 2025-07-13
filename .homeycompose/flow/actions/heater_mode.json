@@ -1,48 +1,42 @@
 {
     "title": {
-        "en": "Light level ring"
+        "en": "Heater mode"
     },
     "titleFormatted": {
-        "en": "Light level ring [[mode]]"
+        "en": "Heater [[mode]]"
     },
     "args": [
         {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2|deviceHeaterCoap"
+            "filter": "driver_id=deviceHeaterCoap"
         },
         {
             "name": "mode",
             "type": "dropdown",
             "values": [
                 {
-                    "id": "0",
+                    "id": "AUTO",
                     "title": {
-                        "en": "0"
+                        "en": "Auto mode"
                     }
                 },
                 {
-                    "id": "25",
+                    "id": "HIGH",
                     "title": {
-                        "en": "25"
+                        "en": "High"
                     }
                 },
                 {
-                    "id": "50",
+                    "id": "LOW",
                     "title": {
-                        "en": "50"
+                        "en": "Low"
                     }
                 },
                 {
-                    "id": "75",
+                    "id": "VENTILATION",
                     "title": {
-                        "en": "75"
-                    }
-                },
-                {
-                    "id": "100",
-                    "title": {
-                        "en": "100"
+                        "en": "Ventilation"
                     }
                 }
             ]

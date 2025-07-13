@@ -110,26 +110,6 @@ class deviceHeaterCoap extends AirDevice {
       return value;
     });
 
-    this.registerCapabilityListener('fan_speed', async (value) => {
-      let model = this.getCapabilityValue('product')
-
-      if (value == "1") {
-        await this.setStateCoap("D0310C", 1, this.getSettings());
-      }
-      if (value == "2") {
-        await this.setStateCoap("D0310C", 2, this.getSettings());
-      }
-      if (value == "s") {
-        await this.setStateCoap("D0310C", 17, this.getSettings());
-      }
-      if (value == "AUTO") {
-        await this.setStateCoap("D0310C", 0, this.getSettings());
-      }
-      if (value == "t") {
-        await this.setStateCoap("D0310C", 18, this.getSettings());
-      }
-      return value;
-    });
 
     this.registerCapabilityListener('timer', async (value) => {
       let model = this.getCapabilityValue('product')
