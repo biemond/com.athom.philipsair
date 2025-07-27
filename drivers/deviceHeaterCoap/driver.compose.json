@@ -12,11 +12,17 @@
     "measure_temperature",
     "light_intensity",
     "beep",
-    "swing" ,
+    "swing",
     "heater_speed",
     "heater_mode",
-    "target_temperature"   
+    "target_temperature",
+    "measure_power"
   ],
+  "capabilitiesOptions": {
+    "measure_power": {
+      "approximated": true
+    }
+  },
   "platforms": [
     "local"
   ],
@@ -58,14 +64,8 @@
           "label": {
             "en": "Add 60 seconds delay"
           }
-        }         
+        }
       ]
     }
-  ],
-  "energy": {
-    "approximation": {
-      "usageOn": 500,
-      "usageOff": 1
-    }
-  }    
+  ]
 }

@@ -14,6 +14,11 @@ class deviceHeaterCoap extends AirDevice {
    */
   async onInit() {
     this.log('MyPhilipsAirHeaterDevice has been inited');
+
+    if (this.hasCapability('measure_power') === false) {
+      await this.addCapability('measure_power');
+    }
+
     this.preFilterTriggered = false;
     this.carbonFilterTriggered = false;
     this.hepaFilterTriggered = false;
@@ -37,19 +42,23 @@ class deviceHeaterCoap extends AirDevice {
       let model = this.getCapabilityValue('product')
       if (value == "AUTO") {
         await this.setStateCoap("D0310A", 3, this.getSettings());
-        await this.setStateCoap("D0310C", 0, this.getSettings());        
+        await this.setStateCoap("D0310C", 0, this.getSettings());  
+        await this.setCapabilityValue('measure_power', 1900);      
       } 
       if (value == "HIGH") {
         await this.setStateCoap("D0310A", 3, this.getSettings());
-        await this.setStateCoap("D0310C", 65, this.getSettings());             
+        await this.setStateCoap("D0310C", 65, this.getSettings()); 
+        await this.setCapabilityValue('measure_power', 1900);                  
       } 
       if (value == "LOW") {
         await this.setStateCoap("D0310A", 3, this.getSettings());
-        await this.setStateCoap("D0310C", 66, this.getSettings());             
+        await this.setStateCoap("D0310C", 66, this.getSettings());
+        await this.setCapabilityValue('measure_power', 1025);             
       } 
       if (value == "VENTILATION") {
         await this.setStateCoap("D0310A", 1, this.getSettings());
-        await this.setStateCoap("D0310C", -127, this.getSettings());             
+        await this.setStateCoap("D0310C", -127, this.getSettings());
+        await this.setCapabilityValue('measure_power', 50);             
       }             
 
       return value;
@@ -86,6 +95,7 @@ class deviceHeaterCoap extends AirDevice {
         values = 1;
       } else {
         values = 0;
+        await this.setCapabilityValue('measure_power', 2);         
       }
       this.setStateCoap("D03102", values, this.getSettings());
       return value;

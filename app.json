@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.athom.philipsair",
-  "version": "1.0.53",
+  "version": "1.0.54",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -1073,8 +1073,14 @@
         "swing",
         "heater_speed",
         "heater_mode",
-        "target_temperature"
+        "target_temperature",
+        "measure_power"
       ],
+      "capabilitiesOptions": {
+        "measure_power": {
+          "approximated": true
+        }
+      },
       "platforms": [
         "local"
       ],
@@ -1120,12 +1126,6 @@
           ]
         }
       ],
-      "energy": {
-        "approximation": {
-          "usageOn": 500,
-          "usageOff": 1
-        }
-      },
       "id": "deviceHeaterCoap"
     }
   ],

@@ -202,23 +202,53 @@ export class AirDevice extends Homey.Device {
                 if (this.hasCapability('heater_mode')) {
                     if (value == 0) {
                         this.setCapabilityValue('heater_mode', "AUTO");
+                        if (json["D03102"] == 1) {
+                            this.setCapabilityValue('measure_power', 1900);
+                        } else {
+                            this.setCapabilityValue('measure_power', 2);
+                        }
                     }
                     if (value == 65) {
                         this.setCapabilityValue('heater_mode', "HIGH");
+                        if (json["D03102"] == 1) {
+                            this.setCapabilityValue('measure_power', 1900);
+                        } else {
+                            this.setCapabilityValue('measure_power', 2);
+                        }
                     }
                     if (value == 66) {
                         this.setCapabilityValue('heater_mode', "LOW");
+                        if (json["D03102"] == 1) {
+                            this.setCapabilityValue('measure_power', 1025);
+                        } else {
+                            this.setCapabilityValue('measure_power', 2);
+                        }
                     }
                     if (value == -127) {
                         this.setCapabilityValue('heater_mode', "VENTILATION");
+                        if (json["D03102"] == 1) {
+                            this.setCapabilityValue('measure_power', 50);
+                        } else {
+                            this.setCapabilityValue('measure_power', 2);
+                        }
                     }
                 }
                 if (this.hasCapability('heater_speed')) {
                     if (value == 65) {
                         this.setCapabilityValue('heater_speed', "HIGH");
+                        if (json["D03102"] == 1) {
+                            this.setCapabilityValue('measure_power', 1900);
+                        } else {
+                            this.setCapabilityValue('measure_power', 2);
+                        }
                     }
                     if (value == 66) {
                         this.setCapabilityValue('heater_speed', "LOW");
+                        if (json["D03102"] == 1) {
+                            this.setCapabilityValue('measure_power', 1025);
+                        } else {
+                            this.setCapabilityValue('measure_power', 2);
+                        }
                     }
                 }
             }

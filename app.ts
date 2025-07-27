@@ -95,18 +95,22 @@ class MyApp extends Homey.App {
       if (args.mode == "AUTO") {
         await args.device.setStateCoap("D0310A", 3, args.device.getSettings());
         await args.device.setStateCoap("D0310C", 0, args.device.getSettings());
+        await args.device.setCapabilityValue('measure_power', 1900);      
       }
       if (args.mode == "HIGH") {
         await args.device.setStateCoap("D0310A", 3, args.device.getSettings());
         await args.device.setStateCoap("D0310C", 65, args.device.getSettings());
+        await args.device.setCapabilityValue('measure_power', 1900);      
       }
       if (args.mode == "LOW") {
         await args.device.setStateCoap("D0310A", 3, args.device.getSettings());
         await args.device.setStateCoap("D0310C", 66, args.device.getSettings());
+        await args.device.setCapabilityValue('measure_power', 1025);      
       }
       if (args.mode == "VENTILATION") {
         await args.device.setStateCoap("D0310A", 1, args.device.getSettings());
         await args.device.setStateCoap("D0310C", -127, args.device.getSettings());
+        await args.device.setCapabilityValue('measure_power', 50);      
       }
 
       return Promise.resolve(true);
@@ -246,6 +250,10 @@ class MyApp extends Homey.App {
         args.device.setStateCoap("D03-02", "OFF", args.device.getSettings());
       } else if (newCoapDevices3.includes(model) || coapHeaterDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("D03102", 0, args.device.getSettings());
+        if (coapHeaterDevices.includes(args.device.constructor.name)) {
+          args.device.setCapabilityValue('measure_power', 2);         
+        }  
+
       } else if (coapDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("pwr", "0", args.device.getSettings());
       } else {
