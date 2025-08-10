@@ -205,7 +205,7 @@ export class AirDevice extends Homey.Device {
                         if (json["D03102"] == 1) {
                             this.setCapabilityValue('measure_power', 1900);
                         } else {
-                            this.setCapabilityValue('measure_power', 2);
+                            this.setCapabilityValue('measure_power', 1);
                         }
                     }
                     if (value == 65) {
@@ -213,7 +213,7 @@ export class AirDevice extends Homey.Device {
                         if (json["D03102"] == 1) {
                             this.setCapabilityValue('measure_power', 1900);
                         } else {
-                            this.setCapabilityValue('measure_power', 2);
+                            this.setCapabilityValue('measure_power', 1);
                         }
                     }
                     if (value == 66) {
@@ -221,15 +221,15 @@ export class AirDevice extends Homey.Device {
                         if (json["D03102"] == 1) {
                             this.setCapabilityValue('measure_power', 1025);
                         } else {
-                            this.setCapabilityValue('measure_power', 2);
+                            this.setCapabilityValue('measure_power', 1);
                         }
                     }
                     if (value == -127) {
                         this.setCapabilityValue('heater_mode', "VENTILATION");
                         if (json["D03102"] == 1) {
-                            this.setCapabilityValue('measure_power', 50);
+                            this.setCapabilityValue('measure_power', 9);
                         } else {
-                            this.setCapabilityValue('measure_power', 2);
+                            this.setCapabilityValue('measure_power', 1);
                         }
                     }
                 }
@@ -239,7 +239,7 @@ export class AirDevice extends Homey.Device {
                         if (json["D03102"] == 1) {
                             this.setCapabilityValue('measure_power', 1900);
                         } else {
-                            this.setCapabilityValue('measure_power', 2);
+                            this.setCapabilityValue('measure_power', 1);
                         }
                     }
                     if (value == 66) {
@@ -247,7 +247,7 @@ export class AirDevice extends Homey.Device {
                         if (json["D03102"] == 1) {
                             this.setCapabilityValue('measure_power', 1025);
                         } else {
-                            this.setCapabilityValue('measure_power', 2);
+                            this.setCapabilityValue('measure_power', 1);
                         }
                     }
                 }
