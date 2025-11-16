@@ -234,6 +234,12 @@ class MyApp extends Homey.App {
         args.device.setStateCoap("D03-02", "ON", args.device.getSettings());
       } else if (newCoapDevices3.includes(model) || coapHeaterDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("D03102", 1, args.device.getSettings());
+        if (coapHeaterDevices.includes(args.device.constructor.name)) {
+            const tokens = {
+              'onoff': true
+            };
+            this.homey.flow.getDeviceTriggerCard('onoff').trigger( args.device, tokens);            
+        }  
       } else if (coapDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("pwr", "1", args.device.getSettings());
       } else {
@@ -251,7 +257,11 @@ class MyApp extends Homey.App {
       } else if (newCoapDevices3.includes(model) || coapHeaterDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("D03102", 0, args.device.getSettings());
         if (coapHeaterDevices.includes(args.device.constructor.name)) {
-          args.device.setCapabilityValue('measure_power', 1);         
+            args.device.setCapabilityValue('measure_power', 1);
+            const tokens = {
+              'onoff': false
+            };
+            this.homey.flow.getDeviceTriggerCard('onoff').trigger( args.device, tokens);            
         }  
 
       } else if (coapDevices.includes(args.device.constructor.name)) {

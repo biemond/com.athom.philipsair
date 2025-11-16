@@ -124,6 +124,7 @@ export class AirDevice extends Homey.Device {
                     this.setCapabilityValue('onoff', false);
                 }
                 this.log(`Power: ${json.pwr == '1' ? 'ON' : "OFF"}`)
+
             }
             if (json.hasOwnProperty('D03-02')) {
                 if (json["D03-02"] == 'ON') {
@@ -134,12 +135,21 @@ export class AirDevice extends Homey.Device {
                 this.log(`Power: ${json["D03-02"] == 'ON' ? 'ON' : "OFF"}`)
             }
             if (json.hasOwnProperty("D03102")) {
+                // let oldValue = 0;
+                // if (this.getCapabilityValue('onoff')){
+                //     oldValue = 1;
+                // }
                 if (json["D03102"] == 1) {
                     this.setCapabilityValue('onoff', true);
                 } else {
                     this.setCapabilityValue('onoff', false);
                 }
                 this.log(`Power: ${json["D03102"] == 1 ? 'ON' : "OFF"}`)
+                // // if (oldValue != json["D03102"]) {
+                // const tokens = {
+                //     'onoff': json["D03102"] == 1 ? true : false
+                // };
+                // this.homey.flow.getDeviceTriggerCard('onoff').trigger(this, tokens);  
             }
 
 

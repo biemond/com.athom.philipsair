@@ -97,7 +97,11 @@ class deviceHeaterCoap extends AirDevice {
         values = 0;
         await this.setCapabilityValue('measure_power', 2);         
       }
-      this.setStateCoap("D03102", values, this.getSettings());
+      await this.setStateCoap("D03102", values, this.getSettings());
+      const tokens = {
+          'onoff': value
+      };
+      this.homey.flow.getDeviceTriggerCard('onoff').trigger(this, tokens);   
       return value;
     });
 
