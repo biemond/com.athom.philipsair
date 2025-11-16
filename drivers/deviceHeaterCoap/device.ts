@@ -25,6 +25,8 @@ class deviceHeaterCoap extends AirDevice {
 
     this.observerAirCoapDevice();
 
+
+
     this.registerCapabilityListener('light_intensity', async (value) => {
       let model = this.getCapabilityValue('product')
       let values2
@@ -86,6 +88,13 @@ class deviceHeaterCoap extends AirDevice {
       return value;
     });
 
+
+    // on/off state condition
+    const onoffCondition = this.homey.flow.getConditionCard('on_off');
+    onoffCondition.registerRunListener(async (args, state) => {
+      const result = Number(await args.device.getCapabilityValue('onoff')) === Number(args.argument_main);
+      return Promise.resolve(result);
+    });
 
     this.registerCapabilityListener('onoff', async (value) => {
       let model = this.getCapabilityValue('product')
