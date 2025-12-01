@@ -28,6 +28,12 @@
                     }
                 },
                 {
+                    "id": "AS",
+                    "title": {
+                        "en": "Allergy Sleep, some devices"
+                    }
+                },
+                {
                     "id": "M",
                     "title": {
                         "en": "Manual mode"
