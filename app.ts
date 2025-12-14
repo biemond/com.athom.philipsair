@@ -17,7 +17,7 @@ class MyApp extends Homey.App {
     const coapHeaterDevices = ['deviceHeaterCoap']
     const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10', 'AC3033/14', 'AC3036/10', 'AC3039/10','AC3039/14', 'AC3059/10', 'AC4236/14']
     const newCoapDevices2 = ['AC0850/11', 'AC1715/11', 'AC1715/10']
-    const newCoapDevices3 = ['AC3737/10', 'AMF765/10', 'AC3421/13', 'AMF870/15', 'AC4221/11', 'AC4220/12', 'AC3220/10', 'AC0950/10', 'AC3210/12','AC0951/13']
+    const newCoapDevices3 = ['AC3737/10', 'AMF765/10', 'AC3421/13', 'AMF870/15', 'AC4221/11', 'AC4220/12', 'AC3220/10', 'AC0950/10', 'AC3210/12','AC0951/13','HU1509/00']
 
 
     let purifierModeAction = this.homey.flow.getActionCard('purifier_mode');
