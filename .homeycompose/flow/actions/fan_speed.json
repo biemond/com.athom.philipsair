@@ -98,7 +98,25 @@
                     "title": {
                         "en": "Sleep allergy"
                     }
-                }                   
+                },
+                {
+                    "id": "17",
+                    "title": {
+                        "en": "Sleep, some devices"
+                    }
+                },
+                {
+                    "id": "19",
+                    "title": {
+                        "en": "Medium, some devices"
+                    }
+                },                
+                {
+                    "id": "65",
+                    "title": {
+                        "en": "High, some devices"
+                    }
+                }                                   
             ]
         }
     ]

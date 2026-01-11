@@ -196,6 +196,7 @@ export class AirDevice extends Homey.Device {
             if (json.hasOwnProperty('D03130')) {
                 this.log(`beep: ${json["D03130"]}`);
                 if (this.hasCapability('beep')) {
+                    this.addCapability('beep');
                     if (json["D03130"] == 100) {
                         this.setCapabilityValue('beep', true);
                     } else {
@@ -203,7 +204,20 @@ export class AirDevice extends Homey.Device {
                     }
                 }
             }
+            if (json.hasOwnProperty('D03138')) {
+                this.log(`Auto QuickDry Mode: ${json["D03138"]}`);
+            }
 
+// Auto QuickDry Mode (D03138):
+// On: "D03138": 1
+// Off: "D03138": 0
+
+            if (json.hasOwnProperty('D03134')) {
+                this.log(`Sensors Monitor in Standby ${json["D03138"]}`);
+            }
+// Sensors Monitor in Standby (D03134):
+// On: "D03134": 1
+// Off: "D03134": 0            
 
             if (json.hasOwnProperty('D0310C')) {
 
@@ -359,10 +373,9 @@ export class AirDevice extends Homey.Device {
                     }
                 }
 
-
                 if (json.hasOwnProperty('D0310C')) {
                     if (this.hasCapabilityValue('fan_speed')) {
-                        let mode_str = { '0': 'AUTO', '1': '1', '2': '2', '18': 't', '17': 's', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9', '10': '10' }
+                        let mode_str = { '0': 'AUTO', '1': '1', '2': '2', '18': 't', '17': 's', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9', '10': '10', '17': '17', '19': '19', '65': '65' }
                         let fan = mode_str[json["D0310C"]];
                         this.log(`Fan speed: ${fan} - ${json["D0310C"]}`)
                         if (fan) {

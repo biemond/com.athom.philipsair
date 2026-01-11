@@ -165,6 +165,15 @@ class MyApp extends Homey.App {
         if (args.mode == "t") {
           await args.device.setStateCoap("D0310C", 18, args.device.getSettings());
         }
+        if (args.mode == "17") {
+          await args.device.setStateCoap("D0310C", 17, args.device.getSettings());
+        }
+        if (args.mode == "19") {
+          await args.device.setStateCoap("D0310C", 19, args.device.getSettings());
+        }
+        if (args.mode == "65") {
+          await args.device.setStateCoap("D0310C", 65, args.device.getSettings());
+        }        
       } else if (coapDevices.includes(args.device.constructor.name)) {
         if (args.mode == "AUTO") {
           // auto

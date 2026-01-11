@@ -25,7 +25,8 @@
     "measure_humidity",
     "measure_temperature",
     "light_ambient_mode",
-    "light_mode"        
+    "light_mode",
+    "beep"        
   ],
   "platforms": [
     "local"

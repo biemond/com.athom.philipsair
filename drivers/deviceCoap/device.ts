@@ -90,7 +90,19 @@ class deviceCoap extends AirDevice {
       this.setStateCoap("D03135", Number(value), this.getSettings());
       return value;
     });
-    
+ 
+    this.registerCapabilityListener('beep', async (value) => {
+      let model = this.getCapabilityValue('product')
+      let values;
+
+      if (value == true) {
+        values = 100;
+      } else {
+        values = 0;
+      }
+      this.setStateCoap("D03130", values, this.getSettings());
+      return value;
+    });    
     
     this.registerCapabilityListener('button_lights', async (value) => {
       let model = this.getCapabilityValue('product')
