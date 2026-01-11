@@ -1,0 +1,36 @@
+{
+    "type": "enum",
+    "title": {
+        "en": "Ambient Light mode"
+    },
+    "getable": true,
+    "setable": true,
+    "uiComponent": "picker",
+    "uiQuickAction": false,
+    "values": [
+        {
+            "id": "1",
+            "title": {
+                "en": "Warm"
+            }
+        },
+        {
+            "id": "2",
+            "title": {
+                "en": "Dawn"
+            }
+        },
+        {
+            "id": "3",
+            "title": {
+                "en": "Calm"
+            }
+        },
+        {
+            "id": "4",
+            "title": {
+                "en": "Breath"
+            }
+        }        
+    ]
+}

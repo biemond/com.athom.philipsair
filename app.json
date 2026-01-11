@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.athom.philipsair",
-  "version": "1.0.61",
+  "version": "1.0.62",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -994,7 +994,9 @@
         "timer",
         "error",
         "measure_humidity",
-        "measure_temperature"
+        "measure_temperature",
+        "light_ambient_mode",
+        "light_mode"
       ],
       "platforms": [
         "local"
@@ -1077,7 +1079,9 @@
         "water_level",
         "timer_remaining",
         "timer",
-        "error"
+        "error",
+        "light_ambient_mode",
+        "light_mode"
       ],
       "platforms": [
         "local"
@@ -1539,6 +1543,42 @@
       "setable": false,
       "icon": "/assets/images/clock.svg"
     },
+    "light_ambient_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Ambient Light mode"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": false,
+      "values": [
+        {
+          "id": "1",
+          "title": {
+            "en": "Warm"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Dawn"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "Calm"
+          }
+        },
+        {
+          "id": "4",
+          "title": {
+            "en": "Breath"
+          }
+        }
+      ]
+    },
     "light_intensity": {
       "type": "number",
       "title": {
@@ -1546,11 +1586,82 @@
       },
       "getable": true,
       "setable": true,
-      "uiComponent": "slider",
       "uiQuickAction": true,
-      "min": 0,
-      "max": 100,
-      "step": 25
+      "uiComponent": "picker",
+      "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "25",
+          "title": {
+            "en": "25%"
+          }
+        },
+        {
+          "id": "50",
+          "title": {
+            "en": "50%"
+          }
+        },
+        {
+          "id": "75",
+          "title": {
+            "en": "75%"
+          }
+        },
+        {
+          "id": "100",
+          "title": {
+            "en": "100%"
+          }
+        },
+        {
+          "id": "115",
+          "title": {
+            "en": "Low, some devices"
+          }
+        },
+        {
+          "id": "123",
+          "title": {
+            "en": "Bright, some devices"
+          }
+        }
+      ]
+    },
+    "light_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Light mode"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": false,
+      "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "1",
+          "title": {
+            "en": "Humidity"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Ambient"
+          }
+        }
+      ]
     },
     "measure_humidity": {
       "type": "number",

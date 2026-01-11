@@ -49,6 +49,7 @@ class deviceCoap extends AirDevice {
     this.registerCapabilityListener('light_intensity', async (value) => {
       let model = this.getCapabilityValue('product')      
       const newCoapDevices2 = ['AC3737/10','AMF765/10','AC3421/13','AC4221/11','AC4220/12','AC3220/10','AC0950/10','AC3210/12','AC0951/13']  
+      const newCoapDevices3 = ['HU1509/00','HU1510/03']                    
       if (newCoapDevices2.includes(model)) {
         let values2
         if (value == "0") {
@@ -56,13 +57,41 @@ class deviceCoap extends AirDevice {
         } else {
           values2 = 100; // on
         }
-        this.setStateCoap("D03105", values2, this.getSettings());
+        if ( values2 == 0 || values2 == 0 ) {
+          this.setStateCoap("D03105", values2, this.getSettings());
+        }
+      } else if (newCoapDevices3.includes(model)) {
+        let values2
+        if (value == "0") {
+          values2 = 0;   // off
+        } else if (value == "115") {
+          values2 = 115;   // Low
+        } else {
+          values2 = 123; // bright
+        }
+        if ( values2 == 0 || values2 == 115 || values2 == 123 ) {
+          await this.setStateCoap("D03104", values2, this.getSettings());
+          await this.setStateCoap("D03105", values2, this.getSettings());
+        }
       } else {        
         this.setStateCoap("aqil", value, this.getSettings());
       }
       return value;
     });
 
+    this.registerCapabilityListener('light_ambient_mode', async (value) => {
+      let model = this.getCapabilityValue('product')      
+      this.setStateCoap("D03137", Number(value), this.getSettings());
+      return value;
+    });
+
+    this.registerCapabilityListener('light_mode', async (value) => {
+      let model = this.getCapabilityValue('product')      
+      this.setStateCoap("D03135", Number(value), this.getSettings());
+      return value;
+    });
+    
+    
     this.registerCapabilityListener('button_lights', async (value) => {
       let model = this.getCapabilityValue('product')
       const newCoapDevices = ['AC0850/11', 'AC1715/11', 'AC1715/10']

@@ -5,9 +5,50 @@
     },
     "getable": true,
     "setable": true,
-    "uiComponent": "slider",
     "uiQuickAction": true,
-    "min": 0,
-    "max": 100,
-    "step": 25
+    "uiComponent": "picker",
+    "values": [
+        {
+            "id": "0",
+            "title": {
+                "en": "Off"
+            }
+        },
+        {
+            "id": "25",
+            "title": {
+                "en": "25%"
+            }
+        },
+        {
+            "id": "50",
+            "title": {
+                "en": "50%"
+            }
+        },
+        {
+            "id": "75",
+            "title": {
+                "en": "75%"
+            }
+        },        
+        {
+            "id": "100",
+            "title": {
+                "en": "100%"
+            }
+        },   
+        {
+            "id": "115",
+            "title": {
+                "en": "Low, some devices"
+            }
+        },
+        {
+            "id": "123",
+            "title": {
+                "en": "Bright, some devices"
+            }
+        }   
+    ]
 }
