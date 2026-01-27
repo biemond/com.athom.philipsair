@@ -396,7 +396,7 @@ export class AirDevice extends Homey.Device {
             }
             if (json.hasOwnProperty('D03105')) {
                 this.log(`Light brightness: ${json["D03105"]}`);
-                this.setCapabilityValue('light_intensity', parseInt(json["D03105"]));
+                this.setCapabilityValue('light_intensity', json["D03105"]);
             }
 
             if (json.hasOwnProperty('D03135')) {
@@ -404,7 +404,7 @@ export class AirDevice extends Homey.Device {
                 if (this.hasCapability('light_mode') === false) {
                     this.addCapability('light_mode');
                 }
-                this.setCapabilityValue('light_mode', parseInt(json["D03135"]));
+                this.setCapabilityValue('light_mode', json["D03135"]);
             }
 
             if (json.hasOwnProperty('D03137')) {
@@ -412,7 +412,7 @@ export class AirDevice extends Homey.Device {
                 if (this.hasCapability('light_ambient_mode') === false) {
                     this.addCapability('light_ambient_mode');
                 }
-                this.setCapabilityValue('light_ambient_mode', parseInt(json["D03137"]));
+                this.setCapabilityValue('light_ambient_mode',json["D03137"]);
             }
 
             if (json.hasOwnProperty('uil')) {

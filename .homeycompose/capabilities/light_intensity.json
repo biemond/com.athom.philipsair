@@ -1,5 +1,5 @@
 {
-    "type": "number",
+    "type": "enum",
     "title": {
         "en": "Light level ring"
     },
