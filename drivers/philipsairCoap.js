@@ -57,7 +57,6 @@ const { resolve } = require("path");
     }
 
     function aes_encrypt2(data, key, iv) {
-        let segmentSize = 16;
         let aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
         let encryptedBytes = aesCbc.encrypt(data);
         return encryptedBytes;
@@ -73,8 +72,15 @@ const { resolve } = require("path");
             .replace(/\\b/g, "\\b")
             .replace(/\\f/g, "\\f");
         // remove non-printable and other non-valid JSON chars
-        data = data.replace(/[\u0000-\u0019]+/g, "");
-        return JSON.parse(data);
+        // data = data.replace(/[\u0000-\u0019]+/g, "");
+        // return JSON.parse(data);
+        try {
+            data = data.replace(/[\u0000-\u0019]+/g, "");
+            return JSON.parse(data);
+        } catch {
+            this.emit('error', `Cannot parse: ${data}`);
+            return console.error(`Cannot parse: ${data}`);
+        }
     }
 
     // active functions()  -------------------------------------  active functions()  --------------------------------------------
@@ -116,12 +122,12 @@ const { resolve } = require("path");
 
     let newTimeout = (handler, delay) => {
         let id = setTimeout(handler, delay), clear = clearTimeout.bind(null, id);
-        return {id, clear, trigger: () => (clear(), handler())};
+        return { id, clear, trigger: () => (clear(), handler()) };
     };
 
     async function getCurrentDataCoap(settings, device, callback) {
 
-        if (settings.add_delay == true){
+        if (settings.add_delay == true) {
             console.log("add 60 sec delay");
             await sleep(60000);
         } else {
@@ -164,7 +170,7 @@ const { resolve } = require("path");
             });
 
         const connectResult = await coap.tryToConnect(target);
-       
+
         console.log("tryToConnect " + connectResult);
         device.setClient(coap);
 
@@ -176,18 +182,21 @@ const { resolve } = require("path");
                 console.log("counter " + counter);
                 const hash = response.substring(response.length - 64);
                 const encodedMessageAndCounter = response.substring(0, response.length - 64);
+
                 // console.log(encodedMessageAndCounter);
                 const hashedMessage = Buffer.from(toSha256(encodedMessageAndCounter)).toString('hex').toUpperCase();
-
+                console.log("statusCounter " + statusCounter);
                 if (counter < 1 || counter > 2000000000 ||
                     ((counter < statusCounter && statusCounter < 2000000000 - 10) ||
                         ((counter > statusCounter + 10 && counter < 2000000000) ||
                             (2000000000 - statusCounter < 10 && counter < statusCounter &&
                                 (10 - (2000000000 - statusCounter)) + 1 < counter && counter < statusCounter)))) {
                     console.log('Invalid message id');
+                    // throw new Error('Invalid message id');
                 }
                 if (hash !== hashedMessage) {
                     console.log('Invalid message hash');
+                    throw new Error('Invalid message hash');
                 }
                 if (counter >= 2000000000) {
                     counter = 1;
@@ -203,13 +212,23 @@ const { resolve } = require("path");
                 // console.log("iv " + iv);
 
                 const encodedMessage = response.substring(8, response.length - 64);
+                if (encodedMessage.length % 16 !== 0) {
+                    console.log("Encoded message length is not a multiple of 16 bytes:", encodedMessage.length);
+                    throw new Error('Message corrupted 2');
+                }
 
                 let payload = new Buffer.from(encodedMessage, 'hex');
+                console.log("Payload length:", payload.length);
+                if (payload.length % 16 !== 0) {
+                    console.log("Payload length is not a multiple of 16 bytes:", payload.length);
+                    throw new Error('Message corrupted 3');
+                }
                 let data = aes_decrypt2(payload, Buffer.from(secretKey, 'utf-8'), Buffer.from(iv, 'utf-8'));
                 let dataText = aesjs.utils.utf8.fromBytes(data);
                 jsonStatus = clean(dataText).state.reported;
                 console.log(jsonStatus);
                 device.handleDeviceStatus(jsonStatus, settings);
+
             }
 
         }, undefined, {
@@ -217,30 +236,30 @@ const { resolve } = require("path");
             retransmit: false
         }).then(() => {
             // TODO: nothing?
-        }).catch(function (error) { 
-            console.log(error); 
-            console.log('observe stopped'); 
-            
+        }).catch(function (error) {
+            console.log(error);
+            console.log('observe stopped');
+
         });
 
         let timeoutId = newTimeout(function () {
             let response = {
                 status: jsonStatus
             };
-            coap.stopObserving('coap://'  + settings.ipkey + ':5683/sys/dev/status');
-            
+            coap.stopObserving('coap://' + settings.ipkey + ':5683/sys/dev/status');
+
             console.log('---------timeout----------');
             if (jsonStatus != null) {
                 return callback(null, response);
             } else {
                 return callback(new Error('No response received'), null);
-            }    
+            }
         }, 600000);
 
 
         device.setTimeoutId(timeoutId);
     }
-    
+
     async function setValueDataCoap(key, value, settings, device, callback) {
         console.log("setValueDataCoap ");
         let target = new origin.Origin('coap:', settings.ipkey, 5683);
@@ -249,8 +268,8 @@ const { resolve } = require("path");
 
         let coap = device.getClient();
 
-        await coap.stopObserving('coap://'  + settings.ipkey + ':5683/sys/dev/status');
-        
+        await coap.stopObserving('coap://' + settings.ipkey + ':5683/sys/dev/status');
+
         // await coap.reset(target);
         coap = coapclass.CoapClient;
 
@@ -323,7 +342,7 @@ const { resolve } = require("path");
                         const payload = response.payload.toString('utf-8');
                         console.log(payload);
                         jsonStatus = payload
-                    } 
+                    }
                 }).catch(err => {
                     console.log(err);
                 });
