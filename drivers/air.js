@@ -392,7 +392,7 @@ export class AirDevice extends Homey.Device {
 
             if (json.hasOwnProperty('aqil')) {
                 this.log(`Light brightness: ${json.aqil}`);
-                this.setCapabilityValue('light_intensity', parseInt(json.aqil));
+                this.setCapabilityValue('light_intensity', json.aqil );
             }
             if (json.hasOwnProperty('D03105')) {
                 this.log(`Light brightness: ${json["D03105"]}`);

@@ -9,6 +9,12 @@
     "uiQuickAction": false,
     "values": [
         {
+            "id": "0",
+            "title": {
+                "en": "unknown"
+            }
+        },
+        {
             "id": "1",
             "title": {
                 "en": "Warm"
