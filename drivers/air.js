@@ -208,16 +208,16 @@ export class AirDevice extends Homey.Device {
                 this.log(`Auto QuickDry Mode: ${json["D03138"]}`);
             }
 
-// Auto QuickDry Mode (D03138):
-// On: "D03138": 1
-// Off: "D03138": 0
+            // Auto QuickDry Mode (D03138):
+            // On: "D03138": 1
+            // Off: "D03138": 0
 
             if (json.hasOwnProperty('D03134')) {
                 this.log(`Sensors Monitor in Standby ${json["D03138"]}`);
             }
-// Sensors Monitor in Standby (D03134):
-// On: "D03134": 1
-// Off: "D03134": 0            
+            // Sensors Monitor in Standby (D03134):
+            // On: "D03134": 1
+            // Off: "D03134": 0            
 
             if (json.hasOwnProperty('D0310C')) {
 
@@ -388,15 +388,18 @@ export class AirDevice extends Homey.Device {
                 this.log('fan_speed error');
             }
 
-
-
-            if (json.hasOwnProperty('aqil')) {
-                this.log(`Light brightness: ${json.aqil}`);
-                this.setCapabilityValue('light_intensity', json.aqil );
+            try {
+                if (json.hasOwnProperty('aqil')) {
+                    this.log(`Light brightness: ${json.aqil}`);
+                    this.setCapabilityValue('light_intensity', json.aqil.toString());
+                }
+                if (json.hasOwnProperty('D03105')) {
+                    this.log(`Light brightness: ${json["D03105"]}`);
+                    this.setCapabilityValue('light_intensity', json["D03105"].toString());
+                }
             }
-            if (json.hasOwnProperty('D03105')) {
-                this.log(`Light brightness: ${json["D03105"]}`);
-                this.setCapabilityValue('light_intensity', json["D03105"].toString());
+            catch (error) {
+                this.log('light_intensity error');
             }
 
             if (json.hasOwnProperty('D03135')) {
@@ -412,7 +415,7 @@ export class AirDevice extends Homey.Device {
                 if (this.hasCapability('light_ambient_mode') === false) {
                     this.addCapability('light_ambient_mode');
                 }
-                this.setCapabilityValue('light_ambient_mode',json["D03137"].toString());
+                this.setCapabilityValue('light_ambient_mode', json["D03137"].toString());
             }
 
             if (json.hasOwnProperty('uil')) {
