@@ -78,8 +78,8 @@ const { resolve } = require("path");
             data = data.replace(/[\u0000-\u0019]+/g, "");
             return JSON.parse(data);
         } catch {
-            this.emit('error', `Cannot parse: ${data}`);
-            return console.error(`Cannot parse: ${data}`);
+            console.log('error', `Cannot parse: ${data}`);
+            throw new Error('Cannot parse');
         }
     }
 
