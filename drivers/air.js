@@ -155,28 +155,38 @@ export class AirDevice extends Homey.Device {
 
             if (json.hasOwnProperty('pm25')) {
                 this.log(`PM25: ${json.pm25}`);
-                this.setCapabilityValue('measure_pm25', json.pm25);
+                if (this.hasCapability('measure_pm25')) {
+                    this.setCapabilityValue('measure_pm25', json.pm25);
+                }
             }
 
             if (json.hasOwnProperty('D03-33')) {
                 this.log(`PM25: ${json["D03-33"]}`);
-                this.setCapabilityValue('measure_pm25', json["D03-33"]);
+                if (this.hasCapability('measure_pm25')) {
+                    this.setCapabilityValue('measure_pm25', json["D03-33"]);
+                }
             }
 
             if (json.hasOwnProperty('D03221')) {
                 this.log(`PM25: ${json["D03221"]}`);
-                this.setCapabilityValue('measure_pm25', json["D03221"]);
+                if (this.hasCapability('measure_pm25')) {
+                    this.setCapabilityValue('measure_pm25', json["D03221"]);
+                }
             }
 
 
             if (json.hasOwnProperty('tvoc')) {
                 this.log(`GAS (TVOC): ${json.tvoc}`);
-                this.setCapabilityValue('measure_tvoc', json.tvoc);
+                if (this.hasCapability('measure_tvoc')) {
+                    this.setCapabilityValue('measure_tvoc', json.tvoc);
+                }
             }
 
             if (json.hasOwnProperty('D03122')) {
                 this.log(`GAS (TVOC): ${json["D03122"]}`);
-                this.setCapabilityValue('measure_tvoc', json["D03122"]);
+                if (this.hasCapability('measure_tvoc')) {
+                    this.setCapabilityValue('measure_tvoc', json["D03122"]);
+                }
             }
 
 
@@ -213,7 +223,7 @@ export class AirDevice extends Homey.Device {
             // Off: "D03138": 0
 
             if (json.hasOwnProperty('D03134')) {
-                this.log(`Sensors Monitor in Standby ${json["D03138"]}`);
+                this.log(`Sensors Monitor in Standby ${json["D03134"]}`);
             }
             // Sensors Monitor in Standby (D03134):
             // On: "D03134": 1
@@ -308,15 +318,21 @@ export class AirDevice extends Homey.Device {
 
             if (json.hasOwnProperty('iaql')) {
                 this.log(`Allergen index: ${json.iaql}`);
-                this.setCapabilityValue('measure_iaql', json.iaql);
+                if (this.hasCapability('measure_iaql')) {
+                    this.setCapabilityValue('measure_iaql', json.iaql);
+                }
             }
             if (json.hasOwnProperty('D03-32')) {
                 this.log(`Allergen index: ${json["D03-32"]}`);
-                this.setCapabilityValue('measure_iaql', json["D03-32"]);
+                if (this.hasCapability('measure_iaql')) {
+                    this.setCapabilityValue('measure_iaql', json["D03-32"]);
+                }
             }
             if (json.hasOwnProperty('D03120')) {
                 this.log(`Allergen index: ${json["D03120"]}`);
-                this.setCapabilityValue('measure_iaql', json["D03120"]);
+                if (this.hasCapability('measure_iaql')) {
+                    this.setCapabilityValue('measure_iaql', json["D03120"]);
+                }
             }
 
 
@@ -375,6 +391,7 @@ export class AirDevice extends Homey.Device {
 
                 if (json.hasOwnProperty('D0310C')) {
                     if (this.hasCapabilityValue('fan_speed')) {
+                        this.log(`Fan speed:${json["D0310C"]}`)
                         let mode_str = { '0': 'AUTO', '1': '1', '2': '2', '18': 't', '17': 's', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9', '10': '10', '17': '17', '19': '19', '65': '65' }
                         let fan = mode_str[json["D0310C"]];
                         this.log(`Fan speed: ${fan} - ${json["D0310C"]}`)
@@ -466,15 +483,19 @@ export class AirDevice extends Homey.Device {
 
             if (json.hasOwnProperty('cl')) {
                 this.log(`Child lock: ${json.cl}`);
-                this.setCapabilityValue('child_lock', json.cl);
+                if (this.hasCapability('child_lock')) {
+                    this.setCapabilityValue('child_lock', json.cl);
+                }
             }
 
             if (json.hasOwnProperty('D03103')) {
                 this.log(`Child lock: ${json["D03103"]}`);
-                if (json["D03103"] == 1) {
-                    this.setCapabilityValue('child_lock', true);
-                } else {
-                    this.setCapabilityValue('child_lock', false);
+                if (this.hasCapability('child_lock')) {
+                    if (json["D03103"] == 1) {
+                        this.setCapabilityValue('child_lock', true);
+                    } else {
+                        this.setCapabilityValue('child_lock', false);
+                    }
                 }
             }
 
@@ -522,6 +543,7 @@ export class AirDevice extends Homey.Device {
                 }
 
                 if (json.hasOwnProperty('D03240')) {
+                    this.log(`Error: ${json["D03240"]}`);
                     if (json["D03240"] != 0) {
                         let err_str = { 49408: 'no water', 32768: 'water tank open', 49153: "pre-filter must be cleaned", 49155: "pre-filter must be cleaned" };
                         this.log(`Error: ${err_str[json["D03240"]]}`);
@@ -571,71 +593,76 @@ export class AirDevice extends Homey.Device {
             // print('Wick filter: replace in {} hours'.format(filters['wicksts']))
             if (json.hasOwnProperty('fltsts0')) {
                 this.log(`Pre-filter: clean in ${json.fltsts0} hours`);
-                this.setCapabilityValue('pre_filter_clean', json.fltsts0);
-                let tokens = {
-                    "hours": json.fltsts0,
-                    "filter": "pre_filter",
-                    "device": this.getName()
-                };
-                let state = {
-                    "which": "pre_filter"
-                };
+                if (this.hasCapability('pre_filter_clean')) {
+                    this.setCapabilityValue('pre_filter_clean', json.fltsts0);
+                    let tokens = {
+                        "hours": json.fltsts0,
+                        "filter": "pre_filter",
+                        "device": this.getName()
+                    };
+                    let state = {
+                        "which": "pre_filter"
+                    };
 
-                this.log("preFilterTriggered: " + this.preFilterTriggered)
-                if (this.preFilterTriggered == false) {
-                    this.log("is preFilterTriggered ");
-                    this.flowTriggerFilterReplaceClean(tokens, state);
-                    this.preFilterTriggered = true;
-                    setTimeout(() => {
-                        this.preFilterTriggered = false;
-                    }, 60 * MINUTE);
+                    this.log("preFilterTriggered: " + this.preFilterTriggered)
+                    if (this.preFilterTriggered == false) {
+                        this.log("is preFilterTriggered ");
+                        this.flowTriggerFilterReplaceClean(tokens, state);
+                        this.preFilterTriggered = true;
+                        setTimeout(() => {
+                            this.preFilterTriggered = false;
+                        }, 60 * MINUTE);
+                    }
                 }
-
             }
             if (json.hasOwnProperty('D05-13')) {
                 this.log(`Pre-filter: clean in ${json["D05-13"]} hours`);
-                this.setCapabilityValue('pre_filter_clean', json["D05-13"]);
-                let tokens = {
-                    "hours": json["D05-13"],
-                    "filter": "pre_filter",
-                    "device": this.getName()
-                };
-                let state = {
-                    "which": "pre_filter"
-                };
+                if (this.hasCapability('pre_filter_clean')) {
+                    this.setCapabilityValue('pre_filter_clean', json["D05-13"]);
+                    let tokens = {
+                        "hours": json["D05-13"],
+                        "filter": "pre_filter",
+                        "device": this.getName()
+                    };
+                    let state = {
+                        "which": "pre_filter"
+                    };
 
-                this.log("preFilterTriggered: " + this.preFilterTriggered)
-                if (this.preFilterTriggered == false) {
-                    this.log("is preFilterTriggered ");
-                    this.flowTriggerFilterReplaceClean(tokens, state);
-                    this.preFilterTriggered = true;
-                    setTimeout(() => {
-                        this.preFilterTriggered = false;
-                    }, 60 * MINUTE);
+                    this.log("preFilterTriggered: " + this.preFilterTriggered)
+                    if (this.preFilterTriggered == false) {
+                        this.log("is preFilterTriggered ");
+                        this.flowTriggerFilterReplaceClean(tokens, state);
+                        this.preFilterTriggered = true;
+                        setTimeout(() => {
+                            this.preFilterTriggered = false;
+                        }, 60 * MINUTE);
+                    }
                 }
 
             }
 
             if (json.hasOwnProperty('D0520D')) {
                 this.log(`Pre-filter: clean in ${json["D0520D"]} hours`);
-                this.setCapabilityValue('pre_filter_clean', json["D0520D"]);
-                let tokens = {
-                    "hours": json["D0520D"],
-                    "filter": "pre_filter",
-                    "device": this.getName()
-                };
-                let state = {
-                    "which": "pre_filter"
-                };
+                if (this.hasCapability('pre_filter_clean')) {
+                    this.setCapabilityValue('pre_filter_clean', json["D0520D"]);
+                    let tokens = {
+                        "hours": json["D0520D"],
+                        "filter": "pre_filter",
+                        "device": this.getName()
+                    };
+                    let state = {
+                        "which": "pre_filter"
+                    };
 
-                this.log("preFilterTriggered: " + this.preFilterTriggered)
-                if (this.preFilterTriggered == false) {
-                    this.log("is preFilterTriggered ");
-                    this.flowTriggerFilterReplaceClean(tokens, state);
-                    this.preFilterTriggered = true;
-                    setTimeout(() => {
-                        this.preFilterTriggered = false;
-                    }, 60 * MINUTE);
+                    this.log("preFilterTriggered: " + this.preFilterTriggered)
+                    if (this.preFilterTriggered == false) {
+                        this.log("is preFilterTriggered ");
+                        this.flowTriggerFilterReplaceClean(tokens, state);
+                        this.preFilterTriggered = true;
+                        setTimeout(() => {
+                            this.preFilterTriggered = false;
+                        }, 60 * MINUTE);
+                    }
                 }
             }
 
