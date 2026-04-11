@@ -9,6 +9,30 @@
     "uiQuickAction": true,
     "values": [
         {
+            "id": "30",
+            "title": {
+                "en": "30 unknown"
+            }
+        }, 
+        {
+            "id": "45",
+            "title": {
+                "en": "45 unknown"
+            }
+        }, 
+        {
+            "id": "60",
+            "title": {
+                "en": "60 unknown"
+            }
+        }, 
+        {
+            "id": "120",
+            "title": {
+                "en": "120 unknown"
+            }
+        },                 
+        {
             "id": "17920",
             "title": {
                 "en": "On"

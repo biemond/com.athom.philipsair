@@ -9,6 +9,18 @@
     "uiQuickAction": true,
     "values": [
         {
+            "id": "30",
+            "title": {
+                "en": "30%"
+            }
+        },
+        {
+            "id": "35",
+            "title": {
+                "en": "35%"
+            }
+        },
+        {
             "id": "40",
             "title": {
                 "en": "40%"

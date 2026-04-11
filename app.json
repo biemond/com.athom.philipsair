@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.athom.philipsair",
-  "version": "1.0.73",
+  "version": "1.0.74",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -1487,6 +1487,12 @@
           "title": {
             "en": "High, some devices"
           }
+        },
+        {
+          "id": "a",
+          "title": {
+            "en": "unknown"
+          }
         }
       ]
     },
@@ -1640,6 +1646,12 @@
           }
         },
         {
+          "id": "1",
+          "title": {
+            "en": "1%"
+          }
+        },
+        {
           "id": "10",
           "title": {
             "en": "10%"
@@ -1649,6 +1661,12 @@
           "id": "25",
           "title": {
             "en": "25%"
+          }
+        },
+        {
+          "id": "30",
+          "title": {
+            "en": "30%"
           }
         },
         {
@@ -1920,6 +1938,30 @@
       "uiQuickAction": true,
       "values": [
         {
+          "id": "30",
+          "title": {
+            "en": "30 unknown"
+          }
+        },
+        {
+          "id": "45",
+          "title": {
+            "en": "45 unknown"
+          }
+        },
+        {
+          "id": "60",
+          "title": {
+            "en": "60 unknown"
+          }
+        },
+        {
+          "id": "120",
+          "title": {
+            "en": "120 unknown"
+          }
+        },
+        {
           "id": "17920",
           "title": {
             "en": "On"
@@ -1943,6 +1985,18 @@
       "uiComponent": "picker",
       "uiQuickAction": true,
       "values": [
+        {
+          "id": "30",
+          "title": {
+            "en": "30%"
+          }
+        },
+        {
+          "id": "35",
+          "title": {
+            "en": "35%"
+          }
+        },
         {
           "id": "40",
           "title": {
