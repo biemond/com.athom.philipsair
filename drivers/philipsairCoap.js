@@ -79,7 +79,7 @@ const { resolve } = require("path");
             return JSON.parse(data);
         } catch {
             console.log('error', `Cannot parse: ${data}`);
-            throw new Error('Cannot parse');
+            throw new Error('Cannot parse: ' + data);
         }
     }
 
@@ -214,20 +214,21 @@ const { resolve } = require("path");
                 const encodedMessage = response.substring(8, response.length - 64);
                 if (encodedMessage.length % 16 !== 0) {
                     console.log("Encoded message length is not a multiple of 16 bytes:", encodedMessage.length);
-                    throw new Error('Message corrupted 2');
+                    throw new Error('Message corrupted 2: ' + encodedMessage.length);
                 }
 
                 let payload = new Buffer.from(encodedMessage, 'hex');
                 console.log("Payload length:", payload.length);
                 if (payload.length % 16 !== 0) {
                     console.log("Payload length is not a multiple of 16 bytes:", payload.length);
-                    throw new Error('Message corrupted 3');
+                    //throw new Error('Message corrupted 3: ' + payload.length);
+                } else {
+                    let data = aes_decrypt2(payload, Buffer.from(secretKey, 'utf-8'), Buffer.from(iv, 'utf-8'));
+                    let dataText = aesjs.utils.utf8.fromBytes(data);
+                    jsonStatus = clean(dataText).state.reported;
+                    console.log(jsonStatus);
+                    device.handleDeviceStatus(jsonStatus, settings);
                 }
-                let data = aes_decrypt2(payload, Buffer.from(secretKey, 'utf-8'), Buffer.from(iv, 'utf-8'));
-                let dataText = aesjs.utils.utf8.fromBytes(data);
-                jsonStatus = clean(dataText).state.reported;
-                console.log(jsonStatus);
-                device.handleDeviceStatus(jsonStatus, settings);
 
             }
 
