@@ -225,9 +225,14 @@ const { resolve } = require("path");
                 } else {
                     let data = aes_decrypt2(payload, Buffer.from(secretKey, 'utf-8'), Buffer.from(iv, 'utf-8'));
                     let dataText = aesjs.utils.utf8.fromBytes(data);
-                    jsonStatus = clean(dataText).state.reported;
-                    console.log(jsonStatus);
-                    device.handleDeviceStatus(jsonStatus, settings);
+
+                    try {
+                        jsonStatus = clean(dataText).state.reported;
+                        console.log(jsonStatus);
+                        device.handleDeviceStatus(jsonStatus, settings);
+                    } catch {
+                        // ignore, not valid json
+                    }
                 }
 
             }

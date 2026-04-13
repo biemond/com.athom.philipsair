@@ -1,4 +1,7 @@
 {
+   "1.0.77": {
+    "en": "fix errors, check valid json"
+  },  
    "1.0.76": {
     "en": "fix errors, corrupted messages"
   },  
