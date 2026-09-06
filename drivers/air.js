@@ -258,6 +258,14 @@ export class AirDevice extends Homey.Device {
                             this.setCapabilityValue('measure_power', 1);
                         }
                     }
+                    if (value == 67) {
+                        this.setCapabilityValue('heater_mode', "MEDIUM");
+                        if (json["D03102"] == 1) {
+                            this.setCapabilityValue('measure_power', 1525);
+                        } else {
+                            this.setCapabilityValue('measure_power', 1);
+                        }
+                    }                    
                     if (value == -127) {
                         this.setCapabilityValue('heater_mode', "VENTILATION");
                         if (json["D03102"] == 1) {
@@ -276,6 +284,14 @@ export class AirDevice extends Homey.Device {
                             this.setCapabilityValue('measure_power', 1);
                         }
                     }
+                    if (value == 67) {
+                        this.setCapabilityValue('heater_speed', "MEDIUM");
+                        if (json["D03102"] == 1) {
+                            this.setCapabilityValue('measure_power', 1525);
+                        } else {
+                            this.setCapabilityValue('measure_power', 1);
+                        }
+                    }                      
                     if (value == 66) {
                         this.setCapabilityValue('heater_speed', "LOW");
                         if (json["D03102"] == 1) {
