@@ -52,6 +52,11 @@ class deviceHeaterCoap extends AirDevice {
         await this.setStateCoap("D0310C", 65, this.getSettings()); 
         await this.setCapabilityValue('measure_power', 1900);                  
       } 
+      if (value == "MEDIUM") {
+        await this.setStateCoap("D0310A", 3, this.getSettings());
+        await this.setStateCoap("D0310C", 67, this.getSettings());
+        await this.setCapabilityValue('measure_power', 1525);             
+      }               
       if (value == "LOW") {
         await this.setStateCoap("D0310A", 3, this.getSettings());
         await this.setStateCoap("D0310C", 66, this.getSettings());

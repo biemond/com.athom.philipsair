@@ -22,6 +22,12 @@
                     }
                 },
                 {
+                    "id": "MEDIUM",
+                    "title": {
+                        "en": "Medium some devices"
+                    }
+                },                
+                {
                     "id": "LOW",
                     "title": {
                         "en": "Low"

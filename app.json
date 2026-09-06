@@ -607,6 +607,12 @@
                 }
               },
               {
+                "id": "MEDIUM",
+                "title": {
+                  "en": "Medium, some devices"
+                }
+              },
+              {
                 "id": "LOW",
                 "title": {
                   "en": "Low"
@@ -644,6 +650,12 @@
                 "id": "HIGH",
                 "title": {
                   "en": "High"
+                }
+              },
+              {
+                "id": "MEDIUM",
+                "title": {
+                  "en": "Medium some devices"
                 }
               },
               {
@@ -1529,6 +1541,12 @@
           }
         },
         {
+          "id": "MEDIUM",
+          "title": {
+            "en": "Medium, some devices"
+          }
+        },
+        {
           "id": "LOW",
           "title": {
             "en": "Low"
@@ -1556,6 +1574,12 @@
           "id": "HIGH",
           "title": {
             "en": "High"
+          }
+        },
+        {
+          "id": "MEDIUM",
+          "title": {
+            "en": "Medium some devices"
           }
         },
         {
