@@ -1,0 +1,18 @@
+{
+    "type": "enum",
+    "title": {
+        "en": "Heating status"
+    },
+    "getable": true,
+    "setable": false,
+    "uiComponent": "sensor",
+    "icon": "/assets/images/temp.svg",
+    "values": [
+        { "id": "heating_high", "title": { "en": "Heating high" } },
+        { "id": "heating_medium", "title": { "en": "Heating medium" } },
+        { "id": "heating_low", "title": { "en": "Heating low" } },
+        { "id": "idle", "title": { "en": "Idle, target reached" } },
+        { "id": "fan", "title": { "en": "Fan only" } },
+        { "id": "off", "title": { "en": "Off" } }
+    ]
+}

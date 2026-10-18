@@ -17,11 +17,18 @@
     "heater_mode",
     "target_temperature",
     "measure_power",
+    "meter_power",
+    "heater_status",
     "child_lock"
   ],
   "capabilitiesOptions": {
     "measure_power": {
       "approximated": true
+    },
+    "meter_power": {
+      "title": {
+        "en": "Energy (estimated)"
+      }
     }
   },
   "platforms": [

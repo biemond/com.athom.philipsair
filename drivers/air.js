@@ -5,10 +5,28 @@ const philipsairCoap = require('./philipsairCoap.js');
 
 const MINUTE = 60000;
 
-// CX3120 wattage per heating level (D0313F / D0310C); the device does not report power itself.
-const HEATER_WATTS = { '65': 2000, '67': 1200, '66': 900 };
-const HEATER_WATTS_FAN_ONLY = 9;
-const HEATER_WATTS_STANDBY = 1;
+// Heating status from D0313F (what the heater is actually doing): 65/67/66 = high/medium/low, -16 = idle at target, 0 = fan only
+const HEATER_LEVEL_STATUS = { '65': 'heating_high', '67': 'heating_medium', '66': 'heating_low', '-16': 'idle', '0': 'fan', '-127': 'fan' };
+const HEATER_STATUS_TITLES = {
+    heating_high: 'Heating high', heating_medium: 'Heating medium', heating_low: 'Heating low',
+    idle: 'Idle, target reached', fan: 'Fan only', off: 'Off',
+};
+// CX3120 ratings; the device does not report power itself
+const HEATER_STATUS_WATTS = { heating_high: 2000, heating_medium: 1200, heating_low: 900, idle: 9, fan: 9, off: 1 };
+// do not count energy across a gap in status updates longer than this
+const ENERGY_MAX_GAP = 5 * MINUTE;
+
+function heaterStatus(json) {
+    if (json["D03102"] !== 1) return 'off';
+    let level;
+    if (json.hasOwnProperty('D0313F')) {
+        level = json["D0313F"];
+    } else {
+        // older firmware without heating status: assume the selected level, auto as high
+        level = json["D0310C"] === 0 ? 65 : json["D0310C"];
+    }
+    return HEATER_LEVEL_STATUS[level] || 'idle';
+}
 
 // Heater timer D03110 is an index: 0 = off, 1 = 30 min, 2 = 1 h, 3 = 2 h, ... (+1 h per step).
 // The Homey timer capability is in whole hours.
@@ -56,18 +74,42 @@ export class AirDevice extends Homey.Device {
 
     updateHeaterPower(json) {
         if (!this.hasCapability('measure_power') || !this.hasCapability('heater_mode')) return;
-        let watts;
-        if (json["D03102"] !== 1) {
-            watts = HEATER_WATTS_STANDBY;
-        } else if (json.hasOwnProperty('D0313F')) {
-            // D0313F is the level the heater is actually running at, so idle when the target is reached
-            watts = HEATER_WATTS[json["D0313F"]] || HEATER_WATTS_FAN_ONLY;
-        } else if (json["D0310C"] === 0) {
-            watts = HEATER_WATTS['65'];
-        } else {
-            watts = HEATER_WATTS[json["D0310C"]] || HEATER_WATTS_FAN_ONLY;
-        }
+        const status = heaterStatus(json);
+        const watts = HEATER_STATUS_WATTS[status];
+        this.addHeaterEnergy(watts);
         this.updateCapability('measure_power', watts);
+        this.updateHeaterStatus(status);
+    }
+
+    // Integrates the estimated power into meter_power (kWh).
+    addHeaterEnergy(watts) {
+        if (!this.hasCapability('meter_power')) return;
+        const now = Date.now();
+        if (this.energyKwh === undefined) {
+            this.energyKwh = this.getCapabilityValue('meter_power') || 0;
+        }
+        if (this.lastPowerAt && now - this.lastPowerAt <= ENERGY_MAX_GAP) {
+            this.energyKwh += this.lastWatts * (now - this.lastPowerAt) / 3600000 / 1000;
+        }
+        this.lastPowerAt = now;
+        this.lastWatts = watts;
+        this.updateCapability('meter_power', Math.round(this.energyKwh * 100) / 100);
+    }
+
+    updateHeaterStatus(status) {
+        if (!this.hasCapability('heater_status')) return;
+        const previous = this.getCapabilityValue('heater_status');
+        if (previous === status) return;
+        this.updateCapability('heater_status', status);
+        if (!previous) return; // first value, nothing changed from the user's point of view
+
+        const heating = status.startsWith('heating');
+        const wasHeating = previous.startsWith('heating');
+        const trigger = (id, tokens) => this.homey.flow.getDeviceTriggerCard(id).trigger(this, tokens)
+            .catch((error) => this.error(`${id}:`, error.message));
+        trigger('heater_status_changed', { status: HEATER_STATUS_TITLES[status], heating });
+        if (heating && !wasHeating) trigger('heater_started_heating', {});
+        if (status === 'idle' && wasHeating) trigger('heater_reached_target', {});
     }
 
     // flow triggers

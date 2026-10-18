@@ -20,6 +20,14 @@ class deviceHeaterCoap extends AirDevice {
       await this.addCapability('timer_remaining');
     }
 
+    if (this.hasCapability('meter_power') === false) {
+      await this.addCapability('meter_power');
+    }
+
+    if (this.hasCapability('heater_status') === false) {
+      await this.addCapability('heater_status');
+    }
+
     // the CX3 heaters have no display backlight (D03105), so this control did nothing
     if (this.hasCapability('light_intensity')) {
       await this.removeCapability('light_intensity');
