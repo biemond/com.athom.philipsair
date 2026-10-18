@@ -478,6 +478,9 @@
         "title": {
           "en": "Beep"
         },
+        "titleFormatted": {
+          "en": "Beep [[mode]]"
+        },
         "args": [
           {
             "name": "device",
@@ -494,6 +497,9 @@
       {
         "title": {
           "en": "Child lock"
+        },
+        "titleFormatted": {
+          "en": "Child lock [[mode]]"
         },
         "args": [
           {
@@ -913,6 +919,9 @@
       {
         "title": {
           "en": "Target temperature"
+        },
+        "titleFormatted": {
+          "en": "Set target temperature to [[value]] °C"
         },
         "args": [
           {

@@ -91,6 +91,10 @@ class MyApp extends Homey.App {
     // });
 
 
+    this.homey.flow.getConditionCard('on_off').registerRunListener(async (args, state) => {
+      return Number(args.device.getCapabilityValue('onoff')) === Number(args.argument_main);
+    });
+
     this.homey.flow.getConditionCard('heater_is_heating').registerRunListener(async (args, state) => {
       return String(args.device.getCapabilityValue('heater_status') || '').startsWith('heating');
     });

@@ -55,12 +55,6 @@ class deviceHeaterCoap extends AirDevice {
       await this.setStateCoapValues({ D0310A: 3, D0310E: value });
     });
 
-    // on/off state condition
-    const onoffCondition = this.homey.flow.getConditionCard('on_off');
-    onoffCondition.registerRunListener(async (args, state) => {
-      return Number(await args.device.getCapabilityValue('onoff')) === Number(args.argument_main);
-    });
-
     this.registerCapabilityListener('onoff', async (value) => {
       await this.setStateCoapValues({ D03102: value ? 1 : 0 });
       this.homey.flow.getDeviceTriggerCard('onoff').trigger(this, { 'onoff': value }).catch(this.error);
