@@ -1,7 +1,7 @@
 import Homey from 'homey';
 
 const philipsair = require('./drivers/philipsair');
-const AirDevice = require('./drivers/air');
+const { HEATER_MODES } = require('./drivers/air');
 
 // sleep time expects milliseconds
 function sleep(time: number) {
@@ -32,8 +32,10 @@ class MyApp extends Homey.App {
     })
 
     let childlockAction = this.homey.flow.getActionCard('child_lock');
-    childlockAction.registerRunListener((args, state) => {
-      if (coapDevices.includes(args.device.constructor.name)) {
+    childlockAction.registerRunListener(async (args, state) => {
+      if (coapHeaterDevices.includes(args.device.constructor.name)) {
+        await args.device.setStateCoapValues({ D03103: args.mode ? 1 : 0 });
+      } else if (coapDevices.includes(args.device.constructor.name)) {
         let model = args.device.getCapabilityValue('product')
         if (newCoapDevices3.includes(model)) {
           let values;
@@ -66,10 +68,9 @@ class MyApp extends Homey.App {
     })
 
     let tempAction = this.homey.flow.getActionCard('target_temperature');
-    tempAction.registerRunListener((args, state) => {
-      args.device.setStateCoap("D0310A", 3, args.device.getSettings());
-      args.device.setStateCoap("D0310E", args.value, args.device.getSettings());      
-      return Promise.resolve(true);
+    tempAction.registerRunListener(async (args, state) => {
+      await args.device.setStateCoapValues({ D0310A: 3, D0310E: args.value });
+      return true;
     })
 
     // this.registerCapabilityListener('child_lock', async (value) => {
@@ -92,50 +93,14 @@ class MyApp extends Homey.App {
 
     let heaterModeAction = this.homey.flow.getActionCard('heater_mode');
     heaterModeAction.registerRunListener(async (args, state) => {
-      if (args.mode == "AUTO") {
-        await args.device.setStateCoap("D0310A", 3, args.device.getSettings());
-        await args.device.setStateCoap("D0310C", 0, args.device.getSettings());
-        await args.device.setCapabilityValue('measure_power', 1900);      
-      }
-      if (args.mode == "HIGH") {
-        await args.device.setStateCoap("D0310A", 3, args.device.getSettings());
-        await args.device.setStateCoap("D0310C", 65, args.device.getSettings());
-        await args.device.setCapabilityValue('measure_power', 1900);      
-      }
-      if (args.mode == "MEDIUM") {
-        await  args.device.setStateCoap("D0310A", 3,  args.device.getSettings());
-        await  args.device.setStateCoap("D0310C", 67,  args.device.getSettings());
-        await  args.device.setCapabilityValue('measure_power', 1525);             
-      }       
-      if (args.mode == "LOW") {
-        await args.device.setStateCoap("D0310A", 3, args.device.getSettings());
-        await args.device.setStateCoap("D0310C", 66, args.device.getSettings());
-        await args.device.setCapabilityValue('measure_power', 1025);      
-      }
-      if (args.mode == "VENTILATION") {
-        await args.device.setStateCoap("D0310A", 1, args.device.getSettings());
-        await args.device.setStateCoap("D0310C", -127, args.device.getSettings());
-        await args.device.setCapabilityValue('measure_power', 9);      
-      }
-
-      return Promise.resolve(true);
+      await args.device.setStateCoapValues(HEATER_MODES[args.mode]);
+      return true;
     });
 
     let heaterSpeedAction = this.homey.flow.getActionCard('heater_speed');
     heaterSpeedAction.registerRunListener(async (args, state) => {
-      if (args.mode == "HIGH") {
-        await args.device.setStateCoap("D0310A", 3, args.device.getSettings());
-        await args.device.setStateCoap("D0310C", 65, args.device.getSettings());
-      }
-      if (args.mode == "MEDIUM") {
-        await  args.device.setStateCoap("D0310A", 3,  args.device.getSettings());
-        await  args.device.setStateCoap("D0310C", 67,  args.device.getSettings());
-      }         
-      if (args.mode == "LOW") {
-        await args.device.setStateCoap("D0310A", 3, args.device.getSettings());
-        await args.device.setStateCoap("D0310C", 66, args.device.getSettings());
-      }
-      return Promise.resolve(true);
+      await args.device.setStateCoapValues(HEATER_MODES[args.mode]);
+      return true;
     });
 
 
@@ -275,7 +240,6 @@ class MyApp extends Homey.App {
       } else if (newCoapDevices3.includes(model) || coapHeaterDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("D03102", 0, args.device.getSettings());
         if (coapHeaterDevices.includes(args.device.constructor.name)) {
-            args.device.setCapabilityValue('measure_power', 1);
             const tokens = {
               'onoff': false
             };

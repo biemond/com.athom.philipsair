@@ -2,21 +2,22 @@
   "name": {
     "en": "Heater"
   },
-  "class": "fan",
+  "class": "heater",
   "capabilities": [
     "latest_retrieval_date",
     "product",
     "onoff",
     "timer",
+    "timer_remaining",
     "error",
     "measure_temperature",
-    "light_intensity",
     "beep",
     "swing",
     "heater_speed",
     "heater_mode",
     "target_temperature",
-    "measure_power"
+    "measure_power",
+    "child_lock"
   ],
   "capabilitiesOptions": {
     "measure_power": {
