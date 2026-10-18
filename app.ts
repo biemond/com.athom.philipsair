@@ -221,19 +221,24 @@ class MyApp extends Homey.App {
       return Promise.resolve(true);
     })
 
+    // Heater on/off from flows: skip when already in that state, and record the new state as soon as the
+    // heater accepted it, because the onoff trigger can re-run flows before the next status arrives.
+    const setHeaterPower = async (device: any, on: boolean) => {
+      if (device.getCapabilityValue('onoff') === on) return;
+      await device.setStateCoapValues({ D03102: on ? 1 : 0 });
+      await device.setCapabilityValue('onoff', on);
+      this.homey.flow.getDeviceTriggerCard('onoff').trigger(device, { 'onoff': on }).catch(this.error);
+    };
+
     let onAction = this.homey.flow.getActionCard('on');
-    onAction.registerRunListener((args, state) => {
+    onAction.registerRunListener(async (args, state) => {
       let model = args.device.getCapabilityValue('product')
-      if (newCoapDevices2.includes(model)) {
+      if (coapHeaterDevices.includes(args.device.constructor.name)) {
+        await setHeaterPower(args.device, true);
+      } else if (newCoapDevices2.includes(model)) {
         args.device.setStateCoap("D03-02", "ON", args.device.getSettings());
-      } else if (newCoapDevices3.includes(model) || coapHeaterDevices.includes(args.device.constructor.name)) {
+      } else if (newCoapDevices3.includes(model)) {
         args.device.setStateCoap("D03102", 1, args.device.getSettings());
-        if (coapHeaterDevices.includes(args.device.constructor.name)) {
-            const tokens = {
-              'onoff': true
-            };
-            this.homey.flow.getDeviceTriggerCard('onoff').trigger( args.device, tokens);            
-        }  
       } else if (coapDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("pwr", "1", args.device.getSettings());
       } else {
@@ -244,19 +249,14 @@ class MyApp extends Homey.App {
     })
 
     let offAction = this.homey.flow.getActionCard('off');
-    offAction.registerRunListener((args, state) => {
+    offAction.registerRunListener(async (args, state) => {
       let model = args.device.getCapabilityValue('product')
-      if (newCoapDevices2.includes(model)) {
+      if (coapHeaterDevices.includes(args.device.constructor.name)) {
+        await setHeaterPower(args.device, false);
+      } else if (newCoapDevices2.includes(model)) {
         args.device.setStateCoap("D03-02", "OFF", args.device.getSettings());
-      } else if (newCoapDevices3.includes(model) || coapHeaterDevices.includes(args.device.constructor.name)) {
+      } else if (newCoapDevices3.includes(model)) {
         args.device.setStateCoap("D03102", 0, args.device.getSettings());
-        if (coapHeaterDevices.includes(args.device.constructor.name)) {
-            const tokens = {
-              'onoff': false
-            };
-            this.homey.flow.getDeviceTriggerCard('onoff').trigger( args.device, tokens);            
-        }  
-
       } else if (coapDevices.includes(args.device.constructor.name)) {
         args.device.setStateCoap("pwr", "0", args.device.getSettings());
       } else {
