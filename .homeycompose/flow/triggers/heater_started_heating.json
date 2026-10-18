@@ -1,0 +1,15 @@
+{
+    "title": {
+        "en": "Started heating"
+    },
+    "hint": {
+        "en": "The heater started heating after being idle, fan only or off."
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=deviceHeaterCoap"
+        }
+    ]
+}

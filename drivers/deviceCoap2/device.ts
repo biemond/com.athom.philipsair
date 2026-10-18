@@ -285,7 +285,7 @@ class deviceCoap2 extends AirDevice {
    */
   async onDeleted() {
     this.log('deviceCoap2 has been deleted');
-    // this.homey.clearInterval(timer);    
+    this.stopObservingCoapDevice();    
   }
 
 }

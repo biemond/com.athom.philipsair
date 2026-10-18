@@ -116,6 +116,71 @@
       },
       {
         "title": {
+          "en": "Reached target temperature"
+        },
+        "hint": {
+          "en": "The heater stopped heating because the target temperature was reached."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=deviceHeaterCoap"
+          }
+        ],
+        "id": "heater_reached_target"
+      },
+      {
+        "title": {
+          "en": "Started heating"
+        },
+        "hint": {
+          "en": "The heater started heating after being idle, fan only or off."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=deviceHeaterCoap"
+          }
+        ],
+        "id": "heater_started_heating"
+      },
+      {
+        "title": {
+          "en": "Heating status changed"
+        },
+        "tokens": [
+          {
+            "name": "status",
+            "type": "string",
+            "title": {
+              "en": "status"
+            },
+            "example": {
+              "en": "Heating high"
+            }
+          },
+          {
+            "name": "heating",
+            "type": "boolean",
+            "title": {
+              "en": "heating"
+            },
+            "example": true
+          }
+        ],
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=deviceHeaterCoap"
+          }
+        ],
+        "id": "heater_status_changed"
+      },
+      {
+        "title": {
           "en": "Humidity changed"
         },
         "tokens": [
@@ -268,6 +333,22 @@
     "conditions": [
       {
         "title": {
+          "en": "Is !{{heating|not heating}}"
+        },
+        "titleFormatted": {
+          "en": "Is !{{heating|not heating}}"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=deviceHeaterCoap"
+          }
+        ],
+        "id": "heater_is_heating"
+      },
+      {
+        "title": {
           "en": "Device active:"
         },
         "titleFormatted": {
@@ -397,6 +478,9 @@
         "title": {
           "en": "Beep"
         },
+        "titleFormatted": {
+          "en": "Beep [[mode]]"
+        },
         "args": [
           {
             "name": "device",
@@ -414,11 +498,14 @@
         "title": {
           "en": "Child lock"
         },
+        "titleFormatted": {
+          "en": "Child lock [[mode]]"
+        },
         "args": [
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2|deviceHeaterCoap"
           },
           {
             "name": "mode",
@@ -680,7 +767,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2|deviceHeaterCoap"
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
           },
           {
             "name": "mode",
@@ -832,6 +919,9 @@
       {
         "title": {
           "en": "Target temperature"
+        },
+        "titleFormatted": {
+          "en": "Set target temperature to [[value]] °C"
         },
         "args": [
           {
@@ -1164,25 +1254,33 @@
       "name": {
         "en": "Heater"
       },
-      "class": "fan",
+      "class": "heater",
       "capabilities": [
         "latest_retrieval_date",
         "product",
         "onoff",
         "timer",
+        "timer_remaining",
         "error",
         "measure_temperature",
-        "light_intensity",
         "beep",
         "swing",
         "heater_speed",
         "heater_mode",
         "target_temperature",
-        "measure_power"
+        "measure_power",
+        "meter_power",
+        "heater_status",
+        "child_lock"
       ],
       "capabilitiesOptions": {
         "measure_power": {
           "approximated": true
+        },
+        "meter_power": {
+          "title": {
+            "en": "Energy (estimated)"
+          }
         }
       },
       "platforms": [
@@ -1586,6 +1684,54 @@
           "id": "LOW",
           "title": {
             "en": "Low"
+          }
+        }
+      ]
+    },
+    "heater_status": {
+      "type": "enum",
+      "title": {
+        "en": "Heating status"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/images/temp.svg",
+      "values": [
+        {
+          "id": "heating_high",
+          "title": {
+            "en": "Heating high"
+          }
+        },
+        {
+          "id": "heating_medium",
+          "title": {
+            "en": "Heating medium"
+          }
+        },
+        {
+          "id": "heating_low",
+          "title": {
+            "en": "Heating low"
+          }
+        },
+        {
+          "id": "idle",
+          "title": {
+            "en": "Idle, target reached"
+          }
+        },
+        {
+          "id": "fan",
+          "title": {
+            "en": "Fan only"
+          }
+        },
+        {
+          "id": "off",
+          "title": {
+            "en": "Off"
           }
         }
       ]

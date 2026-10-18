@@ -2,15 +2,18 @@
     "title": {
         "en": "Child lock"
     },
+    "titleFormatted": {
+        "en": "Child lock [[mode]]"
+    },
     "args": [
         {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2"
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2|deviceHeaterCoap"
         },
         {
             "name": "mode",
-            "type": "checkbox"          
+            "type": "checkbox"
         }
     ]
 }

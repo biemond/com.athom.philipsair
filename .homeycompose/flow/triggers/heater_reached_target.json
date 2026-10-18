@@ -1,0 +1,15 @@
+{
+    "title": {
+        "en": "Reached target temperature"
+    },
+    "hint": {
+        "en": "The heater stopped heating because the target temperature was reached."
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=deviceHeaterCoap"
+        }
+    ]
+}

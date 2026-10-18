@@ -1,0 +1,26 @@
+{
+    "title": {
+        "en": "Heating status changed"
+    },
+    "tokens": [
+        {
+            "name": "status",
+            "type": "string",
+            "title": { "en": "status" },
+            "example": { "en": "Heating high" }
+        },
+        {
+            "name": "heating",
+            "type": "boolean",
+            "title": { "en": "heating" },
+            "example": true
+        }
+    ],
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=deviceHeaterCoap"
+        }
+    ]
+}

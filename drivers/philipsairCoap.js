@@ -1,374 +1,327 @@
-const { resolve } = require("path");
+'use strict';
 
-(function () {
+const { CoapClient } = require('node-coap-client');
+const { Origin } = require('node-coap-client/build/lib/Origin');
+const crypto = require('crypto');
+const aesjs = require('aes-js');
+const pkcs7 = require('pkcs7');
 
-    let philipsairCoap = exports;
+const SHARED_KEY = 'JiangPan';
+const PORT = 5683;
+const MAX_COUNTER = 2000000000;
 
-    const coapclass = require("node-coap-client");
-    const origin = require('node-coap-client/build/lib/Origin');
-    const crypto = require('crypto');
-    let aesjs = require('aes-js');
-    let pkcs7 = require('pkcs7');
+const REQUEST_TIMEOUT = 10 * 1000;
+const FIRST_STATUS_TIMEOUT = 30 * 1000;   // no status this long after subscribing = connect failed
+const SILENCE_TIMEOUT = 45 * 1000;        // devices push every few seconds; silence this long = resubscribe
+const WATCHDOG_INTERVAL = 15 * 1000;
+const RETRY_MIN = 5 * 1000;
+const RETRY_MAX = 2 * 60 * 1000;
+const UNAVAILABLE_AFTER_FAILURES = 3;
+const BATCH_WINDOW = 50;                  // back-to-back setValues calls are sent as one message
 
-    let sharedKey = 'JiangPan';
+// ---- protocol helpers -------------------------------------------------------
 
-    let statusCounter = 0;
-    let controlCounter = 0;
+function decodeCounter(hex) {
+    return parseInt(hex, 16);
+}
 
-    function decodeCounter(encodedCounter) {
-        let counterUpperCase = encodedCounter.toUpperCase();
-        let length = counterUpperCase.length;
+function encodeCounter(counter) {
+    return counter.toString(16).toUpperCase().padStart(8, '0');
+}
 
-        let counter = 0;
-        for (let i = length; i > 0; i--) {
-            let charAt = counterUpperCase.charAt(i - 1);
-            counter = (counter) + Math.pow(16.0, length - i) * ((charAt < '0' || charAt > '9') ? charAt.charCodeAt(0) - '7'.charCodeAt(0) : charAt.charCodeAt(0) - '0'.charCodeAt(0));
-        }
-        return counter;
-    }
+function sha256Hex(value) {
+    return crypto.createHash('sha256').update(value).digest('hex').toUpperCase();
+}
 
-    function encodeCounter(counter, length) {
-        let hex = counter.toString(16);
-        if (hex.length % 2 === 1) {
-            hex = '0' + hex;
-        }
-        return prependZero(hex.toUpperCase(), length);
-    }
-
-    function prependZero(value, length) {
-        let result = '';
-        for (let i = 0; i < length - value.length; i++) {
-            result = '0' + result;
-        }
-        return (result + value).substring(0, length);
-    }
-    function toMD5(value) {
-        return crypto.createHash('md5').update(value).digest();
-    }
-
-    function toSha256(value) {
-        return crypto.createHash('sha256').update(value).digest();
-    }
-
-    function aes_decrypt2(data, key, iv) {
-        let aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
-        let decryptedBytes = aesCbc.decrypt(data);
-        return decryptedBytes;
-    }
-
-    function aes_encrypt2(data, key, iv) {
-        let aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
-        let encryptedBytes = aesCbc.encrypt(data);
-        return encryptedBytes;
-    }
-
-    function clean(data) {
-        data = data.trimRight().replace(/\\n/g, "\\n")
-            .replace(/\\'/g, "\\'")
-            .replace(/\\"/g, '\\"')
-            .replace(/\\&/g, "\\&")
-            .replace(/\\r/g, "\\r")
-            .replace(/\\t/g, "\\t")
-            .replace(/\\b/g, "\\b")
-            .replace(/\\f/g, "\\f");
-        // remove non-printable and other non-valid JSON chars
-        // data = data.replace(/[\u0000-\u0019]+/g, "");
-        // return JSON.parse(data);
-        try {
-            data = data.replace(/[\u0000-\u0019]+/g, "");
-            return JSON.parse(data);
-        } catch {
-            console.log('error', `Cannot parse: ${data}`);
-            throw new Error('Cannot parse: ' + data);
-        }
-    }
-
-    // active functions()  -------------------------------------  active functions()  --------------------------------------------
-
-    philipsairCoap.getCurrentStatusDataCoap = function getCurrentStatusDataCoap(settings, device) {
-        console.log("settings " + JSON.stringify(settings));
-        return new Promise(async (resolve, reject) => {
-            await getCurrentDataCoap(settings, device, (error, jsonobj) => {
-                if (jsonobj) {
-                    console.log('getCurrentDataCoap res ', jsonobj)
-                    resolve(jsonobj);
-                } else {
-                    console.log('2: ' + error);
-                    reject(error);
-                }
-            });
-        }).catch(reason => console.log('1: ' + reason));
-    }
-
-    philipsairCoap.setValueAirDataCoap = function setValueAirDataCoap(key, value, settings, device) {
-        console.log("key " + key)
-        console.log("value " + value)
-        console.log("settings " + JSON.stringify(settings));
-        return new Promise((resolve, reject) => {
-            setValueDataCoap(key, value, settings, device, (error, jsonobj) => {
-                if (jsonobj) {
-                    resolve(jsonobj);
-                } else {
-                    reject(error);
-                }
-            });
-        }).catch(reason => console.log('1: ' + reason));
-    }
-
-    // sleep time expects milliseconds
-    function sleep(time) {
-        return new Promise((resolve) => setTimeout(resolve, time));
-    }
-
-    let newTimeout = (handler, delay) => {
-        let id = setTimeout(handler, delay), clear = clearTimeout.bind(null, id);
-        return { id, clear, trigger: () => (clear(), handler()) };
+function keyAndIv(encodedCounter) {
+    const hex = crypto.createHash('md5').update(SHARED_KEY + encodedCounter).digest('hex').toUpperCase();
+    return {
+        key: Buffer.from(hex.substring(0, hex.length / 2), 'utf-8'),
+        iv: Buffer.from(hex.substring(hex.length / 2), 'utf-8'),
     };
+}
 
-    async function getCurrentDataCoap(settings, device, callback) {
+/** Decrypts a /sys/dev/status payload; returns { counter, reported } or throws. */
+function decryptStatus(response) {
+    const encodedCounter = response.substring(0, 8);
+    const hash = response.substring(response.length - 64);
+    const counterAndMessage = response.substring(0, response.length - 64);
+    if (sha256Hex(counterAndMessage) !== hash) {
+        throw new Error('Invalid message hash');
+    }
+    const encrypted = Buffer.from(response.substring(8, response.length - 64), 'hex');
+    if (encrypted.length === 0 || encrypted.length % 16 !== 0) {
+        throw new Error('Message corrupted, length ' + encrypted.length);
+    }
+    const { key, iv } = keyAndIv(encodedCounter);
+    const text = aesjs.utils.utf8.fromBytes(new aesjs.ModeOfOperation.cbc(key, iv).decrypt(encrypted));
+    // strips PKCS7 padding and other non-JSON control characters
+    const cleaned = text.replace(/[\u0000-\u0019]+/g, '').trimEnd();
+    let json;
+    try {
+        json = JSON.parse(cleaned);
+    } catch (error) {
+        throw new Error(`${error.message}: ${cleaned.substring(0, 200)}`);
+    }
+    return { counter: decodeCounter(encodedCounter), reported: json.state.reported };
+}
 
-        if (settings.add_delay == true) {
-            console.log("add 60 sec delay");
-            await sleep(60000);
-        } else {
-            console.log("no delay");
-        }
+function encryptCommand(values, counter) {
+    const message = {
+        state: {
+            desired: Object.assign({ CommandType: 'app', DeviceId: '', EnduserId: '1' }, values),
+        },
+    };
+    const encodedCounter = encodeCounter(counter);
+    const { key, iv } = keyAndIv(encodedCounter);
+    const padded = pkcs7.pad(aesjs.utils.utf8.toBytes(JSON.stringify(message)));
+    const encrypted = Buffer.from(new aesjs.ModeOfOperation.cbc(key, iv).encrypt(padded)).toString('hex').toUpperCase();
+    const result = encodedCounter + encrypted;
+    return result + sha256Hex(result);
+}
 
-        console.log("getCurrentDataCoap " + settings.ipkey);
-        let target = new origin.Origin('coap:', settings.ipkey, 5683);
-        let targetString = 'coap://' + settings.ipkey + ':5683';
+function withTimeout(promise, ms, message) {
+    let timer;
+    const timeout = new Promise((resolve, reject) => {
+        timer = setTimeout(() => reject(new Error(message)), ms);
+    });
+    return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
 
-        let coap;
-        if (device.getClient()) {
-            coap = device.getClient();
-            coap.reset(target);
-        } else {
-            coap = coapclass.CoapClient;
-        }
+// ---- per-device session -----------------------------------------------------
 
-        let jsonStatus = null;
+class CoapSession {
 
-        coap.request(targetString + '/sys/dev/sync', 'post',
-            Buffer.from(encodeCounter(statusCounter, 8)), { keepAlive: true })
-            .then(response => {
-                if (response.payload) {
-                    const payload = response.payload.toString('utf-8');
-                    controlCounter = decodeCounter(payload);
-                    // console.log(controlCounter);
-                } else {
-                    let error = new Error('No response received for sync call. Cannot proceed, is coap://' + settings.ipkey + ':5683 up');
-                    // coap.reset(target);
-                    return callback(error, null);
-                    // throw new Error('No response received for sync call. Cannot proceed, is coap://'+settings.ipkey+':5683 up');
-                }
-            }).catch(err => {
-                console.log(err);
-                let error = new Error('catch: No response received for sync call. Cannot proceed, is coap://' + settings.ipkey + ':5683 up');
-                coap.reset(target);
-                return callback(error, null);
-                // throw new Error('No response received for sync call. Cannot proceed, is coap://'+settings.ipkey+':5683 up');
-            });
-
-        const connectResult = await coap.tryToConnect(target);
-
-        console.log("tryToConnect " + connectResult);
-        device.setClient(coap);
-
-        await coap.observe(targetString + '/sys/dev/status', 'get', resp => {
-            if (resp.payload) {
-                const response = resp.payload.toString('utf-8');
-                const encodedCounter = response.substring(0, 8);
-                let counter = decodeCounter(encodedCounter);
-                console.log("counter " + counter);
-                const hash = response.substring(response.length - 64);
-                const encodedMessageAndCounter = response.substring(0, response.length - 64);
-
-                // console.log(encodedMessageAndCounter);
-                const hashedMessage = Buffer.from(toSha256(encodedMessageAndCounter)).toString('hex').toUpperCase();
-                console.log("statusCounter " + statusCounter);
-                if (counter < 1 || counter > 2000000000 ||
-                    ((counter < statusCounter && statusCounter < 2000000000 - 10) ||
-                        ((counter > statusCounter + 10 && counter < 2000000000) ||
-                            (2000000000 - statusCounter < 10 && counter < statusCounter &&
-                                (10 - (2000000000 - statusCounter)) + 1 < counter && counter < statusCounter)))) {
-                    console.log('Invalid message id');
-                    // throw new Error('Invalid message id');
-                }
-                if (hash !== hashedMessage) {
-                    console.log('Invalid message hash');
-                    throw new Error('Invalid message hash');
-                }
-                if (counter >= 2000000000) {
-                    counter = 1;
-                }
-
-                statusCounter = counter;
-
-                let keyAndIv = toMD5(sharedKey + encodedCounter).toString('hex').toUpperCase();
-                // console.log("keyAndIv " + keyAndIv);
-                const secretKey = keyAndIv.substring(0, keyAndIv.length / 2);
-                // console.log("secret " + secretKey);
-                const iv = keyAndIv.substring(keyAndIv.length / 2, keyAndIv.length);
-                // console.log("iv " + iv);
-
-                const encodedMessage = response.substring(8, response.length - 64);
-                if (encodedMessage.length % 16 !== 0) {
-                    console.log("Encoded message length is not a multiple of 16 bytes:", encodedMessage.length);
-                    throw new Error('Message corrupted 2: ' + encodedMessage.length);
-                }
-
-                let payload = new Buffer.from(encodedMessage, 'hex');
-                console.log("Payload length:", payload.length);
-                if (payload.length % 16 !== 0) {
-                    console.log("Payload length is not a multiple of 16 bytes:", payload.length);
-                    //throw new Error('Message corrupted 3: ' + payload.length);
-                } else {
-                    let data = aes_decrypt2(payload, Buffer.from(secretKey, 'utf-8'), Buffer.from(iv, 'utf-8'));
-                    let dataText = aesjs.utils.utf8.fromBytes(data);
-
-                    try {
-                        jsonStatus = clean(dataText).state.reported;
-                        console.log(jsonStatus);
-                        device.handleDeviceStatus(jsonStatus, settings);
-                    } catch {
-                        // ignore, not valid json
-                    }
-                }
-
-            }
-
-        }, undefined, {
-            confirmable: false, // we expect no answer here in the typical coap way.
-            retransmit: false
-        }).then(() => {
-            // TODO: nothing?
-        }).catch(function (error) {
-            console.log(error);
-            console.log('observe stopped');
-
-        });
-
-        let timeoutId = newTimeout(function () {
-            let response = {
-                status: jsonStatus
-            };
-            coap.stopObserving('coap://' + settings.ipkey + ':5683/sys/dev/status');
-
-            console.log('---------timeout----------');
-            if (jsonStatus != null) {
-                return callback(null, response);
-            } else {
-                return callback(new Error('No response received'), null);
-            }
-        }, 600000);
-
-
-        device.setTimeoutId(timeoutId);
+    constructor(device) {
+        this.device = device;
+        this.statusCounter = 0;
+        this.controlCounter = 0;
+        this.stopped = true;
+        this.sending = false;
+        this.observedUrl = null;
+        this.connectedAt = 0;
+        this.lastStatusAt = 0;
+        this.failures = 0;
+        this.available = null;
+        this.timer = null;
+        this.watchdog = null;
+        this.queue = Promise.resolve();
+        this.batch = null;
     }
 
-    async function setValueDataCoap(key, value, settings, device, callback) {
-        console.log("setValueDataCoap ");
-        let target = new origin.Origin('coap:', settings.ipkey, 5683);
-        let targetString = 'coap://' + settings.ipkey + ':5683';
-        let jsonStatus = null;
-
-        let coap = device.getClient();
-
-        await coap.stopObserving('coap://' + settings.ipkey + ':5683/sys/dev/status');
-
-        // await coap.reset(target);
-        coap = coapclass.CoapClient;
-
-        console.log('-------------------')
-        coap.request(targetString + '/sys/dev/sync', 'post',
-            Buffer.from(encodeCounter(statusCounter, 8)),
-            { keepAlive: false })
-            .then(response => {
-                // console.log(response);
-                if (response.payload) {
-                    const payload = response.payload.toString('utf-8');
-                    controlCounter = decodeCounter(payload);
-                    console.log(controlCounter);
-                } else {
-                    let error = new Error('No response received for call. Cannot proceed, is coap://' + settings.ipkey + ':5683 up');
-                    return callback(error, null);
-                }
-            }).catch(err => {
-                let error = new Error('No response received for call. Cannot proceed, is coap://' + settings.ipkey + ':5683 up');
-                return callback(error, null);
-                console.log(err);
-            });
-
-        await coap.tryToConnect(target);
-        console.log('tryToConnect ');
-
-        sleep(2000).then(() => {
-            console.log('-------------------')
-
-            let message = {
-                state: {
-                    desired: {
-                        CommandType: 'app',
-                        DeviceId: '',
-                        EnduserId: '1'
-                    }
-                }
-            };
-
-            (message.state.desired)[key] = value;
-            const messageString = JSON.stringify(message);
-            console.log('messageString ' + messageString);
-
-            if (controlCounter == 2000000000) {
-                controlCounter = 1;
-            } else {
-                controlCounter = controlCounter + 1;
-            }
-
-            let encodedCounter = encodeCounter(controlCounter, 8);
-            let keyAndIv = toMD5(sharedKey + encodedCounter).toString('hex').toUpperCase();
-
-            const secretKey = keyAndIv.substring(0, keyAndIv.length / 2);
-            const iv = keyAndIv.substring(keyAndIv.length / 2, keyAndIv.length);
-
-            let dataBytes = pkcs7.pad(aesjs.utils.utf8.toBytes(messageString));
-            const encodedMessage = Buffer.from(aes_encrypt2(dataBytes, Buffer.from(secretKey, 'utf-8'), Buffer.from(iv, 'utf-8'))).toString('hex').toUpperCase();
-            // console.log('encodedMessage '+encodedMessage);
-            let result = encodedCounter + encodedMessage;
-
-            const hash = Buffer.from(toSha256(result)).toString('hex').toUpperCase();
-
-            result = encodedCounter + encodedMessage + hash;
-            console.log(targetString);
-            coap.request(targetString + '/sys/dev/control', 'post',
-                Buffer.from(result), { keepAlive: false })
-                .then(response => {
-                    console.log(response);
-                    if (response.payload) {
-                        const payload = response.payload.toString('utf-8');
-                        console.log(payload);
-                        jsonStatus = payload
-                    }
-                }).catch(err => {
-                    console.log(err);
-                });
-            console.log('-------------------');
-        });
-
-        sleep(4000).then(() => {
-            console.log('-------------------');
-            let response = {
-                status: jsonStatus
-            };
-            // coap.reset(target);
-            console.log("intervalId: ", device.getTimeoutId());
-            device.getTimeoutId().trigger();
-            // clearTimeout(device.getTimeoutId());
-            if (jsonStatus != null) {
-                return callback(null, response);
-            } else {
-                return callback(new Error('No response received'), null);
-            }
-        });
+    endpoint() {
+        const host = this.device.getSetting('ipkey');
+        return {
+            host,
+            target: new Origin('coap:', host, PORT),
+            base: `coap://${host}:${PORT}`,
+        };
     }
-})();
+
+    start() {
+        this.stopped = false;
+        this.failures = 0;
+        this.schedule(this.device.getSetting('add_delay') ? 60 * 1000 : 0);
+        if (!this.watchdog) {
+            this.watchdog = this.device.homey.setInterval(() => this.checkHealth(), WATCHDOG_INTERVAL);
+        }
+    }
+
+    stop() {
+        this.stopped = true;
+        this.clearTimer();
+        if (this.watchdog) {
+            this.device.homey.clearInterval(this.watchdog);
+            this.watchdog = null;
+        }
+        this.unobserve();
+    }
+
+    restart() {
+        this.unobserve();
+        this.start();
+    }
+
+    clearTimer() {
+        if (this.timer) {
+            this.device.homey.clearTimeout(this.timer);
+            this.timer = null;
+        }
+    }
+
+    schedule(delay) {
+        this.clearTimer();
+        if (this.stopped) return;
+        this.timer = this.device.homey.setTimeout(() => {
+            this.timer = null;
+            this.connect();
+        }, delay);
+    }
+
+    unobserve() {
+        if (this.observedUrl) {
+            CoapClient.stopObserving(this.observedUrl);
+            this.observedUrl = null;
+        }
+    }
+
+    async sync(base) {
+        const response = await withTimeout(
+            CoapClient.request(`${base}/sys/dev/sync`, 'post', Buffer.from(encodeCounter(this.statusCounter)), { keepAlive: true }),
+            REQUEST_TIMEOUT, 'No response to sync from ' + base);
+        if (!response || !response.payload) {
+            throw new Error('Empty sync response from ' + base);
+        }
+        this.controlCounter = decodeCounter(response.payload.toString('utf-8'));
+    }
+
+    async connect() {
+        if (this.stopped || this.sending) return;
+        const { host, target, base } = this.endpoint();
+        if (!host) {
+            this.setAvailable(false, 'No IP address configured');
+            return;
+        }
+        try {
+            this.unobserve();
+            if (this.failures > 0) CoapClient.reset(target);
+            await CoapClient.tryToConnect(target);
+            await this.sync(base);
+            if (this.stopped || this.sending) return;
+
+            const url = `${base}/sys/dev/status`;
+            this.observedUrl = url;
+            this.connectedAt = Date.now();
+            this.lastStatusAt = 0;
+            CoapClient.observe(url, 'get', (resp) => this.onStatus(resp), undefined, {
+                confirmable: false, // we expect no answer here in the typical coap way.
+                retransmit: false,
+            }).catch((error) => this.device.log('observe stopped:', error && error.message));
+        } catch (error) {
+            this.onFailure(error);
+        }
+    }
+
+    checkHealth() {
+        if (this.stopped || this.sending || !this.observedUrl) return;
+        const now = Date.now();
+        if (!this.lastStatusAt) {
+            if (now - this.connectedAt > FIRST_STATUS_TIMEOUT) {
+                this.onFailure(new Error('No status received after subscribing'));
+            }
+        } else if (now - this.lastStatusAt > SILENCE_TIMEOUT) {
+            this.device.log(`No status for ${Math.round((now - this.lastStatusAt) / 1000)}s, resubscribing`);
+            this.unobserve();
+            this.schedule(0);
+        }
+    }
+
+    onFailure(error) {
+        this.failures += 1;
+        const delay = Math.min(RETRY_MIN * 2 ** (this.failures - 1), RETRY_MAX);
+        this.device.log(`CoAP connection failed (${this.failures}x), retry in ${delay / 1000}s:`, error && error.message);
+        if (this.failures >= UNAVAILABLE_AFTER_FAILURES) {
+            this.setAvailable(false, 'Device not reachable');
+        }
+        this.unobserve();
+        try {
+            CoapClient.reset(this.endpoint().target);
+        } catch (e) {
+            // ignore
+        }
+        this.schedule(delay);
+    }
+
+    onStatus(resp) {
+        if (!resp.payload || this.stopped) return;
+        let status;
+        try {
+            status = decryptStatus(resp.payload.toString('utf-8'));
+        } catch (error) {
+            this.device.log('Ignoring status message:', error.message);
+            return;
+        }
+        this.statusCounter = status.counter >= MAX_COUNTER ? 1 : status.counter;
+        this.lastStatusAt = Date.now();
+        this.failures = 0;
+        this.setAvailable(true);
+        try {
+            this.device.handleDeviceStatus(status.reported, this.device.getSettings());
+        } catch (error) {
+            this.device.error('handleDeviceStatus failed:', error);
+        }
+    }
+
+    setAvailable(available, reason) {
+        if (this.available === available) return;
+        this.available = available;
+        const result = available ? this.device.setAvailable() : this.device.setUnavailable(reason);
+        result.catch((error) => this.device.error(error));
+    }
+
+    setValues(values) {
+        if (!this.batch) {
+            const batch = { values: {} };
+            batch.promise = new Promise((resolve, reject) => {
+                this.device.homey.setTimeout(() => {
+                    this.batch = null;
+                    this.queue = this.queue.then(() => this.send(batch.values)).then(resolve, reject);
+                }, BATCH_WINDOW);
+            });
+            this.batch = batch;
+        }
+        Object.assign(this.batch.values, values);
+        return this.batch.promise;
+    }
+
+    async send(values) {
+        const { host, target, base } = this.endpoint();
+        if (!host) throw new Error('No IP address configured');
+        this.device.log('setValues', JSON.stringify(values));
+
+        // this CoAP client gets no sync reply while subscribed, so pause the subscription around the command
+        this.sending = true;
+        this.clearTimer();
+        this.unobserve();
+        try {
+            await CoapClient.tryToConnect(target);
+            await this.sync(base);
+            this.controlCounter = this.controlCounter >= MAX_COUNTER ? 1 : this.controlCounter + 1;
+            const response = await withTimeout(
+                CoapClient.request(`${base}/sys/dev/control`, 'post', Buffer.from(encryptCommand(values, this.controlCounter)), { keepAlive: true }),
+                REQUEST_TIMEOUT, 'No response to command from ' + base);
+            const text = response && response.payload ? response.payload.toString('utf-8') : '';
+            this.device.log('control response', text);
+            let result = null;
+            try {
+                result = JSON.parse(text);
+            } catch (e) {
+                // not JSON, nothing to check
+            }
+            if (result && result.status && result.status !== 'success') {
+                throw new Error('Device rejected command: ' + text);
+            }
+            return text;
+        } finally {
+            this.sending = false;
+            // resubscribe right away; the first status confirms the change
+            this.schedule(0);
+        }
+    }
+}
+
+function session(device) {
+    if (!device._coapSession) {
+        device._coapSession = new CoapSession(device);
+    }
+    return device._coapSession;
+}
+
+module.exports = {
+    start: (device) => session(device).start(),
+    stop: (device) => {
+        if (device._coapSession) device._coapSession.stop();
+    },
+    restart: (device) => session(device).restart(),
+    setValues: (device, values) => session(device).setValues(values),
+};
