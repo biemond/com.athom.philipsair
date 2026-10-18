@@ -69,6 +69,8 @@ class MyApp extends Homey.App {
 
     let tempAction = this.homey.flow.getActionCard('target_temperature');
     tempAction.registerRunListener(async (args, state) => {
+      // flows may re-apply the same target often; only send real changes (each command can beep)
+      if (args.device.getCapabilityValue('target_temperature') === args.value) return true;
       await args.device.setStateCoapValues({ D0310A: 3, D0310E: args.value });
       return true;
     })
@@ -101,6 +103,7 @@ class MyApp extends Homey.App {
 
     let heaterModeAction = this.homey.flow.getActionCard('heater_mode');
     heaterModeAction.registerRunListener(async (args, state) => {
+      if (args.device.getCapabilityValue('heater_mode') === args.mode) return true;
       await args.device.setStateCoapValues(HEATER_MODES[args.mode]);
       return true;
     });
