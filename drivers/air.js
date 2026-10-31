@@ -8,9 +8,16 @@ let coap;
 let timeoutId;
 
 
-Date.prototype.timeNow = function () {
-    return ((this.getHours() < 10) ? "0" : "") + ((this.getHours() > 12) ? (this.getHours() - 12) : this.getHours()) + ":" + ((this.getMinutes() < 10) ? "0" : "") + this.getMinutes() + " " + ((this.getHours() > 12) ? ('PM') : 'AM');
-};
+// Homey runs in UTC; format the time in the timezone configured on the Homey itself.
+function formatLocalTime(date, timeZone) {
+    const options = { hour: 'numeric', minute: '2-digit', hour12: true };
+    try {
+        return date.toLocaleTimeString('en-US', { ...options, timeZone });
+    } catch (error) {
+        // unknown timezone: fall back to the system time
+        return date.toLocaleTimeString('en-US', options);
+    }
+}
 
 export class AirDevice extends Homey.Device {
 
@@ -142,7 +149,7 @@ export class AirDevice extends Homey.Device {
 
     handleDeviceStatus(json, settings) {
         if (json != null) {
-            let currentdate = new Date().timeNow();
+            let currentdate = formatLocalTime(new Date(), this.homey.clock.getTimezone());
             this.log("refresh now " + currentdate);
             this.setCapabilityValue('latest_retrieval_date', currentdate);
 

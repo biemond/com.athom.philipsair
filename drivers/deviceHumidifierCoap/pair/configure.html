@@ -1,0 +1,49 @@
+<header class="homey-header">
+  <h1 class="homey-title" data-i18n="pair.start.title"></h1>
+  <p class="homey-subtitle" data-i18n="pair.start.intro"></p>
+</header>
+
+<form id="configure-form" class="homey-form">
+  <div class="homey-form-group">
+    <label class="homey-form-label" for="ipkey" data-i18n="pair.start.ipkey"></label>
+    <input class="homey-form-input" id="ipkey" type="text" inputmode="decimal" placeholder="192.168.1.20" autocomplete="off" />
+  </div>
+  <div class="homey-form-group">
+    <label class="homey-form-label" for="name" data-i18n="pair.start.name"></label>
+    <input class="homey-form-input" id="name" type="text" value="Philips humidifier" autocomplete="off" />
+  </div>
+  <button type="submit" id="next" class="homey-button-primary-full" data-i18n="pair.start.next"></button>
+</form>
+
+<script type="text/javascript">
+  (function () {
+    var form = document.getElementById('configure-form');
+    var button = document.getElementById('next');
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      var ipkey = document.getElementById('ipkey').value.trim();
+      var name = document.getElementById('name').value.trim();
+
+      if (ipkey === '') {
+        Homey.alert(Homey.__('pair.start.required'), 'error');
+        return;
+      }
+
+      button.classList.add('is-loading');
+      button.disabled = true;
+
+      Homey.emit('configure', { ipkey: ipkey, name: name })
+        .then(function () {
+          Homey.nextView();
+        })
+        .catch(function (err) {
+          Homey.alert(err.message || err.toString(), 'error');
+        })
+        .finally(function () {
+          button.classList.remove('is-loading');
+          button.disabled = false;
+        });
+    });
+  })();
+</script>

@@ -1,12 +1,17 @@
 {
-	"pair": {
-		"start": {
-			"title": "Setup Philips Air purifier",
-			"intro": "Enter the ip address of the philips device",
-			"error": "An error has occurred.",
-			"required": "IP address is a required value.",
-			"ipkey": "Philips IP address",
-			"saveSettings": "Save settings"
-		}
+  "pair": {
+    "start": {
+      "title": "Setup Philips Air purifier",
+      "intro": "Enter the ip address of the philips device",
+      "error": "An error has occurred.",
+      "required": "IP address is a required value.",
+      "ipkey": "Philips IP address",
+      "saveSettings": "Save settings",
+      "name": "Device name",
+      "next": "Next",
+      "invalidIp": "Enter a valid IP address, for example 192.168.1.20.",
+      "alreadyAdded": "A device with this IP address has already been added.",
+      "unreachable": "Could not reach a Philips device at __ip__. Check the IP address and that Homey is on the same network."
+    }
   }
 }
