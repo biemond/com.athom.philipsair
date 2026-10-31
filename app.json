@@ -134,7 +134,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=device2|deviceCoap2"
+            "filter": "driver_id=device2|deviceCoap2|deviceHumidifierCoap"
           }
         ],
         "id": "measure_humidity_changed"
@@ -234,7 +234,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=deviceHeaterCoap"
+            "filter": "driver_id=deviceHeaterCoap|deviceHumidifierCoap"
           }
         ],
         "id": "onoff"
@@ -259,7 +259,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=device2|deviceCoap2"
+            "filter": "driver_id=device2|deviceCoap2|deviceHumidifierCoap"
           }
         ],
         "id": "water_level_changed"
@@ -280,7 +280,7 @@
           {
             "type": "device",
             "name": "device",
-            "filter": "driver_id=deviceHeaterCoap"
+            "filter": "driver_id=deviceHeaterCoap|deviceHumidifierCoap"
           },
           {
             "name": "argument_main",
@@ -401,7 +401,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=deviceHeaterCoap"
+            "filter": "driver_id=deviceHeaterCoap|deviceHumidifierCoap"
           },
           {
             "name": "mode",
@@ -671,6 +671,52 @@
       },
       {
         "title": {
+          "en": "Humidifier mode"
+        },
+        "titleFormatted": {
+          "en": "Set humidifier mode to [[mode]]"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=deviceHumidifierCoap"
+          },
+          {
+            "name": "mode",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "AUTO",
+                "title": {
+                  "en": "Auto"
+                }
+              },
+              {
+                "id": "SLEEP",
+                "title": {
+                  "en": "Sleep"
+                }
+              },
+              {
+                "id": "MEDIUM",
+                "title": {
+                  "en": "Medium"
+                }
+              },
+              {
+                "id": "HIGH",
+                "title": {
+                  "en": "High"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "humidifier_mode"
+      },
+      {
+        "title": {
           "en": "Light level ring"
         },
         "titleFormatted": {
@@ -729,7 +775,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2|deviceHeaterCoap"
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2|deviceHeaterCoap|deviceHumidifierCoap"
           }
         ],
         "id": "off"
@@ -742,7 +788,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2|deviceHeaterCoap"
+            "filter": "driver_id=device|device2|deviceCoap|deviceCoap2|deviceHeaterCoap|deviceHumidifierCoap"
           }
         ],
         "id": "on"
@@ -828,6 +874,82 @@
           }
         ],
         "id": "purifier_mode"
+      },
+      {
+        "title": {
+          "en": "Target humidity"
+        },
+        "titleFormatted": {
+          "en": "Set target humidity to [[humidity]]"
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=deviceHumidifierCoap"
+          },
+          {
+            "name": "humidity",
+            "type": "dropdown",
+            "values": [
+              {
+                "id": "30",
+                "title": {
+                  "en": "30%"
+                }
+              },
+              {
+                "id": "35",
+                "title": {
+                  "en": "35%"
+                }
+              },
+              {
+                "id": "40",
+                "title": {
+                  "en": "40%"
+                }
+              },
+              {
+                "id": "45",
+                "title": {
+                  "en": "45%"
+                }
+              },
+              {
+                "id": "50",
+                "title": {
+                  "en": "50%"
+                }
+              },
+              {
+                "id": "55",
+                "title": {
+                  "en": "55%"
+                }
+              },
+              {
+                "id": "60",
+                "title": {
+                  "en": "60%"
+                }
+              },
+              {
+                "id": "65",
+                "title": {
+                  "en": "65%"
+                }
+              },
+              {
+                "id": "70",
+                "title": {
+                  "en": "70%"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "target_humidity"
       },
       {
         "title": {
@@ -1231,6 +1353,112 @@
         }
       ],
       "id": "deviceHeaterCoap"
+    },
+    {
+      "name": {
+        "en": "Humidifier (HU1510)"
+      },
+      "class": "fan",
+      "capabilities": [
+        "latest_retrieval_date",
+        "product",
+        "onoff",
+        "measure_humidity",
+        "target_humidity",
+        "humidifier_mode",
+        "water_level",
+        "error",
+        "light_intensity",
+        "light_mode",
+        "light_ambient_mode",
+        "timer",
+        "beep",
+        "standby_sensors"
+      ],
+      "capabilitiesOptions": {
+        "light_intensity": {
+          "title": {
+            "en": "Display brightness"
+          },
+          "values": [
+            {
+              "id": "0",
+              "title": {
+                "en": "Off"
+              }
+            },
+            {
+              "id": "115",
+              "title": {
+                "en": "Low"
+              }
+            },
+            {
+              "id": "123",
+              "title": {
+                "en": "Bright"
+              }
+            }
+          ]
+        },
+        "timer": {
+          "title": {
+            "en": "Timer (hours)"
+          }
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/deviceHumidifierCoap/assets/images/small.png",
+        "large": "/drivers/deviceHumidifierCoap/assets/images/large.png",
+        "xlarge": "/drivers/deviceHumidifierCoap/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "pair"
+        }
+      ],
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "General settings"
+          },
+          "children": [
+            {
+              "id": "ipkey",
+              "type": "text",
+              "label": {
+                "en": "Philips Air device IP address"
+              },
+              "value": "",
+              "hint": {
+                "en": "Enter the IP address of your Philips humidifier"
+              }
+            },
+            {
+              "id": "add_delay",
+              "type": "checkbox",
+              "value": false,
+              "label": {
+                "en": "Add 60 seconds delay"
+              }
+            }
+          ]
+        }
+      ],
+      "energy": {
+        "approximation": {
+          "usageOn": 22,
+          "usageOff": 1
+        }
+      },
+      "id": "deviceHumidifierCoap"
     }
   ],
   "capabilities": {
@@ -1602,6 +1830,42 @@
       },
       "icon": "/assets/images/clock.svg"
     },
+    "humidifier_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Humidifier mode"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "uiQuickAction": true,
+      "values": [
+        {
+          "id": "AUTO",
+          "title": {
+            "en": "Auto"
+          }
+        },
+        {
+          "id": "SLEEP",
+          "title": {
+            "en": "Sleep"
+          }
+        },
+        {
+          "id": "MEDIUM",
+          "title": {
+            "en": "Medium"
+          }
+        },
+        {
+          "id": "HIGH",
+          "title": {
+            "en": "High"
+          }
+        }
+      ]
+    },
     "latest_retrieval_date": {
       "type": "string",
       "title": {
@@ -1950,6 +2214,16 @@
           }
         }
       ]
+    },
+    "standby_sensors": {
+      "type": "boolean",
+      "title": {
+        "en": "Sensors in standby"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "uiQuickAction": false
     },
     "swing": {
       "type": "enum",

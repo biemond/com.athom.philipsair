@@ -1,0 +1,36 @@
+{
+    "type": "enum",
+    "title": {
+        "en": "Humidifier mode"
+    },
+    "getable": true,
+    "setable": true,
+    "uiComponent": "picker",
+    "uiQuickAction": true,
+    "values": [
+        {
+            "id": "AUTO",
+            "title": {
+                "en": "Auto"
+            }
+        },
+        {
+            "id": "SLEEP",
+            "title": {
+                "en": "Sleep"
+            }
+        },
+        {
+            "id": "MEDIUM",
+            "title": {
+                "en": "Medium"
+            }
+        },
+        {
+            "id": "HIGH",
+            "title": {
+                "en": "High"
+            }
+        }
+    ]
+}

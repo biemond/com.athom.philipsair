@@ -12,6 +12,13 @@ Verified on
 ## Purifier ( + Humidifier) Device
 For adding the device you need to provide Philips device ip address plus Homey has to be on the same network as your purifier. 
 
+## Humidifier Device
+- HU1510/03 (Philips 1000 series, also HU1509/00)
+
+Capabilities: power, humidity, target humidity (30–70%), mode (auto, sleep, medium, high), water tank status, display brightness (off, low, bright), light mode and ambient light, timer (1–12 hours), beep, sensors in standby.
+
+Flows: on, off, humidifier mode, target humidity, beep; triggers for on/off, humidity changed and water level changed.
+
 ## Heater Device
 - CX5120/11
 

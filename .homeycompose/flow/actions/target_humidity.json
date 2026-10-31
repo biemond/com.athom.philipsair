@@ -1,0 +1,75 @@
+{
+    "title": {
+        "en": "Target humidity"
+    },
+    "titleFormatted": {
+        "en": "Set target humidity to [[humidity]]"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=deviceHumidifierCoap"
+        },
+        {
+            "name": "humidity",
+            "type": "dropdown",
+            "values": [
+                {
+                    "id": "30",
+                    "title": {
+                        "en": "30%"
+                    }
+                },
+                {
+                    "id": "35",
+                    "title": {
+                        "en": "35%"
+                    }
+                },
+                {
+                    "id": "40",
+                    "title": {
+                        "en": "40%"
+                    }
+                },
+                {
+                    "id": "45",
+                    "title": {
+                        "en": "45%"
+                    }
+                },
+                {
+                    "id": "50",
+                    "title": {
+                        "en": "50%"
+                    }
+                },
+                {
+                    "id": "55",
+                    "title": {
+                        "en": "55%"
+                    }
+                },
+                {
+                    "id": "60",
+                    "title": {
+                        "en": "60%"
+                    }
+                },
+                {
+                    "id": "65",
+                    "title": {
+                        "en": "65%"
+                    }
+                },
+                {
+                    "id": "70",
+                    "title": {
+                        "en": "70%"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,45 @@
+{
+    "title": {
+        "en": "Humidifier mode"
+    },
+    "titleFormatted": {
+        "en": "Set humidifier mode to [[mode]]"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=deviceHumidifierCoap"
+        },
+        {
+            "name": "mode",
+            "type": "dropdown",
+            "values": [
+                {
+                    "id": "AUTO",
+                    "title": {
+                        "en": "Auto"
+                    }
+                },
+                {
+                    "id": "SLEEP",
+                    "title": {
+                        "en": "Sleep"
+                    }
+                },
+                {
+                    "id": "MEDIUM",
+                    "title": {
+                        "en": "Medium"
+                    }
+                },
+                {
+                    "id": "HIGH",
+                    "title": {
+                        "en": "High"
+                    }
+                }
+            ]
+        }
+    ]
+}
