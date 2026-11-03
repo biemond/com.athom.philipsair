@@ -58,6 +58,7 @@ function fixture() {
         ...common, module: protocolModule, exports: protocolModule.exports,
         require(name) {
             if (name === 'node-coap-client') return { CoapClient: coap };
+            if (name === './coapPacketGuard') return projectRequire('./drivers/coapPacketGuard');
             return projectRequire(name);
         },
     });

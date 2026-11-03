@@ -3,6 +3,8 @@
     let philipsairCoap = exports;
 
     const coapclass = require("node-coap-client");
+    const { installCoapPacketGuard } = require('./coapPacketGuard');
+    installCoapPacketGuard(coapclass.CoapClient);
     const origin = require('node-coap-client/build/lib/Origin');
     const crypto = require('crypto');
     const { isIP } = require('net');
