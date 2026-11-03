@@ -1,4 +1,7 @@
 {
+   "1.0.83": {
+    "en": "ip address input validation"
+  },  
   "1.0.82": {
     "en": "fixing top cpu and retry loop"
   },     

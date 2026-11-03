@@ -5,11 +5,40 @@
     const coapclass = require("node-coap-client");
     const origin = require('node-coap-client/build/lib/Origin');
     const crypto = require('crypto');
+    const { isIP } = require('net');
+    const { URL } = require('url');
     let aesjs = require('aes-js');
     let pkcs7 = require('pkcs7');
 
     let sharedKey = 'JiangPan';
 
+
+    philipsairCoap.validateCoapAddress = function validateCoapAddress(address) {
+        let host = typeof address === 'string' ? address.trim() : '';
+        if (host.startsWith('[') && host.endsWith(']')) {
+            host = host.slice(1, -1);
+            if (isIP(host) !== 6) host = '';
+        }
+        if (!isIP(host)) {
+            const error = new Error('Invalid purifier IP address. Enter its complete IP address, not a MAC address or URL.');
+            error.code = 'INVALID_COAP_ADDRESS';
+            throw error;
+        }
+        const target = new origin.Origin('coap:', host, 5683);
+        const targetString = target.toString();
+        // Validate synchronously before node-coap-client queues any asynchronous work.
+        new URL(targetString);
+        return { target, targetString };
+    };
+
+    function resetClientSafely(coap, target) {
+        try {
+            coap.reset(target);
+        } catch (error) {
+            return error;
+        }
+        return null;
+    }
 
     function decodeCounter(encodedCounter) {
         let counterUpperCase = encodedCounter.toUpperCase();
@@ -109,7 +138,7 @@
                 const response = await new Promise((resolve, reject) => {
                     const timeout = setTimeout(() => {
                         reject(new Error('CoAP command request timed out: ' + url));
-                        coap.reset(target);
+                        resetClientSafely(coap, target);
                     }, timeoutMs);
                     Promise.resolve().then(() => coap.request(url, 'post', payload, {
                         keepAlive: true,
@@ -128,7 +157,7 @@
                 return response;
             } catch (error) {
                 if (device.coapStopped || error.retryable === false || attempt === maxAttempts) throw error;
-                coap.reset(target);
+                resetClientSafely(coap, target);
                 device.log('CoAP command request failed; retry ' + (attempt + 1) + '/' + maxAttempts + ': ' + url);
                 await sleep(attempt * 1000);
             }
@@ -153,33 +182,36 @@
 
     async function getCurrentDataCoap(settings, device, callback) {
         let statusCounter = device.coapStatusCounter || 0;
-        const target = new origin.Origin('coap:', settings.ipkey, 5683);
-        const targetString = 'coap://' + settings.ipkey + ':5683';
+        const { target, targetString } = philipsairCoap.validateCoapAddress(settings.ipkey);
         const coap = device.getClient() || coapclass.CoapClient;
         device.setClient(coap);
         let jsonStatus = null;
         let finished = false;
         let delayId;
         let resumeDelay;
-        const finish = (error) => {
+        const finish = (error, reset = false) => {
             if (finished) return;
             finished = true;
             timeoutId.clear();
             clearTimeout(delayId);
             if (resumeDelay) resumeDelay();
-            coap.stopObserving(targetString + '/sys/dev/status');
-            // Discard failed requests so the next attempt cannot reuse a rejected promise.
-            if (error) coap.reset(target);
+            try {
+                coap.stopObserving(targetString + '/sys/dev/status');
+            } catch (cleanupError) {
+                error = error || cleanupError;
+            }
+            // Always settle the observation, even if cleanup fails inside a timer.
+            if (error || reset) {
+                const resetError = resetClientSafely(coap, target);
+                error = error || resetError;
+            }
             callback(error, error ? null : { status: jsonStatus });
         };
         const timeoutId = newTimeout(() => {
             finish(jsonStatus === null ? new Error('No response received') : null);
         }, 600000);
         timeoutId.interrupt = () => finish(null);
-        timeoutId.cancel = () => {
-            finish(null);
-            coap.reset(target);
-        };
+        timeoutId.cancel = () => finish(null, true);
         device.setTimeoutId(timeoutId);
 
         try {
@@ -201,6 +233,8 @@
                 throw new Error('No response received for sync call: ' + targetString);
             }
 
+            await device.setAvailable();
+            if (finished) return;
             await coap.observe(targetString + '/sys/dev/status', 'get', resp => {
                 if (finished) return;
                 try {
@@ -280,8 +314,7 @@
     }
 
     async function setValueDataCoap(key, value, settings, device) {
-        const target = new origin.Origin('coap:', settings.ipkey, 5683);
-        const targetString = 'coap://' + settings.ipkey + ':5683';
+        const { target, targetString } = philipsairCoap.validateCoapAddress(settings.ipkey);
         const coap = device.getClient() || coapclass.CoapClient;
         const observation = device.getTimeoutId();
         try {
@@ -336,7 +369,7 @@
             }
             return { status: response.payload.toString('utf-8') };
         } catch (error) {
-            coap.reset(target);
+            resetClientSafely(coap, target);
             throw error;
         } finally {
             // Complete only the observation interrupted by this command, once.

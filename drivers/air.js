@@ -85,16 +85,23 @@ export class AirDevice extends Homey.Device {
         }
         this.coapObserving = true;
         let delay = 1000;
+        let retry = true;
         try {
             await philipsairCoap.getCurrentStatusDataCoap(this.getSettings(), this);
             this.coapRetryCount = 0;
         } catch (error) {
+            if (error.code === 'INVALID_COAP_ADDRESS') {
+                retry = false;
+                this.error(error.message);
+                await this.setUnavailable(error.message).catch(error => this.error(error));
+                return;
+            }
             this.coapRetryCount = (this.coapRetryCount || 0) + 1;
             delay = Math.min(5000 * Math.pow(2, Math.min(this.coapRetryCount - 1, 6)), 300000);
             this.error('CoAP observation failed; retrying in ' + delay / 1000 + 's', error);
         } finally {
             this.coapObserving = false;
-            this.scheduleAirCoapObserver(delay);
+            if (retry) this.scheduleAirCoapObserver(delay);
         }
     }
 
@@ -104,6 +111,21 @@ export class AirDevice extends Homey.Device {
             this.coapRetryTimer = null;
             this.observerAirCoapDevice();
         }, delay);
+    }
+
+    validateCoapSettings(settings) {
+        philipsairCoap.validateCoapAddress(settings.ipkey);
+    }
+
+    restartAirCoapDevice() {
+        if (this.coapStopped) return;
+        clearTimeout(this.coapRetryTimer);
+        this.coapRetryTimer = null;
+        const observation = this.getTimeoutId();
+        if (observation && observation.interrupt) observation.interrupt();
+        this.coapRetryCount = 0;
+        // Homey persists new settings after onSettings returns.
+        this.scheduleAirCoapObserver(1000);
     }
 
     stopAirCoapDevice() {

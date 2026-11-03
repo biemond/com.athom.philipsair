@@ -166,7 +166,9 @@ class deviceHeaterCoap extends AirDevice {
    * @param {string[]} event.changedKeys An array of keys changed since the previous version
    * @returns {Promise<string|void>} return a custom message that will be displayed
    */
-  async onSettings({ oldSettings: { }, newSettings: { }, changedKeys: { } }): Promise<string | void> {
+  async onSettings({ newSettings, changedKeys }: Parameters<AirDevice['onSettings']>[0]): Promise<string | void> {
+    this.validateCoapSettings(newSettings);
+    if (changedKeys.includes('ipkey')) this.restartAirCoapDevice();
     this.log('deviceHeaterCoap settings where changed');
   }
 

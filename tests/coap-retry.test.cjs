@@ -78,6 +78,8 @@ function fixture() {
         device.getSettings = () => settings;
         device.error = (...args) => calls.errors.push(args);
         device.log = () => {};
+        device.setAvailable = async () => { device.unavailable = null; };
+        device.setUnavailable = async message => { device.unavailable = message; };
         device.handleDeviceStatus = () => {};
         return device;
     };
@@ -369,5 +371,93 @@ test('a command interrupting a quiet observer does not report a false timeout', 
     assert.equal(f.calls.observe, 2);
     f.device.stopAirCoapDevice();
     await f.flush();
+    assert.equal(f.timers.size, 0);
+});
+
+test('reported malformed IP and MAC addresses never reach the CoAP library', async () => {
+    for (const address of ['192.168.86 ', '68:79:C4:BE:77:BC', '', '   ', undefined, 123,
+        '192.168.1.999', '192.168.1.1:5683', 'coap://192.168.1.1', '192.168.1.1/path',
+        '192.168.1.1\nother', '[192.168.1.1]', 'purifier.local']) {
+        const f = fixture();
+        f.device.getSettings().ipkey = address;
+        let libraryCalls = 0;
+        for (const key of Object.keys(f.coap)) f.coap[key] = () => { libraryCalls++; throw new Error('Library must not be called'); };
+        await assert.rejects(f.protocol.getCurrentStatusDataCoap(f.device.getSettings(), f.device),
+            error => error.code === 'INVALID_COAP_ADDRESS');
+        await assert.rejects(f.protocol.setValueAirDataCoap('pwr', '1', f.device.getSettings(), f.device),
+            error => error.code === 'INVALID_COAP_ADDRESS');
+        assert.equal(libraryCalls, 0);
+        assert.equal(f.timers.size, 0);
+    }
+});
+
+test('valid IPs are trimmed and IPv6 URLs are bracketed consistently', async () => {
+    for (const [address, expected] of [
+        [' 192.168.1.171\n', 'coap://192.168.1.171:5683'],
+        ['2001:db8::1', 'coap://[2001:db8::1]:5683'],
+        [' [2001:db8::1] ', 'coap://[2001:db8::1]:5683']
+    ]) {
+        const f = fixture();
+        f.device.getSettings().ipkey = address;
+        const urls = [];
+        const originalRequest = f.coap.request;
+        f.coap.request = async (url, ...args) => { urls.push(url); return originalRequest(url, ...args); };
+        const observing = f.device.observerAirCoapDevice();
+        await f.flush();
+        assert.equal(urls[0], expected + '/sys/dev/sync');
+        const command = f.device.setStateCoap('pwr', '1', f.device.getSettings());
+        await f.flush();
+        await f.advance(2000);
+        await command;
+        await observing;
+        assert.equal(urls[1], expected + '/sys/dev/sync');
+        assert.equal(urls[2], expected + '/sys/dev/control');
+        f.device.stopAirCoapDevice();
+        await f.flush();
+        assert.equal(f.timers.size, 0);
+    }
+});
+
+test('invalid saved address stops retries and recovers after settings are corrected', async () => {
+    const f = fixture();
+    f.device.getSettings().ipkey = '68:79:C4:BE:77:BC';
+    await f.device.observerAirCoapDevice();
+    assert.match(f.device.unavailable, /complete IP address/);
+    assert.equal(f.calls.sync, 0);
+    assert.equal(f.timers.size, 0);
+    await f.advance(3600000);
+    assert.equal(f.calls.sync, 0);
+    assert.throws(() => f.device.validateCoapSettings({ ipkey: '192.168.86 ' }), /Invalid purifier IP/);
+    f.device.validateCoapSettings({ ipkey: '192.168.1.171' });
+    f.device.getSettings().ipkey = '192.168.1.171';
+    f.device.restartAirCoapDevice();
+    await f.advance(1000);
+    assert.equal(f.calls.sync, 1);
+    assert.equal(f.calls.observe, 1);
+    assert.equal(f.device.unavailable, null);
+    f.device.stopAirCoapDevice();
+    await f.flush();
+    assert.equal(f.timers.size, 0);
+});
+
+test('cleanup exceptions inside the observation timer reject safely and clear timers', async () => {
+    const f = fixture();
+    const failed = assert.rejects(f.protocol.getCurrentStatusDataCoap(f.device.getSettings(), f.device), /No response received/);
+    await f.flush();
+    f.coap.stopObserving = () => { throw new Error('cleanup URL failure'); };
+    f.coap.reset = () => { throw new Error('reset URL failure'); };
+    await f.advance(600000);
+    await failed;
+    assert.equal(f.timers.size, 0);
+});
+
+test('cancellation handles cleanup failures without throwing synchronously', async () => {
+    const f = fixture();
+    const failed = assert.rejects(f.protocol.getCurrentStatusDataCoap(f.device.getSettings(), f.device), /cleanup failed/);
+    await f.flush();
+    f.coap.stopObserving = () => { throw new Error('cleanup failed'); };
+    f.coap.reset = () => { throw new Error('reset failed'); };
+    assert.doesNotThrow(() => f.device.stopAirCoapDevice());
+    await failed;
     assert.equal(f.timers.size, 0);
 });

@@ -130,7 +130,7 @@ class deviceCoap extends AirDevice {
     this.registerCapabilityListener('display_mode', async (value) => {
       let model = this.getCapabilityValue('product')
       const newCoapDevices = [ 'AC1715/11', 'AC1715/10']
-      const newCoapDevices2 =  ['AC3737/10','AMF765/10','AC3421/13','AMF870/15','AC4221/11','AC4220/12','AC3220/10','AC0950/10','AC3210/12','AC0951/13','AC3221/13',"AC0850/11"]  
+      const newCoapDevices2 =  ['AC3737/10','AMF765/10','AC3421/13','AMF870/15','AMF870/35','AC4221/11','AC4220/12','AC3220/10','AC0950/10','AC3210/12','AC0951/13','AC3221/13',"AC0850/11"]  
       if (newCoapDevices.includes(model)) {
         let values2
         if (value == '1' ) {
@@ -150,7 +150,7 @@ class deviceCoap extends AirDevice {
     this.registerCapabilityListener('onoff', async (value) => {
       let model = this.getCapabilityValue('product')
       const newCoapDevices = [ 'AC1715/11', 'AC1715/10']
-      const newCoapDevices2 = ['AC3737/10','AMF765/10','AC3421/13','AMF870/15','AC4221/11','AC4220/12','AC3220/10','AC0950/10','AC3210/12','AC0951/13','AC3221/13','AC0850/11']    
+      const newCoapDevices2 = ['AC3737/10','AMF765/10','AC3421/13','AMF870/15','AMF870/35','AC4221/11','AC4220/12','AC3220/10','AC0950/10','AC3210/12','AC0951/13','AC3221/13','AC0850/11']    
       if (newCoapDevices.includes(model)) {
         let values2
         if (value == true ) {
@@ -184,7 +184,7 @@ class deviceCoap extends AirDevice {
 
     this.registerCapabilityListener('child_lock', async (value) => {
       let model = this.getCapabilityValue('product')      
-      const newCoapDevices2 = ['AC3737/10','AMF765/10','AC3421/13','AMF870/15','AC4221/11','AC4220/12','AC3220/10','AC0950/10','AC3210/12','AC0951/13','AC3221/13']       
+      const newCoapDevices2 = ['AC3737/10','AMF765/10','AC3421/13','AMF870/15','AMF870/35','AC4221/11','AC4220/12','AC3220/10','AC0950/10','AC3210/12','AC0951/13','AC3221/13']       
       if (newCoapDevices2.includes(model)) {
         let values;
         if (value == true) {
@@ -203,7 +203,7 @@ class deviceCoap extends AirDevice {
       let model = this.getCapabilityValue('product')
       const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10','AC3033/14','AC3036/10','AC3039/10','AC3039/14', 'AC3059/10','AC2936/13','AC4236/14']
       const newCoapDevices2 = ['AC1715/11', 'AC1715/10']
-      const newCoapDevices3 = ['AC3737/10','AMF765/10','AC3421/13','AMF870/15','AC4221/11','AC4220/12','AC3220/10','AC0950/10','AC3210/12','AC0951/13','AC3221/13','AC0850/11']     
+      const newCoapDevices3 = ['AC3737/10','AMF765/10','AC3421/13','AMF870/15','AMF870/35','AC4221/11','AC4220/12','AC3220/10','AC0950/10','AC3210/12','AC0951/13','AC3221/13','AC0850/11']     
 
       if (newCoapDevices3.includes(model)) {
         if (value == "1") {
@@ -262,7 +262,7 @@ class deviceCoap extends AirDevice {
 
     this.registerCapabilityListener('timer', async (value) => {
       let model = this.getCapabilityValue('product')      
-      const newCoapDevices2 = ['AC3737/10','AMF765/10','AC3421/13','AC4236/14','AMF870/15','AC4221/11','AC4220/12','AC3220/10','AC0950/10','AC3210/12','AC0951/13','AC3221/13']       
+      const newCoapDevices2 = ['AC3737/10','AMF765/10','AC3421/13','AC4236/14','AMF870/15','AMF870/35','AC4221/11','AC4220/12','AC3220/10','AC0950/10','AC3210/12','AC0951/13','AC3221/13']       
       if (newCoapDevices2.includes(model)) {
         await this.setStateCoap("D03110", Number(value), this.getSettings());
       } else {  
@@ -288,7 +288,9 @@ class deviceCoap extends AirDevice {
    * @param {string[]} event.changedKeys An array of keys changed since the previous version
    * @returns {Promise<string|void>} return a custom message that will be displayed
    */
-  async onSettings({ oldSettings: { }, newSettings: { }, changedKeys: { } }): Promise<string | void> {
+  async onSettings({ newSettings, changedKeys }: Parameters<AirDevice['onSettings']>[0]): Promise<string | void> {
+    this.validateCoapSettings(newSettings);
+    if (changedKeys.includes('ipkey')) this.restartAirCoapDevice();
     this.log('deviceCoap settings where changed');
   }
 
