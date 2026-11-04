@@ -67,7 +67,10 @@ function fixture() {
     const airModule = { exports: {} };
     const airContext = vm.createContext({
         ...common, module: airModule, Homey: { Device: class {} },
-        require(name) { return name === './philipsairCoap.js' ? protocol : {}; },
+        require(name) {
+            if (name === '../app.json') return projectRequire('./app.json');
+            return name === './philipsairCoap.js' ? protocol : {};
+        },
     });
     const airSource = fs.readFileSync('drivers/air.js', 'utf8')
         .replace("import Homey from 'homey';", '')
@@ -89,7 +92,8 @@ function fixture() {
         if (targetDevice) notifications.get('coap://' + targetDevice.getSettings().ipkey + ':5683/sys/dev/status')(data);
         else notification(data);
     };
-    return { protocol, device, coap, calls, timers, flush, advance, notify, createDevice, logs };
+    const handleStatus = airModule.exports.prototype.handleDeviceStatus;
+    return { protocol, device, coap, calls, timers, flush, advance, notify, createDevice, logs, handleStatus };
 }
 
 function statusPayload(value = 1) {
@@ -461,4 +465,60 @@ test('cancellation handles cleanup failures without throwing synchronously', asy
     assert.doesNotThrow(() => f.device.stopAirCoapDevice());
     await failed;
     assert.equal(f.timers.size, 0);
+});
+
+test('heater swing 75 is declared and real status updates it as an enum string', async () => {
+    const f = fixture();
+    const declared = projectRequire('./.homeycompose/capabilities/swing.json');
+    const generated = projectRequire('./app.json').capabilities.swing;
+    assert.deepEqual(generated.values, declared.values);
+    const accepted = new Set(declared.values.map(option => option.id));
+    assert.ok(accepted.has('75'));
+    const updates = [];
+    f.device.hasCapability = id => id === 'swing';
+    f.device.getCapabilityValue = () => null;
+    f.device.setCapabilityValue = async (id, value) => {
+        if (id === 'swing') {
+            assert.ok(accepted.has(value), 'Homey rejects values absent from the enum');
+            updates.push(value);
+        }
+    };
+    for (const value of [75, '75', 0, 17920, 30, 45, 60, 120]) {
+        f.handleStatus.call(f.device, { D0320F: value }, f.device.getSettings());
+    }
+    await f.flush();
+    assert.deepEqual(updates, ['75', '75', '0', '17920', '30', '45', '60', '120']);
+    assert.equal(f.calls.control, 0);
+    assert.equal(f.calls.errors.length, 0);
+});
+
+test('unknown and unchanged swing values do not send invalid Homey updates', async () => {
+    const f = fixture();
+    f.device.hasCapability = id => id === 'swing';
+    f.device.getCapabilityValue = () => '75';
+    let swingUpdates = 0;
+    f.device.setCapabilityValue = async id => { if (id === 'swing') swingUpdates++; };
+    for (const value of [75, 999, 999, null, undefined]) {
+        f.handleStatus.call(f.device, { D0320F: value }, f.device.getSettings());
+    }
+    await f.flush();
+    assert.equal(swingUpdates, 0);
+    assert.equal(f.calls.errors.length, 0);
+    assert.equal(f.calls.control, 0);
+});
+
+test('a rejected Homey swing update is handled while observation continues', async () => {
+    const f = fixture();
+    f.device.hasCapability = id => id === 'swing';
+    f.device.getCapabilityValue = () => null;
+    f.device.setCapabilityValue = async id => {
+        if (id === 'swing') throw new Error('Homey capability update rejected');
+    };
+    f.handleStatus.call(f.device, { D0320F: 75 }, f.device.getSettings());
+    await f.flush();
+    assert.equal(f.calls.errors.length, 1);
+    assert.match(f.calls.errors[0][1].message, /Homey capability update rejected/);
+    f.handleStatus.call(f.device, {}, f.device.getSettings());
+    await f.flush();
+    assert.equal(f.calls.errors.length, 1);
 });

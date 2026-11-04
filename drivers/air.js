@@ -2,6 +2,7 @@ import Homey from 'homey';
 
 const philipsair = require('./philipsair.js');
 const philipsairCoap = require('./philipsairCoap.js');
+const swingValues = new Set(require('../app.json').capabilities.swing.values.map(option => option.id));
 
 const MINUTE = 60000;
 let coap;
@@ -354,10 +355,16 @@ export class AirDevice extends Homey.Device {
                 }
             }
 
-            if (json.hasOwnProperty('D0320F')) {
-                this.log(`swing: ${json["D0320F"]}`);
-                if (this.hasCapability('swing')) {
-                    this.setCapabilityValue('swing', json["D0320F"].toString());
+            if (json.hasOwnProperty('D0320F') && this.hasCapability('swing')) {
+                const value = String(json.D0320F);
+                if (swingValues.has(value)) {
+                    if (this.getCapabilityValue('swing') !== value) {
+                        this.setCapabilityValue('swing', value)
+                            .catch(error => this.error('Updating swing capability failed', error));
+                    }
+                } else if (this.unsupportedSwingValue !== value) {
+                    this.unsupportedSwingValue = value;
+                    this.log('Ignoring unsupported swing value: ' + value);
                 }
             }
 
