@@ -467,13 +467,13 @@ test('cancellation handles cleanup failures without throwing synchronously', asy
     assert.equal(f.timers.size, 0);
 });
 
-test('heater swing 75 is declared and real status updates it as an enum string', async () => {
+test('reported heater swing values are declared and status updates them as enum strings', async () => {
     const f = fixture();
     const declared = projectRequire('./.homeycompose/capabilities/swing.json');
     const generated = projectRequire('./app.json').capabilities.swing;
     assert.deepEqual(generated.values, declared.values);
     const accepted = new Set(declared.values.map(option => option.id));
-    assert.ok(accepted.has('75'));
+    for (const value of ['70', '75', '85', '165']) assert.ok(accepted.has(value));
     const updates = [];
     f.device.hasCapability = id => id === 'swing';
     f.device.getCapabilityValue = () => null;
@@ -483,11 +483,11 @@ test('heater swing 75 is declared and real status updates it as an enum string',
             updates.push(value);
         }
     };
-    for (const value of [75, '75', 0, 17920, 30, 45, 60, 120]) {
+    for (const value of [70, '70', 75, '75', 85, '85', 165, '165', 0, 17920, 30, 45, 60, 120]) {
         f.handleStatus.call(f.device, { D0320F: value }, f.device.getSettings());
     }
     await f.flush();
-    assert.deepEqual(updates, ['75', '75', '0', '17920', '30', '45', '60', '120']);
+    assert.deepEqual(updates, ['70', '70', '75', '75', '85', '85', '165', '165', '0', '17920', '30', '45', '60', '120']);
     assert.equal(f.calls.control, 0);
     assert.equal(f.calls.errors.length, 0);
 });
