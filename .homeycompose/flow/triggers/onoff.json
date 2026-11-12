@@ -18,7 +18,7 @@
         {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=deviceHeaterCoap"
+            "filter": "driver_id=deviceHeaterCoap|deviceHumidifierCoap"
         }
     ]
 }

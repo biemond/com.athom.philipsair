@@ -1,0 +1,123 @@
+{
+  "name": {
+    "en": "Humidifier (HU1510)"
+  },
+  "class": "fan",
+  "capabilities": [
+    "latest_retrieval_date",
+    "product",
+    "onoff",
+    "measure_humidity",
+    "target_humidity",
+    "humidifier_mode",
+    "water_level",
+    "error",
+    "light_intensity",
+    "light_mode",
+    "light_ambient_mode",
+    "timer",
+    "beep",
+    "standby_sensors"
+  ],
+  "capabilitiesOptions": {
+    "light_intensity": {
+      "title": {
+        "en": "Display brightness"
+      },
+      "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "115",
+          "title": {
+            "en": "Low"
+          }
+        },
+        {
+          "id": "123",
+          "title": {
+            "en": "Bright"
+          }
+        }
+      ]
+    },
+    "timer": {
+      "title": {
+        "en": "Timer (hours)"
+      }
+    }
+  },
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "configure",
+      "navigation": {
+        "next": "list_devices"
+      }
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "prev": "configure",
+        "next": "add_devices"
+      },
+      "options": {
+        "singular": true
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "settings": [
+    {
+      "type": "group",
+      "label": {
+        "en": "General settings"
+      },
+      "children": [
+        {
+          "id": "ipkey",
+          "type": "text",
+          "label": {
+            "en": "Philips Air device IP address"
+          },
+          "value": "",
+          "hint": {
+            "en": "Enter the IP address of your Philips humidifier"
+          }
+        },
+        {
+          "id": "add_delay",
+          "type": "checkbox",
+          "value": false,
+          "label": {
+            "en": "Add 60 seconds delay"
+          }
+        }
+      ]
+    }
+  ],
+  "energy": {
+    "approximation": {
+      "usageOn": 22,
+      "usageOff": 1
+    }
+  }
+}

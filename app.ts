@@ -14,7 +14,7 @@ class MyApp extends Homey.App {
   async onInit() {
     this.log('philipsair is running...');
     const coapDevices = ['deviceCoap', 'deviceCoap2']
-    const coapHeaterDevices = ['deviceHeaterCoap']
+    const coapHeaterDevices = ['deviceHeaterCoap', 'deviceHumidifierCoap']
     const newCoapDevices = ['AC4236/10', 'AC2958/10', 'AC2939/10', 'AC3858/10', 'AC3033/10', 'AC3033/14', 'AC3036/10', 'AC3039/10','AC3039/14', 'AC3059/10', 'AC4236/14']
     const newCoapDevices2 = [ 'AC1715/11', 'AC1715/10']
     const newCoapDevices3 = ['AC3737/10', 'AMF765/10', 'AC3421/13', 'AMF870/15','AMF870/35', 'AC4221/11', 'AC4220/12', 'AC3220/10', 'AC0950/10', 'AC3210/12','AC0951/13','HU1509/00','HU1510/03','HU5710/00','AC3420/10','AC3221/13','AC0850/11','HU4209/00']
@@ -138,6 +138,20 @@ class MyApp extends Homey.App {
       return Promise.resolve(true);
     });
 
+
+    let humidifierModeAction = this.homey.flow.getActionCard('humidifier_mode');
+    humidifierModeAction.registerRunListener(async (args, state) => {
+      await args.device.setHumidifierMode(args.mode);
+      await args.device.setCapabilityValue('humidifier_mode', args.mode);
+      return Promise.resolve(true);
+    });
+
+    let targetHumidityAction = this.homey.flow.getActionCard('target_humidity');
+    targetHumidityAction.registerRunListener(async (args, state) => {
+      await args.device.setTargetHumidity(Number(args.humidity));
+      await args.device.setCapabilityValue('target_humidity', args.humidity);
+      return Promise.resolve(true);
+    });
 
     let fanSpeedAction = this.homey.flow.getActionCard('fan_speed');
     fanSpeedAction.registerRunListener(async (args, state) => {
@@ -275,7 +289,9 @@ class MyApp extends Homey.App {
       } else if (newCoapDevices3.includes(model) || coapHeaterDevices.includes(args.device.constructor.name)) {
         await args.device.setStateCoap("D03102", 0, args.device.getSettings());
         if (coapHeaterDevices.includes(args.device.constructor.name)) {
-            args.device.setCapabilityValue('measure_power', 1);
+            if (args.device.hasCapability('measure_power')) {
+              args.device.setCapabilityValue('measure_power', 1);
+            }
             const tokens = {
               'onoff': false
             };

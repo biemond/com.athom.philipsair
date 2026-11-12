@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">Philips humidifier outline icon</title><desc id="desc">Minimal monochrome vector icon of a cylindrical Philips humidifier, with top outlet, ribbed water tank and digital control panel.</desc>
+<defs><clipPath id="tank"><path d="M121 225 Q256 255 391 225 L391 343 Q391 367 368 369 Q256 382 144 369 Q121 367 121 343 Z"/></clipPath></defs>
+<g stroke="#000" stroke-linecap="round" stroke-linejoin="round" fill="none">
+<!-- Outer body silhouette -->
+<path stroke-width="8" d="M124 370 C121 343 121 214 123 121 C124 66 146 42 203 36 Q256 29 309 36 C366 42 388 66 389 121 C391 214 391 343 388 370 L388 419 C388 457 362 474 323 478 Q256 484 189 478 C150 474 124 457 124 419 Z"/>
+<!-- Crown and adjustable outlet -->
+<path stroke-width="6" d="M148 65 Q163 44 206 41 M364 65 Q349 44 306 41"/>
+<path stroke-width="6" d="M152 65 C165 47 347 47 360 65 C352 83 160 83 152 65 Z"/>
+<path stroke-width="6" d="M180 53 C192 40 320 40 332 53 C327 69 185 69 180 53 Z"/>
+<path stroke-width="5" d="M198 71 L198 77 Q256 85 314 77 L314 71"/>
+<!-- Upper housing to water tank join -->
+<path stroke-width="7" d="M124 223 Q256 254 388 223"/>
+<!-- Tank lower edge and accent band -->
+<path stroke-width="6" d="M124 346 C161 367 351 367 388 346"/>
+<path stroke-width="8" d="M124 360 C164 382 348 382 388 360"/>
+<!-- Vertical ribbing -->
+<g clip-path="url(#tank)" stroke-width="1.55" opacity="0.85">
+<path d="M141.0 231 Q145.6 296 141.0 367"/>
+<path d="M149.0 231 Q153.3 296 149.0 367"/>
+<path d="M157.0 231 Q161.0 296 157.0 367"/>
+<path d="M165.0 231 Q168.6 296 165.0 367"/>
+<path d="M173.0 231 Q176.3 296 173.0 367"/>
+<path d="M181.0 231 Q184.0 296 181.0 367"/>
+<path d="M189.0 231 Q191.7 296 189.0 367"/>
+<path d="M197.0 231 Q199.4 296 197.0 367"/>
+<path d="M205.0 231 Q207.0 296 205.0 367"/>
+<path d="M213.0 231 Q214.7 296 213.0 367"/>
+<path d="M221.0 231 Q222.4 296 221.0 367"/>
+<path d="M229.0 231 Q230.1 296 229.0 367"/>
+<path d="M237.0 231 Q237.8 296 237.0 367"/>
+<path d="M245.0 231 Q245.4 296 245.0 367"/>
+<path d="M253.0 231 Q253.1 296 253.0 367"/>
+<path d="M261.0 231 Q260.8 296 261.0 367"/>
+<path d="M269.0 231 Q268.5 296 269.0 367"/>
+<path d="M277.0 231 Q276.2 296 277.0 367"/>
+<path d="M285.0 231 Q283.8 296 285.0 367"/>
+<path d="M293.0 231 Q291.5 296 293.0 367"/>
+<path d="M301.0 231 Q299.2 296 301.0 367"/>
+<path d="M309.0 231 Q306.9 296 309.0 367"/>
+<path d="M317.0 231 Q314.6 296 317.0 367"/>
+<path d="M325.0 231 Q322.2 296 325.0 367"/>
+<path d="M333.0 231 Q329.9 296 333.0 367"/>
+<path d="M341.0 231 Q337.6 296 341.0 367"/>
+<path d="M349.0 231 Q345.3 296 349.0 367"/>
+<path d="M357.0 231 Q353.0 296 357.0 367"/>
+<path d="M365.0 231 Q360.6 296 365.0 367"/>
+<path d="M373.0 231 Q368.3 296 373.0 367"/>
+</g>
+<!-- Control panel division -->
+<path stroke-width="5" d="M125 374 Q256 397 387 374"/>
+<!-- Small logo with stylized lettering omitted for icon legibility -->
+<path stroke-width="2.8" d="M226 180 H286" opacity="0"/>
+<!-- Display digits: simplified seven-segment 50 -->
+<g stroke-width="5.2">
+<path d="M238 404 H251 M236 405 L234 415 M236 421 L249 421 M251 423 L252 433 M236 435 H251"/>
+<path d="M265 404 H279 M263 407 V432 M281 407 V432 M265 436 H279"/>
+</g>
+<!-- Small telemetry symbols -->
+<g stroke-width="2.5">
+<!-- wifi -->
+<path d="M173 412 Q179 405 185 412 M176 415 Q179 412 182 415"/><circle cx="179" cy="419" r="1" fill="#000" stroke="none"/>
+<!-- timer -->
+<circle cx="196" cy="411" r="6"/><path d="M196 407 V411 L199 413"/>
+<!-- muted sound -->
+<path d="M210 410 H214 L219 406 V417 L214 413 H210 Z M208 405 L222 420"/>
+<!-- droplets -->
+<path d="M301 414 Q301 410 305 405 Q310 412 310 415 A4.5 4.5 0 0 1 301 414 Z"/>
+<path d="M318 412 Q318 409 321 405 Q325 410 325 413 A3.5 3.5 0 0 1 318 412 Z"/>
+<!-- moon -->
+<path d="M344 405 A7 7 0 1 0 353 414 A6 6 0 0 1 344 405 Z"/>
+</g>
+<!-- Panel status indicator dots -->
+<g fill="#000" stroke="none"><circle cx="177" cy="429" r="2.1"/><circle cx="346" cy="429" r="2.1"/></g>
+<!-- Touch controls -->
+<g stroke-width="3.1">
+<!-- power -->
+<path d="M186 451 A8 8 0 1 0 197 451 M192 443 V454"/>
+<!-- brightness -->
+<circle cx="232" cy="452" r="4"/><path d="M232 442 V439 M232 462 V465 M222 452 H219 M242 452 H245 M225 445 L223 443 M239 459 L241 461 M239 445 L241 443 M225 459 L223 461"/>
+<!-- automatic -->
+<circle cx="280" cy="452" r="9"/><path d="M275 456 L280 446 L285 456 M277 453 H283"/>
+<!-- night mode -->
+<circle cx="328" cy="452" r="9"/><circle cx="325" cy="452" r="1.5" fill="#000"/><circle cx="331" cy="452" r="1.5" fill="#000"/>
+</g>
+</g></svg>
